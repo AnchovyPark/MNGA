@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip list *)",
+      "Bash(pip3 list *)",
+      "Bash(furiosa-smi info *)",
+      "Bash(furiosactl info *)",
+      "Bash(lspci)",
+      "Bash(furiosa-smi --help)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(open\\('/home/furiosa/compiled_models_lens_profiling/Qwen3-14B-tp8-lens/artifact.json'\\)\\); print\\(json.dumps\\(d,indent=1\\)[:2500]\\)\")",
+      "Bash(python3 -c \"import furiosa_llm, inspect; from furiosa_llm import LLM; print\\(inspect.signature\\(LLM.__init__\\)\\)\")",
+      "Bash(python3 -c \"from furiosa_llm import LLM; print\\([m for m in dir\\(LLM\\) if not m.startswith\\('_'\\)]\\)\")",
+      "Bash(/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python -c \"import furiosa_llm; print\\('furiosa_llm OK', getattr\\(furiosa_llm,'__version__','?'\\)\\)\")",
+      "Bash(furiosa-smi status *)",
+      "Bash(furiosa-smi topo *)",
+      "Bash(furiosa-smi version *)",
+      "Bash(grep -E \"\\\\.py$\")",
+      "Bash(python3 *)",
+      "Bash(xargs cat)",
+      "WebSearch",
+      "Bash(timeout 540 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python attn_decode_profile.py)",
+      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python tactic_kernel_spike.py)"
+    ]
+  }
+}
