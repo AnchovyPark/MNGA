@@ -19,7 +19,31 @@
       "Bash(xargs cat)",
       "WebSearch",
       "Bash(timeout 540 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python attn_decode_profile.py)",
-      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python tactic_kernel_spike.py)"
+      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python tactic_kernel_spike.py)",
+      "Bash(timeout 600 .venv/bin/python LENS/inference_profiling/RNGD/llm_kernel_profile.py decode 2048)",
+      "Bash(grep -v -E \"Warning|warn|UserWarning|^\\\\s*$\")",
+      "Bash(timeout 1200 .venv/bin/python LENS/inference_profiling/RNGD/llm_kernel_profile.py all)",
+      "Bash(grep -v -E \"Warning|warn|UserWarning|_xpu_getDeviceCount|^\\\\s*$\")",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(rsync -a --exclude=__pycache__ /home/furiosa/바탕화면/pjh/npu_chip_project/LENS/inference_profiling/RNGD/ /home/furiosa/바탕화면/pjh/rngd/profiling/)",
+      "Bash(timeout 600 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python kernel_composition.py decode)",
+      "Bash(timeout 900 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python kernel_composition.py all)",
+      "Bash(awk -F, 'NR==1 || \\($4==\"chain\" && $5==6\\)' kernel_composition_results.csv)",
+      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python probe_profiler.py)",
+      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python probe_profiler2.py)",
+      "Bash(timeout 400 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python probe_engines.py)",
+      "Bash(timeout 500 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python pair_fusion.py decode)",
+      "Bash(timeout 900 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python pair_fusion.py all)",
+      "Bash(awk -F, 'NR==1{print \"regime\",\"block\",\"pair\",\"A\",\"B\",\"fused\",\"Δ\",\"ratio%\",\"dmaΔ\"} NR>1 && $1{printf \"%-7s %-5s %-20s %8s %8s %8s %8s %6.0f %8s\\\\n\",$1,$2,$3,$5,$6,$7,$9,$10*100,$14}' pair_fusion_results.csv)",
+      "Bash(dmesg)",
+      "Bash(timeout 1800 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python pair_fusion.py prefill)",
+      "Read(//home/furiosa/.cache/**)",
+      "Read(//home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/torch/custom_ops/**)",
+      "Bash(rm -rf ~/compiled_models_lens_profiling)",
+      "Bash(rm -rf ~/.cache/furiosa/llm)",
+      "Read(//home/furiosa/바탕화면/pjh/npu_chip_project/**)",
+      "Bash(.venv/bin/python -c ' *)",
+      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python tp_allreduce_derisk.py)"
     ]
   }
 }

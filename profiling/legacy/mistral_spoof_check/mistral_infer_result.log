@@ -1,0 +1,75 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/core/attention/attention.py:6: UserWarning: LTW Backend is provided temporarily for compatibility purposes only. This feature may be removed without notice in future versions. (Default behavior, set USE_WTL_BACKEND=1 to use WTL backend)
+  from furiosa.models.core.attention.backends import LLMAttentionBackend
+[load] artifact (재컴파일 없음)
+[2m2026-06-12T12:58:51.647282304+09:00[0m [32m INFO[0m [2mfuriosa_llm_common::artifact::types::next_gen[0m[2m:[0m Loading artifact from path: /home/furiosa/compiled_models_lens_profiling/Mistral-7B-spoof-llama-check
+[2m2026-06-12T12:58:51.988512194+09:00[0m [32m INFO[0m [2mfuriosa_llm_common::artifact::types::commons[0m[2m:[0m Loading artifact with schema version: 3.0
+[2m2026-06-12T12:58:51.993203472+09:00[0m [32m INFO[0m [2mfuriosa::llm::engine[0m[2m:[0m Loaded target artifact: SchemaVersion { major: 3, minor: 0 }
+[2m2026-06-12T12:58:51.993231546+09:00[0m [32m INFO[0m [2mfuriosa::llm::engine[0m[2m:[0m Parallelism Config: tp=8, pp=1, dp=1
+[2m2026-06-12T12:58:52.398460814+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Loading the target model ...
+[2m2026-06-12T12:58:52.398870577+09:00[0m [32m INFO[0m [2mdevice_runtime::context[0m[2m:[0m Memory dump thread for Device([npu:0:0-3, npu:0:4-7]) started
+[2m2026-06-12T12:58:52.403631429+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::pipeline::resolve[0m[2m:[0m PP device#0 allocation plan: Binary=2.8 MiB, Model weights=13.5 GiB, Reserved IO memory=2.0 GiB
+[2m2026-06-12T12:58:53.108726792+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::pipeline::resolve[0m[2m:[0m Resolve 1 pipeline for 1 DP groups (DP=1, PP=1) in 710.20ms
+[2m2026-06-12T12:58:53.10876194+09:00[0m [32m INFO[0m [2mfuriosa_generator::backing_file[0m[2m:[0m Total size of parameters loaded: 13.5 GiB in 0.70510894 s
+[2m2026-06-12T12:58:53.274351633+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Loading the target model took 875.863961ms
+[2m2026-06-12T12:58:53.274818775+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::pipeline::resolve[0m[2m:[0m PP device#0 KV cache=32.0 GiB
+[2m2026-06-12T12:58:53.274855999+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Computed bucket limits: max_executable_len=256
+[2m2026-06-12T12:58:53.275080649+09:00[0m [32m INFO[0m [2mfuriosa_generator::structured_output::manager[0m[2m:[0m Initializing structured output manager for backend: Auto
+[2m2026-06-12T12:58:53.344490561+09:00[0m [32m INFO[0m [2mfuriosa_generator::structured_output::manager[0m[2m:[0m XGrammar backend is initialized.
+[2m2026-06-12T12:58:53.437845998+09:00[0m [32m INFO[0m [2mfuriosa_generator::structured_output::manager[0m[2m:[0m LLGuidance backend is initialized.
+[2m2026-06-12T12:58:53.437868609+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::generator[0m[2m:[0m DP entry DpId(0) → device [npu0pe0-3, npu0pe4-7]
+[2m2026-06-12T12:58:53.447701966+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::scheduler::request_management::task_selector[0m[2m:[0m Initializing TaskSelector([[npu:0:0-3, npu:0:4-7]]) with config: TaskSelectorConfig { enable_jit_compilation: false }, 0 AOT wired pipelines
+[2m2026-06-12T12:58:53.447741808+09:00[0m [33m WARN[0m [2mfuriosa_generator::next_gen::scheduler::strategies::fcfs[0m[2m:[0m No extend buckets with kv_cache_size > 0 found in the artifact. Chunked prefill will be disabled to prevent liveness violations. If this is a non-pooling model, this may indicate a bucket misconfiguration in the artifact, causing suboptimal performance.
+[2m2026-06-12T12:58:53.447747618+09:00[0m [33m WARN[0m [2mfuriosa_generator::next_gen::scheduler::strategies::fcfs[0m[2m:[0m Prefix caching is enabled but no extend buckets are available. Disabling prefix caching to prevent unschedulable extend requests.
+[2m2026-06-12T12:58:53.447903447+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::scheduler::memory_manager[0m[2m:[0m Initialize KVCacheManager with config: KVCacheConfig(kv_cache_memory: {[npu:0:0-3, npu:0:4-7]: Buffer { addr: 0x80000000, size: 0x7fecac200, device: Npu([npu:0:0-3, npu:0:4-7], Dram) }}, KVCachePlan(global_attention_config: LayerConfig(attention_type: Global, unit_block_size: 2048, block_size: 2048, num_chips: 1), global_kv_cache_tensors: 64, aux_attention_config: None, aux_kv_cache_tensors: 0)), is_prefix_cache_enabled: false
+[2m2026-06-12T12:58:53.447957949+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::scheduler::memory_manager[0m[2m:[0m Configured KV cache blocks, global_num_blocks: 261989, aux_num_blocks: None
+[2m2026-06-12T12:58:53.457509672+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::generator[0m[2m:[0m Eager scheduler has started with: SchedulerConfig { scheduler_kind: None, npu_queue_limit: 1, max_processing_samples: 65536, spare_blocks_ratio: 0.0, estimation_time_limit_ms: None, prefix_cache_config: PrefixCacheConfig { enabled: true, lookahead_requests: 2 }, experimental_scheduling_loop_type: Eager, experimental_aggressive_batching: false, max_concurrency: None, max_num_batched_tokens: None, data_parallel_routing_policy: RoundRobin }
+[2m2026-06-12T12:58:53.457603153+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::generator[0m[2m:[0m max_kv_len=261988 (from KV cache blocks across 1 DP device(s))
+[2m2026-06-12T12:58:53.565981284+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Num samples received: 1
+
+======================================================================
+[Q1] What is the capital of South Korea, and name two famous landmarks there.
+[A1] The capital of South Korea is Seoul. Two famous landmarks in Seoul are the Gyeongbokgung Palace and the Myeongdong District.
+
+Gyeongbokgung Palace is the largest and most iconic of the Five Grand Palaces built by the Joseon dynasty. It was first built in 1395 and has been restored several times since then. The palace complex includes various buildings such as the Gyeonghoeru Pavilion, Geunjeongjeon Throne Hall, and the National Folk
+[2m2026-06-12T12:58:55.442718874+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Num samples received: 1
+
+======================================================================
+[Q2] If I have 3 apples and buy 5 more, then give 2 away, how many do I have? Explain step by step.
+[A2] Let's break it down step by step:
+
+1. You start with 3 apples.
+2. You buy 5 more apples, so now you have 3 (initial apples) + 5 (new apples) = 8 apples.
+3. Then you give 2 apples away, so now you have 8 (remaining apples) - 2 (given away) = 6 apples.
+
+So, after giving 2 apples away, you have 6 apples left.
+[2m2026-06-12T12:58:57.267926073+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Num samples received: 1
+
+======================================================================
+[Q3] Translate to French: 'The weather is nice today and I want to go for a walk.'
+[A3] Le temps est beau aujourd'hui et je veux faire une promenade.
+[2m2026-06-12T12:58:57.604993871+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Num samples received: 1
+
+======================================================================
+[Q4] Write a Python function that returns the n-th Fibonacci number.
+[A4] Here's a Python function that calculates the n-th Fibonacci number using recursion. This function has an exponential time complexity, so it's not efficient for large values of `n`. For large numbers, you should use an iterative approach or memoization to improve performance.
+
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+```
+
+Here'
+[2m2026-06-12T12:58:59.492830952+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::hf_compat_next_gen[0m[2m:[0m Num samples received: 1
+
+======================================================================
+[Q5] Summarize in one sentence: A neural processing unit (NPU) is a specialized chip that accelerates machine learning workloads, especially matrix and tensor operations, with high energy efficiency compared to general-purpose CPUs and GPUs.
+[A5] A Neural Processing Unit (NPU) is a power-efficient chip designed to speed up machine learning tasks, particularly matrix and tensor operations, by focusing on artificial neural network computations.
+
+======================================================================
+[DONE] 실제 텍스트 추론 검증 완료
+[2m2026-06-12T12:59:00.333980287+09:00[0m [32m INFO[0m [2mfuriosa_generator::next_gen::generator[0m[2m:[0m Scheduler exits normally

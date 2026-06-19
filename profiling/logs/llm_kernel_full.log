@@ -1,0 +1,85 @@
+[14:11:57] q_proj         decode B8 Sq1 ctx2048
+    bytes=33.69MB gflop=0.27 ai=8.0 dma=172.02 tu=25.3 | BW=0.196(13%) TF=10.6(4%) [mem]
+[14:11:59] k_proj         decode B8 Sq1 ctx2048
+    bytes=8.47MB gflop=0.07 ai=7.9 dma=44.55 tu=6.78 | BW=0.19(13%) TF=9.9(4%) [mem]
+[14:12:00] v_proj         decode B8 Sq1 ctx2048
+    bytes=8.47MB gflop=0.07 ai=7.9 dma=44.39 tu=6.78 | BW=0.191(13%) TF=9.9(4%) [mem]
+[14:12:01] o_proj         decode B8 Sq1 ctx2048
+    bytes=33.69MB gflop=0.27 ai=8.0 dma=172.42 tu=25.3 | BW=0.195(13%) TF=10.6(4%) [mem]
+[14:12:03] gate_proj      decode B8 Sq1 ctx2048
+    bytes=117.74MB gflop=0.94 ai=8.0 dma=602.51 tu=82.3 | BW=0.195(13%) TF=11.4(4%) [mem]
+[14:12:07] up_proj        decode B8 Sq1 ctx2048
+    bytes=117.74MB gflop=0.94 ai=8.0 dma=602.76 tu=82.32 | BW=0.195(13%) TF=11.4(4%) [mem]
+[14:12:11] down_proj      decode B8 Sq1 ctx2048
+    bytes=117.74MB gflop=0.94 ai=8.0 dma=600.61 tu=88.53 | BW=0.196(13%) TF=10.6(4%) [mem]
+[14:12:15] lm_head        decode B8 Sq1 ctx2048
+    bytes=1052.79MB gflop=8.41 ai=8.0 dma=5375.85 tu=734.96 | BW=0.196(13%) TF=11.4(4%) [mem]
+[14:12:47] rmsnorm        decode B8 Sq1 ctx2048
+    bytes=0.14MB gflop=0.0 ai=0.9 dma=2.2 tu=1.19 | BW=0.063(4%) TF=0.1(0%) [mem]
+[14:12:47] silu           decode B8 Sq1 ctx2048
+    bytes=0.46MB gflop=0.0 ai=1.0 dma=2.78 tu=0.6 | BW=0.165(11%) TF=0.8(0%) [mem]
+[14:12:47] swiglu_mul     decode B8 Sq1 ctx2048
+    bytes=0.69MB gflop=0.0 ai=0.8 dma=4.3 tu=1.65 | BW=0.16(11%) TF=0.3(0%) [mem]
+[14:12:48] residual_add   decode B8 Sq1 ctx2048
+    bytes=0.2MB gflop=0.0 ai=0.2 dma=2.94 tu=0.27 | BW=0.067(4%) TF=0.1(0%) [mem]
+[14:12:48] rope           decode B8 Sq1 ctx2048
+    bytes=0.13MB gflop=0.0 ai=0.7 dma=3.03 tu=3.21 | BW=0.043(3%) TF=0.0(0%) [cmp]
+[14:12:49] embedding      decode B8 Sq1 ctx2048
+    bytes=0.07MB gflop=0.0 ai=0.0 dma=7.19 tu=0.0 | BW=0.009(1%) TF=0(0%) [mem]
+[14:12:56] argmax         decode B8 Sq1 ctx2048
+    bytes=2.05MB gflop=0.0 ai=0.5 dma=17.24 tu=21.09 | BW=0.119(8%) TF=0.0(0%) [cmp]
+[14:12:57] attn_scores    decode B8 Sq1 ctx2048
+    bytes=34.67MB gflop=0.13 ai=3.9 dma=177.83 tu=20.78 | BW=0.195(13%) TF=6.5(3%) [mem]
+[14:12:58] softmax        decode B8 Sq1 ctx2048
+    bytes=2.1MB gflop=0.0 ai=1.2 dma=11.17 tu=6.84 | BW=0.188(13%) TF=0.4(0%) [mem]
+[14:12:58] attn_av        decode B8 Sq1 ctx2048
+    bytes=34.67MB gflop=0.13 ai=3.9 dma=178.31 tu=22.77 | BW=0.194(13%) TF=5.9(2%) [mem]
+[14:12:59] attn_scores    decode B8 Sq1 ctx8192
+    bytes=138.48MB gflop=0.54 ai=3.9 dma=993.18 tu=83.11 | BW=0.139(9%) TF=6.5(3%) [mem]
+[14:13:02] softmax        decode B8 Sq1 ctx8192
+    bytes=8.39MB gflop=0.01 ai=1.2 dma=41.87 tu=25.27 | BW=0.2(13%) TF=0.4(0%) [mem]
+[14:13:02] attn_av        decode B8 Sq1 ctx8192
+    bytes=138.48MB gflop=0.54 ai=3.9 dma=981.55 tu=93.55 | BW=0.141(9%) TF=5.7(2%) [mem]
+[14:13:08] attn_scores    decode B8 Sq1 ctx16384
+    bytes=276.89MB gflop=1.07 ai=3.9 dma=2009.96 tu=166.19 | BW=0.138(9%) TF=6.5(3%) [mem]
+[14:13:18] softmax        decode B8 Sq1 ctx16384
+    bytes=16.78MB gflop=0.02 ai=1.2 dma=83.39 tu=50.67 | BW=0.201(13%) TF=0.4(0%) [mem]
+[14:13:18] attn_av        decode B8 Sq1 ctx16384
+    bytes=276.89MB gflop=1.07 ai=3.9 dma=1965.54 tu=187.22 | BW=0.141(9%) TF=5.7(2%) [mem]
+[14:13:32] q_proj         prefill B1 Sq2048 ctx2048
+    bytes=67.11MB gflop=68.72 ai=1024.0 dma=602.32 tu=2402.55 | BW=0.111(7%) TF=28.6(11%) [cmp]
+[14:13:53] k_proj         prefill B1 Sq2048 ctx2048
+    bytes=29.36MB gflop=17.18 ai=585.1 dma=205.99 tu=873.07 | BW=0.143(10%) TF=19.7(8%) [cmp]
+[14:14:00] v_proj         prefill B1 Sq2048 ctx2048
+    bytes=29.36MB gflop=17.18 ai=585.1 dma=205.03 tu=873.05 | BW=0.143(10%) TF=19.7(8%) [cmp]
+[14:14:07] o_proj         prefill B1 Sq2048 ctx2048
+    bytes=67.11MB gflop=68.72 ai=1024.0 dma=600.25 tu=2402.57 | BW=0.112(7%) TF=28.6(11%) [cmp]
+[14:14:27] gate_proj      prefill B1 Sq2048 ctx2048
+    bytes=192.94MB gflop=240.52 ai=1246.6 dma=11224.24 tu=8162.08 | BW=0.017(1%) TF=29.5(12%) [mem]
+[14:16:42] up_proj        prefill B1 Sq2048 ctx2048
+    bytes=192.94MB gflop=240.52 ai=1246.6 dma=11225.3 tu=8162.06 | BW=0.017(1%) TF=29.5(12%) [mem]
+[14:18:58] down_proj      prefill B1 Sq2048 ctx2048
+    bytes=192.94MB gflop=240.52 ai=1246.6 dma=2605.54 tu=9261.96 | BW=0.074(5%) TF=26.0(10%) [cmp]
+[14:19:32] lm_head        prefill B1 Sq2048 ctx2048
+    bytes=1592.79MB gflop=2151.78 ai=1351.0 dma=22890.5 tu=75605.41 | BW=0.07(5%) TF=28.5(11%) [cmp]
+[14:21:56] rmsnorm        prefill B1 Sq2048 ctx2048
+    bytes=33.56MB gflop=0.03 ai=1.0 dma=167.86 tu=90.33 | BW=0.2(13%) TF=0.4(0%) [mem]
+[14:21:57] silu           prefill B1 Sq2048 ctx2048
+    bytes=117.44MB gflop=0.12 ai=1.0 dma=531.35 tu=117.09 | BW=0.221(15%) TF=1.0(0%) [mem]
+[14:21:59] swiglu_mul     prefill B1 Sq2048 ctx2048
+    bytes=176.16MB gflop=0.15 ai=0.8 dma=1007.55 tu=352.72 | BW=0.175(12%) TF=0.4(0%) [mem]
+[14:22:03] residual_add   prefill B1 Sq2048 ctx2048
+    bytes=50.33MB gflop=0.01 ai=0.2 dma=351.63 tu=33.32 | BW=0.143(10%) TF=0.3(0%) [mem]
+[14:22:04] rope           prefill B1 Sq2048 ctx2048
+    bytes=34.6MB gflop=0.03 ai=0.7 dma=180.34 tu=196.96 | BW=0.192(13%) TF=0.1(0%) [cmp]
+[14:22:07] embedding      prefill B1 Sq2048 ctx2048
+    bytes=16.79MB gflop=0.0 ai=0.0 dma=163.82 tu=0.8 | BW=0.103(7%) TF=0.0(0%) [mem]
+[14:22:15] argmax         prefill B1 Sq2048 ctx2048
+    bytes=525.34MB gflop=0.26 ai=0.5 dma=2826.82 tu=4566.71 | BW=0.186(12%) TF=0.1(0%) [cmp]
+[14:22:40] attn_scores    prefill B1 Sq2048 ctx2048
+    bytes=289.41MB gflop=34.36 ai=118.7 dma=2055.7 tu=3209.81 | BW=0.141(9%) TF=10.7(4%) [cmp]
+[14:22:52] softmax        prefill B1 Sq2048 ctx2048
+    bytes=536.87MB gflop=0.67 ai=1.2 dma=3492.87 tu=1634.93 | BW=0.154(10%) TF=0.4(0%) [mem]
+[14:23:04] attn_av        prefill B1 Sq2048 ctx2048
+    bytes=289.41MB gflop=34.36 ai=118.7 dma=1822.92 tu=1146.48 | BW=0.159(11%) TF=30.0(12%) [mem]
+[DONE] /home/furiosa/바탕화면/pjh/npu_chip_project/LENS/inference_profiling/RNGD/llm_kernel_profile_results.csv (42 rows)

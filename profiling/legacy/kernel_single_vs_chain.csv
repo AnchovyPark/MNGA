@@ -1,0 +1,16 @@
+chain,S,kernel1,kernel1_us,kernel2,kernel2_us,single_sum_us,chain_us,saving_us
+matmul_add,128,matmul,3.55,add,2.08,5.63,4.48,1.15
+matmul_add,512,matmul,31.11,add,9.11,40.22,32.92,7.3
+matmul_add,1024,matmul,98.7,add,32.68,131.38,115.12,16.26
+matmul_add,2048,matmul,618.86,add,125.62,744.48,635.4,109.08
+matmul_add,4096,matmul,4487.96,add,502.35,4990.31,4603.62,386.69
+matmul_mul,128,matmul,3.55,mul,2.15,5.7,4.56,1.14
+matmul_mul,512,matmul,31.11,mul,10.32,41.43,33.18,8.25
+matmul_mul,1024,matmul,98.7,mul,36.95,135.65,119.59,16.06
+matmul_mul,2048,matmul,618.86,mul,125.29,744.15,652.29,91.86
+matmul_mul,4096,matmul,4487.96,mul,501.55,4989.51,4671.26,318.25
+matmul_softmax,128,matmul,3.55,softmax,2.17,5.72,4.53,1.19
+matmul_softmax,512,matmul,31.11,softmax,9.8,40.91,34.73,6.18
+matmul_softmax,1024,matmul,98.7,softmax,31.69,130.39,124.32,6.07
+matmul_softmax,2048,matmul,618.86,softmax,92.44,711.3,683.71,27.59
+matmul_softmax,4096,matmul,4487.96,softmax,333.41,4821.37,5213.6,-392.23

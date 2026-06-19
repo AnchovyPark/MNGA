@@ -1,0 +1,9 @@
+[prefill] rmsnorm→gate_proj   (vec→mm) A=172 B=10069 fused=10116 Δ=-125(99%) | dma A+B=10177→9960(-217)
+[prefill] gate_proj→silu      (mm→vec) A=10067 B=523 fused=10104 Δ=-486(95%) | dma A+B=10531→10013(-517)
+[prefill] silu→mul(swiglu)    (vec→vec) A=523 B=800 fused=793 Δ=-530(60%) | dma A+B=1323→792(-530)
+[prefill] mul→down_proj       (vec→mm) A=800 B=8677 fused=8910 Δ=-566(94%) | dma A+B=2690→2469(-220)
+[prefill] down_proj→residual  (mm→vec) A=8676 B=251 fused=8714 Δ=-213(98%) | dma A+B=2142→1982(-160)
+[prefill] QK→softmax          (mm→vec) A=1540 B=2663 fused=6352 Δ=+2149(151%) | dma A+B=4201→4473(+272)
+[prefill] softmax→AV          (vec→mm) A=2664 B=1626 fused=7573 Δ=+3283(177%) | dma A+B=4265→7509(+3245)
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/pair_fusion_results.csv (7 rows)
