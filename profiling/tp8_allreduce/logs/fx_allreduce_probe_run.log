@@ -1,0 +1,52 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/core/attention/attention.py:6: UserWarning: LTW Backend is provided temporarily for compatibility purposes only. This feature may be removed without notice in future versions. (Default behavior, set USE_WTL_BACKEND=1 to use WTL backend)
+  from furiosa.models.core.attention.backends import LLMAttentionBackend
+Output tensor names will be obtained from FX graph. This might not be correct.
+/usr/lib/python3.10/copyreg.py:101: FutureWarning: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+  return cls.__new__(cls, *args)
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/trace.py:677: FutureWarning: `treespec.children_specs` is deprecated. Use `treespec.child(index)` to access a single child, or `treespec.children()` to get all children.
+  assert in_spec.type is tuple and len(in_spec.children_specs) == 2
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/trace.py:682: FutureWarning: `treespec.children_specs` is deprecated. Use `treespec.child(index)` to access a single child, or `treespec.children()` to get all children.
+  example_args, LocalSource(ARGS_NAME), in_spec.children_specs[0]  # type: ignore[call-arg]
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/trace.py:644: FutureWarning: `treespec.children_specs` is deprecated. Use `treespec.child(index)` to access a single child, or `treespec.children()` to get all children.
+  cur_spec.children_specs[idx],
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/trace.py:685: FutureWarning: `treespec.children_specs` is deprecated. Use `treespec.child(index)` to access a single child, or `treespec.children()` to get all children.
+  example_kwargs, LocalSource(KWARGS_NAME), in_spec.children_specs[1]  # type: ignore[call-arg]
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/trace.py:649: FutureWarning: `treespec.children_specs` is deprecated. Use `treespec.child(index)` to access a single child, or `treespec.children()` to get all children.
+  for dict_key, child_spec in zip(dict_keys, cur_spec.children_specs):
+=== aten graph ===
+  placeholder    arg0_1               arg0_1
+  placeholder    arg1_1               arg1_1
+  call_function  matmul               aten.matmul.default
+  output         output               output
+
+=== ModelRewriter.rewrite (AllReduce 삽입 시도) ===
+  placeholder    d0_arg0_1                d0_arg0_1
+  placeholder    d1_arg0_1                d1_arg0_1
+  placeholder    d2_arg0_1                d2_arg0_1
+  placeholder    d3_arg0_1                d3_arg0_1
+  placeholder    d4_arg0_1                d4_arg0_1
+  placeholder    d5_arg0_1                d5_arg0_1
+  placeholder    d6_arg0_1                d6_arg0_1
+  placeholder    d7_arg0_1                d7_arg0_1
+  placeholder    d0_arg1_1                d0_arg1_1
+  placeholder    d1_arg1_1                d1_arg1_1
+  placeholder    d2_arg1_1                d2_arg1_1
+  placeholder    d3_arg1_1                d3_arg1_1
+  placeholder    d4_arg1_1                d4_arg1_1
+  placeholder    d5_arg1_1                d5_arg1_1
+  placeholder    d6_arg1_1                d6_arg1_1
+  placeholder    d7_arg1_1                d7_arg1_1
+  call_function  matmul_default           aten.matmul.default
+  call_function  matmul_default_1         aten.matmul.default
+  call_function  matmul_default_2         aten.matmul.default
+  call_function  matmul_default_3         aten.matmul.default
+  call_function  matmul_default_4         aten.matmul.default
+  call_function  matmul_default_5         aten.matmul.default
+  call_function  matmul_default_6         aten.matmul.default
+  call_function  matmul_default_7         aten.matmul.default
+  output         output                   output
+
+>>> AllReduce 삽입됨: NO
+>>> 다음 단계(new_pipeline_builder)에서 실행 시 'Communication supertasks are not supported yet' 로 막힘.

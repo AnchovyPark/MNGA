@@ -1,0 +1,19 @@
+########## NPE=1 ##########
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== NPE=1  device_config=1 PE fused ===
+[NPE=1] matmul_DxD   task=656.5 tu=595.7 dma=211.7 parcopy=0.0 cluster=0.0 | task-tu=60.8
+[NPE=1] mlp          task=4331.0 tu=4279.9 dma=1245.5 parcopy=0.0 cluster=0.0 | task-tu=51.0
+[NPE=1] attn         task=2670.6 tu=2640.3 dma=900.7 parcopy=0.0 cluster=0.0 | task-tu=30.2
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/tp8_allreduce/tp_sweep_np1_results.csv (3 rows)
+########## NPE=8 ##########
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== NPE=8  device_config=8 PE fused ===
+[NPE=8] matmul_DxD   task=307.0 tu=141.0 dma=52.2 parcopy=8.8 cluster=148.3 | task-tu=166.1
+[NPE=8] mlp          task=1593.0 tu=691.2 dma=500.5 parcopy=17.9 cluster=29.4 | task-tu=901.8
+[NPE=8] attn         task=1100.0 tu=491.7 dma=205.2 parcopy=29.3 cluster=340.2 | task-tu=608.3
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/tp8_allreduce/tp_sweep_np8_results.csv (3 rows)
+TP_SWEEP_DONE
