@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Profile three adjacent operator pairs on RNGD.
+"""Profile adjacent operator pairs on RNGD.
 
 This is the second rung of the operator composition ladder:
 compare isolated A + isolated B against joint-compiled A -> B.
@@ -44,10 +44,14 @@ class PairBlock(torch.nn.Module):
             v = x.float()
             v = v * torch.rsqrt(v.pow(2).mean(-1, keepdim=True) + 1e-5)
             return (v * aux.float()).to(x.dtype)
-        if kind in ("q_proj", "gate_proj"):
+        if kind in ("q_proj", "gate_proj", "down_proj", "av_context"):
             return x @ aux
         if kind == "activation":
             return F.silu(x)
+        if kind == "swiglu_mul":
+            return x * aux
+        if kind == "residual_add":
+            return x + aux
         if kind == "qk_scores":
             return x @ aux
         if kind == "softmax":
@@ -139,6 +143,13 @@ def pairs_for(regime):
             b=("q_proj", (D, D)),
         ),
         dict(
+            pair="rmsnorm_to_gate_proj",
+            input_a=(B, S, D),
+            input_b=(B, S, D),
+            a=("rmsnorm", (D,)),
+            b=("gate_proj", (D, INTER)),
+        ),
+        dict(
             pair="gate_proj_to_activation",
             input_a=(B, S, D),
             input_b=(B, S, INTER),
@@ -146,11 +157,39 @@ def pairs_for(regime):
             b=("activation", None),
         ),
         dict(
+            pair="activation_to_swiglu_mul",
+            input_a=(B, S, INTER),
+            input_b=(B, S, INTER),
+            a=("activation", None),
+            b=("swiglu_mul", (B, S, INTER)),
+        ),
+        dict(
+            pair="swiglu_mul_to_down_proj",
+            input_a=(B, S, INTER),
+            input_b=(B, S, INTER),
+            a=("swiglu_mul", (B, S, INTER)),
+            b=("down_proj", (INTER, D)),
+        ),
+        dict(
+            pair="down_proj_to_residual",
+            input_a=(B, S, INTER),
+            input_b=(B, S, D),
+            a=("down_proj", (INTER, D)),
+            b=("residual_add", (B, S, D)),
+        ),
+        dict(
             pair="qk_scores_to_softmax",
             input_a=(B, NH, S, HD),
             input_b=(B, NH, S, CTX),
             a=("qk_scores", (B, NH, HD, CTX)),
             b=("softmax", None),
+        ),
+        dict(
+            pair="softmax_to_av_context",
+            input_a=(B, NH, S, CTX),
+            input_b=(B, NH, S, CTX),
+            a=("softmax", None),
+            b=("av_context", (B, NH, CTX, HD)),
         ),
     ]
 
