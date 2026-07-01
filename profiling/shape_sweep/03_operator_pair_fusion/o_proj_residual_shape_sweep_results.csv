@@ -1,0 +1,6 @@
+B,S,NH,HD,D,pair,pair_task_us,pair_dma_us,pair_tu_us
+1,128,32,128,4096,o_proj_to_residual_add,202.57,187.25,147.16
+1,256,32,128,4096,o_proj_to_residual_add,319.82,202.54,283.36
+1,512,32,128,4096,o_proj_to_residual_add,665.06,233.28,622.99
+1,1024,32,128,4096,o_proj_to_residual_add,1255.21,299.64,1221.16
+1,2048,32,128,4096,o_proj_to_residual_add,2323.01,575.6,2274.48
