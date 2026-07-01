@@ -1,21 +1,25 @@
 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
   return torch._C._xpu_getDeviceCount()
-[decode] rmsnorm_to_q_proj        A+B=178.1us fused=177.8us gap=-0.3us
-[decode] rmsnorm_to_gate_proj     A+B=611.1us fused=608.7us gap=-2.5us
-[decode] gate_proj_to_activation  A+B=611.2us fused=608.0us gap=-3.2us
-[decode] activation_to_swiglu_mul A+B=8.7us fused=5.6us gap=-3.1us
-[decode] swiglu_mul_to_down_proj  A+B=608.7us fused=608.3us gap=-0.4us
-[decode] down_proj_to_residual    A+B=606.1us fused=603.7us gap=-2.4us
-[decode] qk_scores_to_softmax     A+B=992.2us fused=981.0us gap=-11.1us
-[decode] softmax_to_av_context    A+B=982.6us fused=964.8us gap=-17.8us
-[prefill] rmsnorm_to_q_proj        A+B=2461.9us fused=2409.9us gap=-52.0us
-[prefill] rmsnorm_to_gate_proj     A+B=10237.0us fused=10116.9us gap=-120.1us
-[prefill] gate_proj_to_activation  A+B=10587.6us fused=10102.4us gap=-485.2us
-[prefill] activation_to_swiglu_mul A+B=1323.1us fused=792.7us gap=-530.5us
-[prefill] swiglu_mul_to_down_proj  A+B=9476.2us fused=8910.5us gap=-565.7us
-[prefill] down_proj_to_residual    A+B=8926.8us fused=8714.1us gap=-212.7us
-[prefill] qk_scores_to_softmax     A+B=4203.9us fused=6350.8us gap=+2146.9us
-[prefill] softmax_to_av_context    A+B=4288.9us fused=7572.9us gap=+3284.0us
+[decode] rmsnorm_to_q_proj        A+B=178.9us fused=177.8us gap=-1.1us
+[decode] rmsnorm_to_gate_proj     A+B=610.0us fused=608.4us gap=-1.6us
+[decode] gate_proj_to_activation  A+B=610.8us fused=608.0us gap=-2.8us
+[decode] activation_to_swiglu_mul A+B=8.8us fused=5.4us gap=-3.4us
+[decode] swiglu_mul_to_down_proj  A+B=609.5us fused=608.1us gap=-1.3us
+[decode] down_proj_to_residual    A+B=606.3us fused=604.0us gap=-2.3us
+[decode] qk_scores_to_softmax     A+B=993.1us fused=981.1us gap=-12.0us
+[decode] softmax_to_av_context    A+B=983.1us fused=964.8us gap=-18.3us
+[decode] av_context_to_o_proj     A+B=1140.3us fused=1136.2us gap=-4.1us
+[decode] o_proj_to_residual_add   A+B=178.1us fused=175.9us gap=-2.1us
+[prefill] rmsnorm_to_q_proj        A+B=2462.3us fused=2410.0us gap=-52.3us
+[prefill] rmsnorm_to_gate_proj     A+B=10238.5us fused=10115.3us gap=-123.1us
+[prefill] gate_proj_to_activation  A+B=10591.4us fused=10104.7us gap=-486.7us
+[prefill] activation_to_swiglu_mul A+B=1323.3us fused=792.8us gap=-530.5us
+[prefill] swiglu_mul_to_down_proj  A+B=9477.1us fused=8910.3us gap=-566.8us
+[prefill] down_proj_to_residual    A+B=8927.3us fused=8714.0us gap=-213.4us
+[prefill] qk_scores_to_softmax     A+B=4203.7us fused=6352.2us gap=+2148.6us
+[prefill] softmax_to_av_context    A+B=4290.6us fused=7574.9us gap=+3284.3us
+[prefill] av_context_to_o_proj     A+B=3915.9us fused=3964.3us gap=+48.4us
+[prefill] o_proj_to_residual_add   A+B=2540.5us fused=2323.1us gap=-217.4us
 
-[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/adjacent_operator_pairs_results.csv (16 rows)
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/adjacent_operator_pairs_results.csv (20 rows)
 ADJ_DONE
