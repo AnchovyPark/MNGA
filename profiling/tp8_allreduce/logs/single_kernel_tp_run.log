@@ -1,0 +1,55 @@
+########## NPE=1 ##########
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== NPE=1 (1 PE fused) ===
+[NPE=1 S=128] qk_matmul        task=21.8 tu=9.1 dma=16.9 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] softmax_scores   task=18.0 tu=6.8 dma=11.1 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] av_matmul        task=21.7 tu=9.1 dma=16.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] rmsnorm          task=16.2 tu=5.0 dma=11.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] qkv_proj         task=542.5 tu=425.1 dma=534.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] o_proj           task=199.2 tu=144.0 dma=181.4 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] residual_add     task=17.1 tu=2.2 dma=14.9 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] qk_matmul        task=138.0 tu=85.2 dma=132.1 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] softmax_scores   task=151.8 tu=106.0 dma=149.1 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] av_matmul        task=135.6 tu=93.6 dma=133.7 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] rmsnorm          task=63.8 tu=21.9 dma=43.2 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] qkv_proj         task=1882.5 tu=1848.6 dma=600.7 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] o_proj           task=656.8 tu=614.7 dma=211.9 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] residual_add     task=71.4 tu=8.3 dma=63.0 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] qk_matmul        task=1539.9 tu=1183.9 dma=1538.6 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] softmax_scores   task=2663.0 tu=1634.8 dma=2662.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] av_matmul        task=1627.6 tu=1490.6 dma=1602.6 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] rmsnorm          task=172.1 tu=87.6 dma=167.7 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] qkv_proj         task=8556.4 tu=6909.9 dma=8465.6 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] o_proj           task=2289.7 tu=2241.2 dma=466.4 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] residual_add     task=250.9 tu=33.3 dma=250.8 parcopy=0.0 cluster=0.0
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/tp8_allreduce/single_kernel_tp_np1_results.csv (21 rows)
+########## NPE=8 ##########
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== NPE=8 (8 PE fused) ===
+[NPE=8 S=128] qk_matmul        task=16.8 tu=5.7 dma=7.9 parcopy=0.0 cluster=5.1
+[NPE=8 S=128] softmax_scores   task=12.7 tu=3.4 dma=4.8 parcopy=0.0 cluster=3.7
+[NPE=8 S=128] av_matmul        task=15.0 tu=5.7 dma=6.9 parcopy=0.0 cluster=3.7
+[NPE=8 S=128] rmsnorm          task=10.2 tu=1.8 dma=3.8 parcopy=0.0 cluster=0.5
+[NPE=8 S=128] qkv_proj         task=268.9 tu=110.6 dma=89.6 parcopy=0.0 cluster=0.7
+[NPE=8 S=128] o_proj           task=129.4 tu=31.4 dma=37.4 parcopy=2.0 cluster=59.6
+[NPE=8 S=128] residual_add     task=11.0 tu=0.6 dma=4.2 parcopy=0.0 cluster=0.8
+[NPE=8 S=512] qk_matmul        task=67.5 tu=15.4 dma=22.1 parcopy=0.0 cluster=0.5
+[NPE=8 S=512] softmax_scores   task=81.3 tu=17.0 dma=32.6 parcopy=0.0 cluster=3.3
+[NPE=8 S=512] av_matmul        task=68.4 tu=22.4 dma=28.6 parcopy=0.0 cluster=3.6
+[NPE=8 S=512] rmsnorm          task=24.9 tu=6.4 dma=14.1 parcopy=0.0 cluster=3.2
+[NPE=8 S=512] qkv_proj         task=724.5 tu=297.2 dma=156.4 parcopy=17.1 cluster=304.7
+[NPE=8 S=512] o_proj           task=308.6 tu=139.5 dma=50.2 parcopy=7.3 cluster=146.1
+[NPE=8 S=512] residual_add     task=28.9 tu=2.5 dma=15.1 parcopy=0.0 cluster=4.7
+[NPE=8 S=2048] qk_matmul        task=611.7 tu=267.2 dma=342.9 parcopy=0.0 cluster=90.3
+[NPE=8 S=2048] softmax_scores   task=845.6 tu=274.0 dma=424.9 parcopy=0.0 cluster=4.2
+[NPE=8 S=2048] av_matmul        task=576.9 tu=215.3 dma=263.1 parcopy=0.0 cluster=1.2
+[NPE=8 S=2048] rmsnorm          task=81.7 tu=12.3 dma=30.6 parcopy=0.0 cluster=0.7
+[NPE=8 S=2048] qkv_proj         task=2208.1 tu=1005.2 dma=684.0 parcopy=128.5 cluster=434.6
+[NPE=8 S=2048] o_proj           task=764.6 tu=373.4 dma=106.7 parcopy=0.0 cluster=18.2
+[NPE=8 S=2048] residual_add     task=94.3 tu=4.6 dma=42.4 parcopy=0.0 cluster=0.9
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/tp8_allreduce/single_kernel_tp_np8_results.csv (21 rows)
+SINGLE_TP_DONE
