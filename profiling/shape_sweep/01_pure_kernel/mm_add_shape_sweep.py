@@ -8,6 +8,7 @@ No reshape/transpose/layout transform is included.
 Usage:
   python mm_add_shape_sweep.py
   python mm_add_shape_sweep.py 128,256,512,1024,2048
+  python mm_add_shape_sweep.py "1,32,512,128;1,16,512,128"
 """
 import csv
 import os
@@ -23,10 +24,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_CSV = os.path.join(HERE, "mm_add_shape_sweep_results.csv")
 
 B = 1
-D = 4096
+NH = 32
+HD = 128
+D = NH * HD
 DTYPE = torch.bfloat16
 N_RUNS = 3
-DEFAULT_S = [128, 256, 512, 1024, 2048]
+DEFAULT_CONFIGS = [
+    # B, NH, S, HD
+    (1, 32, 128, 128),
+    (1, 32, 512, 128),
+    (1, 32, 2048, 128),
+    (1, 16, 512, 128),
+    (1, 64, 512, 128),
+    (1, 32, 512, 64),
+    (1, 32, 512, 256),
+]
 
 
 class OpChain(torch.nn.Module):
@@ -106,24 +118,32 @@ def measure(ops, input_shape, weight_shape, residual_shape, dev):
     }
 
 
-def main():
-    seq_lens = DEFAULT_S
-    if len(sys.argv) > 1:
-        seq_lens = [int(x) for x in sys.argv[1].split(",") if x]
+def parse_configs():
+    if len(sys.argv) <= 1:
+        return DEFAULT_CONFIGS
+    arg = sys.argv[1]
+    if ";" in arg:
+        return [tuple(int(x) for x in item.split(",")) for item in arg.split(";") if item]
+    return [(B, NH, int(s), HD) for s in arg.split(",") if s]
 
+
+def main():
     dev = torch.device("rngd", 0)
     rows = []
-    for s in seq_lens:
-        input_shape = (B, s, D)
-        weight_shape = (D, D)
-        residual_shape = (B, s, D)
+    for b, nh, s, hd in parse_configs():
+        d = nh * hd
+        input_shape = (b, s, d)
+        weight_shape = (d, d)
+        residual_shape = (b, s, d)
 
         matmul = measure(["matmul"], input_shape, weight_shape, None, dev)
         add = measure(["add"], input_shape, None, residual_shape, dev)
         row = dict(
-            B=B,
+            B=b,
             S=s,
-            D=D,
+            NH=nh,
+            HD=hd,
+            D=d,
             matmul_task_us=round(matmul["task_us"], 2),
             add_task_us=round(add["task_us"], 2),
             isolated_sum_us=round(matmul["task_us"] + add["task_us"], 2),
@@ -134,13 +154,13 @@ def main():
         )
         rows.append(row)
         print(
-            f"[S={s}] matmul={matmul['task_us']:.1f}us "
+            f"[B={b} NH={nh} S={s} HD={hd}] matmul={matmul['task_us']:.1f}us "
             f"add={add['task_us']:.1f}us sum={row['isolated_sum_us']:.1f}us",
             flush=True,
         )
 
     fields = [
-        "B", "S", "D",
+        "B", "S", "NH", "HD", "D",
         "matmul_task_us", "add_task_us", "isolated_sum_us",
         "matmul_dma_us", "add_dma_us",
         "matmul_tu_us", "add_tu_us",

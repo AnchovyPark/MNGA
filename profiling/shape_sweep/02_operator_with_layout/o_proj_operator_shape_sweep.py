@@ -16,6 +16,7 @@ Stage 3 counterpart:
 Usage:
   python o_proj_operator_shape_sweep.py
   python o_proj_operator_shape_sweep.py 128,256,512,1024,2048
+  python o_proj_operator_shape_sweep.py "1,32,512,128;1,16,512,128"
 """
 import csv
 import os
@@ -33,10 +34,19 @@ OUT_CSV = os.path.join(HERE, "o_proj_operator_shape_sweep_results.csv")
 B = 1
 NH = 32
 HD = 128
-D = 4096
+D = NH * HD
 DTYPE = torch.bfloat16
 N_RUNS = 3
-DEFAULT_S = [128, 256, 512, 1024, 2048]
+DEFAULT_CONFIGS = [
+    # B, NH, S, HD
+    (1, 32, 128, 128),
+    (1, 32, 512, 128),
+    (1, 32, 2048, 128),
+    (1, 16, 512, 128),
+    (1, 64, 512, 128),
+    (1, 32, 512, 64),
+    (1, 32, 512, 256),
+]
 
 
 class OperatorBlock(torch.nn.Module):
@@ -117,18 +127,24 @@ def measure(kind, input_shape, weight_shape, residual_shape, dev):
     }
 
 
-def main():
-    seq_lens = DEFAULT_S
-    if len(sys.argv) > 1:
-        seq_lens = [int(x) for x in sys.argv[1].split(",") if x]
+def parse_configs():
+    if len(sys.argv) <= 1:
+        return DEFAULT_CONFIGS
+    arg = sys.argv[1]
+    if ";" in arg:
+        return [tuple(int(x) for x in item.split(",")) for item in arg.split(";") if item]
+    return [(B, NH, int(s), HD) for s in arg.split(",") if s]
 
+
+def main():
     dev = torch.device("rngd", 0)
     rows = []
-    for s in seq_lens:
-        o_proj_input_shape = (B, NH, s, HD)
-        residual_input_shape = (B, s, D)
-        weight_shape = (D, D)
-        residual_shape = (B, s, D)
+    for b, nh, s, hd in parse_configs():
+        d = nh * hd
+        o_proj_input_shape = (b, nh, s, hd)
+        residual_input_shape = (b, s, d)
+        weight_shape = (d, d)
+        residual_shape = (b, s, d)
 
         o_proj = measure("o_proj", o_proj_input_shape, weight_shape, None, dev)
         residual = measure(
@@ -136,11 +152,11 @@ def main():
         )
 
         row = dict(
-            B=B,
+            B=b,
             S=s,
-            NH=NH,
-            HD=HD,
-            D=D,
+            NH=nh,
+            HD=hd,
+            D=d,
             o_proj_task_us=round(o_proj["task_us"], 2),
             residual_task_us=round(residual["task_us"], 2),
             isolated_sum_us=round(o_proj["task_us"] + residual["task_us"], 2),
@@ -151,7 +167,7 @@ def main():
         )
         rows.append(row)
         print(
-            f"[S={s}] o_proj={o_proj['task_us']:.1f}us "
+            f"[B={b} NH={nh} S={s} HD={hd}] o_proj={o_proj['task_us']:.1f}us "
             f"residual={residual['task_us']:.1f}us "
             f"sum={row['isolated_sum_us']:.1f}us",
             flush=True,
