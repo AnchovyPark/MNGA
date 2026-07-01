@@ -1,0 +1,43 @@
+=== [1] 01/mm_add ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[B=1 NH=32 S=128 HD=128] matmul=198.7us add=17.0us sum=215.7us
+[B=1 NH=32 S=512 HD=128] matmul=656.7us add=71.2us sum=727.9us
+[B=1 NH=32 S=2048 HD=128] matmul=2289.8us add=251.1us sum=2540.9us
+[B=1 NH=16 S=512 HD=128] matmul=185.4us add=36.4us sum=221.8us
+[B=1 NH=64 S=512 HD=128] matmul=2609.4us add=126.2us sum=2735.6us
+[B=1 NH=32 S=512 HD=64] matmul=185.4us add=36.3us sum=221.8us
+[B=1 NH=32 S=512 HD=256] matmul=2609.3us add=126.1us sum=2735.4us
+[B=2 NH=32 S=512 HD=128] matmul=1185.2us add=127.4us sum=1312.6us
+[B=4 NH=32 S=512 HD=128] matmul=2296.1us add=225.8us sum=2521.9us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/01_pure_kernel/mm_add_shape_sweep_results.csv (9 rows)
+=== [2] 02/o_proj_operator ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[B=1 NH=32 S=128 HD=128] o_proj=199.2us residual=17.1us sum=216.3us
+[B=1 NH=32 S=512 HD=128] o_proj=656.8us residual=71.1us sum=727.9us
+[B=1 NH=32 S=2048 HD=128] o_proj=2289.7us residual=251.2us sum=2540.9us
+[B=1 NH=16 S=512 HD=128] o_proj=186.4us residual=36.3us sum=222.7us
+[B=1 NH=64 S=512 HD=128] o_proj=2609.9us residual=126.1us sum=2736.0us
+[B=1 NH=32 S=512 HD=64] o_proj=184.2us residual=36.4us sum=220.6us
+[B=1 NH=32 S=512 HD=256] o_proj=2608.5us residual=126.1us sum=2734.6us
+[B=2 NH=32 S=512 HD=128] o_proj=1170.5us residual=127.3us sum=1297.7us
+[B=4 NH=32 S=512 HD=128] o_proj=2297.0us residual=225.8us sum=2522.8us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/02_operator_with_layout/o_proj_operator_shape_sweep_results.csv (9 rows)
+=== [3] 03/o_proj_residual ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[B=1 NH=32 S=128 HD=128] o_proj_to_residual_add=202.5us
+[B=1 NH=32 S=512 HD=128] o_proj_to_residual_add=665.1us
+[B=1 NH=32 S=2048 HD=128] o_proj_to_residual_add=2323.0us
+[B=1 NH=16 S=512 HD=128] o_proj_to_residual_add=190.8us
+[B=1 NH=64 S=512 HD=128] o_proj_to_residual_add=2615.8us
+[B=1 NH=32 S=512 HD=64] o_proj_to_residual_add=188.7us
+[B=1 NH=32 S=512 HD=256] o_proj_to_residual_add=2614.1us
+[B=2 NH=32 S=512 HD=128] o_proj_to_residual_add=1194.1us
+[B=4 NH=32 S=512 HD=128] o_proj_to_residual_add=2354.1us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/03_operator_pair_fusion/o_proj_residual_shape_sweep_results.csv (9 rows)
+CHAIN_B_GRID_DONE

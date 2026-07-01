@@ -1,6 +1,10 @@
 B,S,NH,HD,D,pair,pair_task_us,pair_dma_us,pair_tu_us
-1,128,32,128,4096,o_proj_to_residual_add,202.57,187.25,147.16
-1,256,32,128,4096,o_proj_to_residual_add,319.82,202.54,283.36
-1,512,32,128,4096,o_proj_to_residual_add,665.06,233.28,622.99
-1,1024,32,128,4096,o_proj_to_residual_add,1255.21,299.64,1221.16
-1,2048,32,128,4096,o_proj_to_residual_add,2323.01,575.6,2274.48
+1,128,32,128,4096,o_proj_to_residual_add,202.54,187.09,147.17
+1,512,32,128,4096,o_proj_to_residual_add,665.14,233.23,623.06
+1,2048,32,128,4096,o_proj_to_residual_add,2322.97,575.76,2274.53
+1,512,16,128,2048,o_proj_to_residual_add,190.76,73.1,162.53
+1,512,64,128,8192,o_proj_to_residual_add,2615.76,859.71,2579.31
+1,512,32,64,2048,o_proj_to_residual_add,188.69,73.0,160.48
+1,512,32,256,8192,o_proj_to_residual_add,2614.12,856.89,2579.22
+2,512,32,128,4096,o_proj_to_residual_add,1194.13,317.62,1136.11
+4,512,32,128,4096,o_proj_to_residual_add,2354.12,976.04,2303.59
