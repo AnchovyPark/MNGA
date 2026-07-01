@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Prefill shape sweep for O projection -> residual add on RNGD.
 
-Measures:
-  isolated O projection + isolated residual add
-  vs joint-compiled O projection -> residual add
+Stage 3: measure only the joint operator pair.
+Use stage 2 outputs to compute composition gap offline.
 
 O projection here includes the attention-output layout transform:
   (B, NH, S, HD) -> (B, S, D) -> MatMul(D, D)
@@ -128,15 +127,8 @@ def main():
         weight_shape = (D, D)
         residual_shape = (B, s, D)
 
-        o_proj = measure(["o_proj"], o_proj_input_shape, weight_shape, None, dev)
-        residual = measure(["residual_add"], residual_input_shape, None,
-                           residual_shape, dev)
         fused = measure(["o_proj", "residual_add"], o_proj_input_shape,
                         weight_shape, residual_shape, dev)
-
-        isolated_sum = o_proj["task_us"] + residual["task_us"]
-        gap = fused["task_us"] - isolated_sum
-        ratio = fused["task_us"] / isolated_sum if isolated_sum else 0.0
 
         row = dict(
             B=B,
@@ -144,32 +136,20 @@ def main():
             NH=NH,
             HD=HD,
             D=D,
-            o_proj_task_us=round(o_proj["task_us"], 2),
-            residual_task_us=round(residual["task_us"], 2),
-            fused_task_us=round(fused["task_us"], 2),
-            isolated_sum_us=round(isolated_sum, 2),
-            composition_gap_us=round(gap, 2),
-            fusion_ratio=round(ratio, 4),
-            o_proj_dma_us=round(o_proj["dma_us"], 2),
-            residual_dma_us=round(residual["dma_us"], 2),
-            fused_dma_us=round(fused["dma_us"], 2),
-            o_proj_tu_us=round(o_proj["tu_us"], 2),
-            residual_tu_us=round(residual["tu_us"], 2),
-            fused_tu_us=round(fused["tu_us"], 2),
+            pair="o_proj_to_residual_add",
+            pair_task_us=round(fused["task_us"], 2),
+            pair_dma_us=round(fused["dma_us"], 2),
+            pair_tu_us=round(fused["tu_us"], 2),
         )
         rows.append(row)
         print(
-            f"[S={s}] A+B={isolated_sum:.1f}us fused={fused['task_us']:.1f}us "
-            f"gap={gap:+.1f}us ratio={ratio:.3f}",
+            f"[S={s}] o_proj_to_residual_add={fused['task_us']:.1f}us",
             flush=True,
         )
 
     fields = [
-        "B", "S", "NH", "HD", "D",
-        "o_proj_task_us", "residual_task_us", "fused_task_us",
-        "isolated_sum_us", "composition_gap_us", "fusion_ratio",
-        "o_proj_dma_us", "residual_dma_us", "fused_dma_us",
-        "o_proj_tu_us", "residual_tu_us", "fused_tu_us",
+        "B", "S", "NH", "HD", "D", "pair",
+        "pair_task_us", "pair_dma_us", "pair_tu_us",
     ]
     with open(OUT_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")

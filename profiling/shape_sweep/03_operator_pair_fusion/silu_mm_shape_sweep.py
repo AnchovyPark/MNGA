@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Prefill shape sweep for SiLU -> MatMul composition on RNGD.
 
-Measures:
-  isolated SiLU + isolated MatMul vs joint-compiled SiLU -> MatMul
+Stage 3: measure only the joint operator pair.
+Use stage 2 outputs to compute composition gap offline.
 
 Default sweep changes sequence length S while keeping Llama-3.1-8B-like
 hidden dimensions:
@@ -116,45 +116,27 @@ def main():
         input_shape = (B, s, INTER)
         weight_shape = (INTER, D)
 
-        silu = measure(["silu"], input_shape, None, dev)
-        matmul = measure(["matmul"], input_shape, weight_shape, dev)
         fused = measure(["silu", "matmul"], input_shape, weight_shape, dev)
-
-        isolated_sum = silu["task_us"] + matmul["task_us"]
-        gap = fused["task_us"] - isolated_sum
-        ratio = fused["task_us"] / isolated_sum if isolated_sum else 0.0
 
         row = dict(
             B=B,
             S=s,
             INTER=INTER,
             D=D,
-            silu_task_us=round(silu["task_us"], 2),
-            matmul_task_us=round(matmul["task_us"], 2),
-            fused_task_us=round(fused["task_us"], 2),
-            isolated_sum_us=round(isolated_sum, 2),
-            composition_gap_us=round(gap, 2),
-            fusion_ratio=round(ratio, 4),
-            silu_dma_us=round(silu["dma_us"], 2),
-            matmul_dma_us=round(matmul["dma_us"], 2),
-            fused_dma_us=round(fused["dma_us"], 2),
-            silu_tu_us=round(silu["tu_us"], 2),
-            matmul_tu_us=round(matmul["tu_us"], 2),
-            fused_tu_us=round(fused["tu_us"], 2),
+            pair="silu_to_matmul",
+            pair_task_us=round(fused["task_us"], 2),
+            pair_dma_us=round(fused["dma_us"], 2),
+            pair_tu_us=round(fused["tu_us"], 2),
         )
         rows.append(row)
         print(
-            f"[S={s}] A+B={isolated_sum:.1f}us fused={fused['task_us']:.1f}us "
-            f"gap={gap:+.1f}us ratio={ratio:.3f}",
+            f"[S={s}] silu_to_matmul={fused['task_us']:.1f}us",
             flush=True,
         )
 
     fields = [
-        "B", "S", "INTER", "D",
-        "silu_task_us", "matmul_task_us", "fused_task_us",
-        "isolated_sum_us", "composition_gap_us", "fusion_ratio",
-        "silu_dma_us", "matmul_dma_us", "fused_dma_us",
-        "silu_tu_us", "matmul_tu_us", "fused_tu_us",
+        "B", "S", "INTER", "D", "pair",
+        "pair_task_us", "pair_dma_us", "pair_tu_us",
     ]
     with open(OUT_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")

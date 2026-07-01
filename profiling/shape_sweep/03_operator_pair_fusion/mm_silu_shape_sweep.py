@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Pair-fusion shape sweep for MatMul -> SiLU on RNGD.
 
-Stage 3: measure isolated MatMul + isolated SiLU vs joint MatMul -> SiLU.
+Stage 3: measure only the joint operator pair.
+Use stage 2 outputs to compute composition gap offline.
 
 Usage:
   python mm_silu_shape_sweep.py
@@ -115,42 +116,24 @@ def main():
         silu_input = (B, s, INTER)
         weight_shape = (D, INTER)
 
-        matmul = measure(["matmul"], mm_input, weight_shape, dev)
-        silu = measure(["silu"], silu_input, None, dev)
         fused = measure(["matmul", "silu"], mm_input, weight_shape, dev)
-
-        isolated_sum = matmul["task_us"] + silu["task_us"]
-        gap = fused["task_us"] - isolated_sum
-        ratio = fused["task_us"] / isolated_sum if isolated_sum else 0.0
 
         row = dict(
             B=B, S=s, D=D, INTER=INTER,
-            matmul_task_us=round(matmul["task_us"], 2),
-            silu_task_us=round(silu["task_us"], 2),
-            fused_task_us=round(fused["task_us"], 2),
-            isolated_sum_us=round(isolated_sum, 2),
-            composition_gap_us=round(gap, 2),
-            fusion_ratio=round(ratio, 4),
-            matmul_dma_us=round(matmul["dma_us"], 2),
-            silu_dma_us=round(silu["dma_us"], 2),
-            fused_dma_us=round(fused["dma_us"], 2),
-            matmul_tu_us=round(matmul["tu_us"], 2),
-            silu_tu_us=round(silu["tu_us"], 2),
-            fused_tu_us=round(fused["tu_us"], 2),
+            pair="matmul_to_silu",
+            pair_task_us=round(fused["task_us"], 2),
+            pair_dma_us=round(fused["dma_us"], 2),
+            pair_tu_us=round(fused["tu_us"], 2),
         )
         rows.append(row)
         print(
-            f"[S={s}] A+B={isolated_sum:.1f}us fused={fused['task_us']:.1f}us "
-            f"gap={gap:+.1f}us ratio={ratio:.3f}",
+            f"[S={s}] matmul_to_silu={fused['task_us']:.1f}us",
             flush=True,
         )
 
     fields = [
-        "B", "S", "D", "INTER",
-        "matmul_task_us", "silu_task_us", "fused_task_us",
-        "isolated_sum_us", "composition_gap_us", "fusion_ratio",
-        "matmul_dma_us", "silu_dma_us", "fused_dma_us",
-        "matmul_tu_us", "silu_tu_us", "fused_tu_us",
+        "B", "S", "D", "INTER", "pair",
+        "pair_task_us", "pair_dma_us", "pair_tu_us",
     ]
     with open(OUT_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
