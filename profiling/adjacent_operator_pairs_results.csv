@@ -1,0 +1,7 @@
+regime,pair,task_a_us,task_b_us,task_fused_us,isolated_sum_us,composition_gap_us,fusion_ratio,dma_a_us,dma_b_us,dma_fused_us,tu_a_us,tu_b_us,tu_fused_us,error
+decode,rmsnorm_to_q_proj,2.8,175.46,177.71,178.26,-0.55,0.9969,2.21,172.08,173.13,1.19,25.3,28.81,
+decode,gate_proj_to_activation,607.55,3.4,607.98,610.95,-2.97,0.9951,602.6,2.74,602.96,82.29,0.6,83.36,
+decode,qk_scores_to_softmax,974.35,18.03,981.18,992.38,-11.21,0.9887,963.73,11.15,963.75,152.89,6.83,159.83,
+prefill,rmsnorm_to_q_proj,172.24,2289.85,2410.0,2462.1,-52.1,0.9788,167.79,466.51,1095.9,87.6,2241.15,2342.26,
+prefill,gate_proj_to_activation,10067.92,523.43,10102.66,10591.35,-488.69,0.9539,10008.17,523.29,10011.87,8137.05,117.09,8166.8,
+prefill,qk_scores_to_softmax,1540.59,2663.21,6353.66,4203.8,2149.87,1.5114,1539.23,2662.94,4475.02,1183.85,1634.93,5654.16,

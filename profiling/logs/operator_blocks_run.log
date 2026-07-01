@@ -1,0 +1,15 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[decode] rmsnorm         task=2.8us tu=1.2us dma=2.2us
+[decode] q_proj          task=175.5us tu=25.3us dma=172.1us
+[decode] gate_proj       task=607.7us tu=82.3us dma=602.7us
+[decode] qk_scores       task=974.2us tu=152.9us dma=963.5us
+[decode] softmax_scores  task=18.1us tu=6.8us dma=11.2us
+[prefill] rmsnorm         task=172.4us tu=87.6us dma=168.0us
+[prefill] q_proj          task=2289.8us tu=2241.2us dma=469.2us
+[prefill] gate_proj       task=10063.0us tu=8137.0us dma=10003.4us
+[prefill] qk_scores       task=1540.4us tu=1183.8us dma=1539.1us
+[prefill] softmax_scores  task=2663.3us tu=1634.7us dma=2663.1us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/operator_blocks_results.csv (10 rows)
+OPBLOCKS_DONE
