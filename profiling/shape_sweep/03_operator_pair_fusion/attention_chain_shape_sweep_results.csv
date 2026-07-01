@@ -1,0 +1,10 @@
+B,S,NH,HD,D,chain,chain_task_us,chain_dma_us,chain_tu_us
+1,128,32,128,4096,qk_softmax_av,35.35,22.9,22.6
+1,128,32,128,4096,rmsnorm_qkv_proj,547.7,534.95,431.8
+1,128,32,128,4096,softmax_av_oproj_residual,208.77,193.38,163.41
+1,512,32,128,4096,qk_softmax_av,300.78,91.64,273.24
+1,512,32,128,4096,rmsnorm_qkv_proj,1919.19,600.0,1864.74
+1,512,32,128,4096,softmax_av_oproj_residual,860.41,321.9,818.4
+1,2048,32,128,4096,qk_softmax_av,13311.83,7794.27,7054.2
+1,2048,32,128,4096,rmsnorm_qkv_proj,8632.49,8473.98,6989.36
+1,2048,32,128,4096,softmax_av_oproj_residual,9770.85,8476.69,6338.6

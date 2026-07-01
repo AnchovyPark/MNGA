@@ -1,0 +1,41 @@
+=== [1] 01/attention_single_kernel ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[S=128] qk_matmul=21.6us
+[S=128] softmax_scores=18.0us
+[S=128] av_matmul=21.7us
+[S=128] rmsnorm=16.2us
+[S=128] qkv_proj=542.6us
+[S=128] o_proj=199.3us
+[S=128] residual_add=17.2us
+[S=512] qk_matmul=138.4us
+[S=512] softmax_scores=152.0us
+[S=512] av_matmul=135.7us
+[S=512] rmsnorm=63.8us
+[S=512] qkv_proj=1882.5us
+[S=512] o_proj=657.0us
+[S=512] residual_add=71.3us
+[S=2048] qk_matmul=1539.7us
+[S=2048] softmax_scores=2663.7us
+[S=2048] av_matmul=1625.8us
+[S=2048] rmsnorm=172.4us
+[S=2048] qkv_proj=8556.8us
+[S=2048] o_proj=2289.9us
+[S=2048] residual_add=251.1us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/01_pure_kernel/attention_single_kernel_shape_sweep_results.csv (21 rows)
+=== [3] 03/attention_chain ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[S=128] qk_softmax_av=35.4us
+[S=128] rmsnorm_qkv_proj=547.7us
+[S=128] softmax_av_oproj_residual=208.8us
+[S=512] qk_softmax_av=300.8us
+[S=512] rmsnorm_qkv_proj=1919.2us
+[S=512] softmax_av_oproj_residual=860.4us
+[S=2048] qk_softmax_av=13311.8us
+[S=2048] rmsnorm_qkv_proj=8632.5us
+[S=2048] softmax_av_oproj_residual=9770.9us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/03_operator_pair_fusion/attention_chain_shape_sweep_results.csv (9 rows)
+ATTN_CHAINS_DONE
