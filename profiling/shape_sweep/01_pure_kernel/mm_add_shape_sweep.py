@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""Pure-kernel shape sweep for MatMul -> Add composition on RNGD.
+"""Pure-kernel shape sweep for MatMul and Add on RNGD.
 
-Measures:
-  isolated MatMul + isolated Add vs joint-compiled MatMul -> Add
+Stage 1: measure isolated pure kernels while changing sequence length.
 
 No reshape/transpose/layout transform is included.
 
@@ -121,43 +120,30 @@ def main():
 
         matmul = measure(["matmul"], input_shape, weight_shape, None, dev)
         add = measure(["add"], input_shape, None, residual_shape, dev)
-        fused = measure(["matmul", "add"], input_shape, weight_shape,
-                        residual_shape, dev)
-
-        isolated_sum = matmul["task_us"] + add["task_us"]
-        gap = fused["task_us"] - isolated_sum
-        ratio = fused["task_us"] / isolated_sum if isolated_sum else 0.0
-
         row = dict(
             B=B,
             S=s,
             D=D,
             matmul_task_us=round(matmul["task_us"], 2),
             add_task_us=round(add["task_us"], 2),
-            fused_task_us=round(fused["task_us"], 2),
-            isolated_sum_us=round(isolated_sum, 2),
-            composition_gap_us=round(gap, 2),
-            fusion_ratio=round(ratio, 4),
+            isolated_sum_us=round(matmul["task_us"] + add["task_us"], 2),
             matmul_dma_us=round(matmul["dma_us"], 2),
             add_dma_us=round(add["dma_us"], 2),
-            fused_dma_us=round(fused["dma_us"], 2),
             matmul_tu_us=round(matmul["tu_us"], 2),
             add_tu_us=round(add["tu_us"], 2),
-            fused_tu_us=round(fused["tu_us"], 2),
         )
         rows.append(row)
         print(
-            f"[S={s}] A+B={isolated_sum:.1f}us fused={fused['task_us']:.1f}us "
-            f"gap={gap:+.1f}us ratio={ratio:.3f}",
+            f"[S={s}] matmul={matmul['task_us']:.1f}us "
+            f"add={add['task_us']:.1f}us sum={row['isolated_sum_us']:.1f}us",
             flush=True,
         )
 
     fields = [
         "B", "S", "D",
-        "matmul_task_us", "add_task_us", "fused_task_us",
-        "isolated_sum_us", "composition_gap_us", "fusion_ratio",
-        "matmul_dma_us", "add_dma_us", "fused_dma_us",
-        "matmul_tu_us", "add_tu_us", "fused_tu_us",
+        "matmul_task_us", "add_task_us", "isolated_sum_us",
+        "matmul_dma_us", "add_dma_us",
+        "matmul_tu_us", "add_tu_us",
     ]
     with open(OUT_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
