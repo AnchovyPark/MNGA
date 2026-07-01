@@ -1,0 +1,49 @@
+########## NPE=1 ##########
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== NPE=1 (1 PE fused) ===
+[NPE=1 S=128] qk_matmul                  task=21.7 tu=9.1 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] softmax_scores             task=18.0 tu=6.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] av_matmul                  task=21.7 tu=9.0 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] o_proj                     task=199.2 tu=144.0 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] qk_softmax_av              task=35.3 tu=22.6 parcopy=0.0 cluster=0.0
+[NPE=1 S=128] softmax_av_oproj_residual  task=209.1 tu=163.4 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] qk_matmul                  task=138.4 tu=85.2 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] softmax_scores             task=151.9 tu=106.0 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] av_matmul                  task=135.5 tu=93.6 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] o_proj                     task=656.8 tu=614.7 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] qk_softmax_av              task=300.7 tu=273.2 parcopy=0.0 cluster=0.0
+[NPE=1 S=512] softmax_av_oproj_residual  task=860.5 tu=818.5 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] qk_matmul                  task=1539.7 tu=1183.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] softmax_scores             task=2663.1 tu=1634.9 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] av_matmul                  task=1625.8 tu=1488.9 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] o_proj                     task=2289.7 tu=2241.2 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] qk_softmax_av              task=13306.9 tu=7056.8 parcopy=0.0 cluster=0.0
+[NPE=1 S=2048] softmax_av_oproj_residual  task=9770.3 tu=6339.3 parcopy=0.0 cluster=0.0
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/tp8_allreduce/attention_chain_tp_np1_results.csv (18 rows)
+########## NPE=8 ##########
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== NPE=8 (8 PE fused) ===
+[NPE=8 S=128] qk_matmul                  task=37.3 tu=5.7 parcopy=0.0 cluster=26.1
+[NPE=8 S=128] softmax_scores             task=12.4 tu=3.4 parcopy=0.0 cluster=3.8
+[NPE=8 S=128] av_matmul                  task=14.8 tu=5.7 parcopy=0.0 cluster=3.5
+[NPE=8 S=128] o_proj                     task=127.6 tu=34.7 parcopy=2.8 cluster=62.9
+[NPE=8 S=128] qk_softmax_av              task=21.2 tu=7.9 parcopy=0.0 cluster=0.7
+[NPE=8 S=128] softmax_av_oproj_residual  task=132.8 tu=41.9 parcopy=1.7 cluster=7.5
+[NPE=8 S=512] qk_matmul                  task=67.5 tu=15.5 parcopy=0.0 cluster=0.6
+[NPE=8 S=512] softmax_scores             task=81.9 tu=17.0 parcopy=0.0 cluster=3.2
+[NPE=8 S=512] av_matmul                  task=67.8 tu=21.1 parcopy=0.0 cluster=3.0
+[NPE=8 S=512] o_proj                     task=312.1 tu=136.0 parcopy=4.6 cluster=140.0
+[NPE=8 S=512] qk_softmax_av              task=130.8 tu=73.6 parcopy=0.0 cluster=41.3
+[NPE=8 S=512] softmax_av_oproj_residual  task=406.1 tu=170.6 parcopy=5.6 cluster=9.4
+[NPE=8 S=2048] qk_matmul                  task=531.0 tu=202.6 parcopy=0.0 cluster=4.8
+[NPE=8 S=2048] softmax_scores             task=846.9 tu=272.9 parcopy=0.0 cluster=4.6
+[NPE=8 S=2048] av_matmul                  task=586.1 tu=214.5 parcopy=0.0 cluster=1.3
+[NPE=8 S=2048] o_proj                     task=784.2 tu=392.7 parcopy=0.0 cluster=37.5
+[NPE=8 S=2048] qk_softmax_av              task=1234.5 tu=616.1 parcopy=0.0 cluster=34.2
+[NPE=8 S=2048] softmax_av_oproj_residual  task=1694.6 tu=784.8 parcopy=0.0 cluster=14.8
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/tp8_allreduce/attention_chain_tp_np8_results.csv (18 rows)
+ATTN_TP_DONE

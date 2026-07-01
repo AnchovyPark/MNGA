@@ -91,8 +91,30 @@ python tp_sweep.py 8     # → tp_sweep_np8_results.csv
 
 ---
 
+## TP=8 이 attention anti-fusion 을 없앤다  ★
+
+`attention_chain_tp.py` — attention 멀티커널 체인을 TP=1 vs TP=8 로 측정.
+
+TP=1 에서 S=2048 attention core 체인은 score (B,NH,S,S)=256MB 가 단일 PE SRAM(~32MB)
+을 넘어 HBM 으로 spill → 심각한 anti-fusion 이었다(../shape_sweep). TP=8 은 head-parallel
+로 score 를 PE 당 (B,4,S,S)=33.5MB 로 쪼개 SRAM 에 (거의) 넣어 spill 을 없앤다.
+
+| chain | S | TP=1 task | TP=8 task | 속도↑ | TP=1 gap | TP=8 gap |
+|---|---|---|---|---|---|---|
+| qk_softmax_av | 128 | 35.3 | 21.2 | 1.7× | −26 | −43 |
+| qk_softmax_av | 512 | 300.7 | 130.8 | 2.3× | −125 | −86 |
+| qk_softmax_av | 2048 | 13307 | 1234.5 | **10.8×** | **+7478** | **−730** |
+| softmax_av_oproj_residual | 2048 | 9770 | 1694.6 | **5.8×** | **+2940** | **−522** |
+
+- 결정적 증거: TP=1 S=2048 체인 span 에만 `Renegade::StoTrf`(SRAM→HBM spill) 가 있고
+  TP=8 엔 없다. spill 이 사라져 fused compute(tu) 도 7057→616us 로 폭락(재계산 소멸).
+- S=2048 qk_softmax_av 는 **10.8× 초선형 가속** = 8× 병렬화 + anti-fusion spill 페널티 제거.
+- **함의: attention anti-fusion 은 연산 본질이 아니라 "1 PE 에서 score 가 SRAM 초과"라는
+  인공물.** 실제 서빙(TP=8)엔 안 나타난다 → composition gap 예측은 TP-aware 여야 한다.
+
 ## 파일
-- `tp_sweep.py` — ✅ TP=1 vs TP=8 실측 (set_fusion). 메인.
+- `tp_sweep.py` — ✅ TP=1 vs TP=8 실측 (matmul/mlp/attn, set_fusion). 메인.
+- `attention_chain_tp.py` — ✅ attention 체인 TP=1 vs TP=8 (anti-fusion 소멸 확인).
 - `fx_allreduce_probe.py` — ❌ FX all_reduce 삽입 실패 재현 (문서화).
-- `tp_sweep_np1_results.csv`, `tp_sweep_np8_results.csv` — 결과.
+- `tp_sweep_np{1,8}_results.csv`, `attention_chain_tp_np{1,8}_results.csv` — 결과.
 - `logs/` — 실행 로그.
