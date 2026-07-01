@@ -46,6 +46,10 @@ class PairBlock(torch.nn.Module):
             return (v * aux.float()).to(x.dtype)
         if kind in ("q_proj", "gate_proj", "down_proj", "av_context"):
             return x @ aux
+        if kind == "o_proj":
+            bsz, n_heads, seq_len, head_dim = x.shape
+            x = x.permute(0, 2, 1, 3).reshape(bsz, seq_len, n_heads * head_dim)
+            return x @ aux
         if kind == "activation":
             return F.silu(x)
         if kind == "swiglu_mul":
@@ -190,6 +194,20 @@ def pairs_for(regime):
             input_b=(B, NH, S, CTX),
             a=("softmax", None),
             b=("av_context", (B, NH, CTX, HD)),
+        ),
+        dict(
+            pair="av_context_to_o_proj",
+            input_a=(B, NH, S, CTX),
+            input_b=(B, NH, S, HD),
+            a=("av_context", (B, NH, CTX, HD)),
+            b=("o_proj", (D, D)),
+        ),
+        dict(
+            pair="o_proj_to_residual_add",
+            input_a=(B, NH, S, HD),
+            input_b=(B, S, D),
+            a=("o_proj", (D, D)),
+            b=("residual_add", (B, S, D)),
         ),
     ]
 
