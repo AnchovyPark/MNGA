@@ -1,0 +1,31 @@
+=== [1] 01/mm_silu ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[S=128] matmul=632.0us silu=39.1us sum=671.1us
+[S=256] matmul=988.0us silu=64.5us sum=1052.5us
+[S=512] matmul=2188.4us silu=130.0us sum=2318.3us
+[S=1024] matmul=4248.4us silu=260.9us sum=4509.3us
+[S=2048] matmul=10067.6us silu=523.1us sum=10590.7us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/01_pure_kernel/mm_silu_shape_sweep_results.csv (5 rows)
+=== [2] 02/gate_proj_silu ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[S=128] gate_proj=631.8us silu=39.1us sum=670.9us
+[S=256] gate_proj=988.0us silu=64.4us sum=1052.5us
+[S=512] gate_proj=2188.5us silu=129.9us sum=2318.4us
+[S=1024] gate_proj=4248.3us silu=261.0us sum=4509.3us
+[S=2048] gate_proj=10069.1us silu=523.2us sum=10592.2us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/02_operator_with_layout/gate_proj_silu_operator_shape_sweep_results.csv (5 rows)
+=== [3] 03/mm_silu ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[S=128] matmul_to_silu=631.7us
+[S=256] matmul_to_silu=990.3us
+[S=512] matmul_to_silu=2191.7us
+[S=1024] matmul_to_silu=4277.3us
+[S=2048] matmul_to_silu=10103.7us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/03_operator_pair_fusion/mm_silu_shape_sweep_results.csv (5 rows)
+CHAIN_A_DONE
