@@ -1,0 +1,10 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[S=128] A+B=697.4us fused=658.0us gap=-39.4us ratio=0.944
+[S=256] A+B=1321.5us fused=1268.9us gap=-52.6us ratio=0.960
+[S=512] A+B=2266.4us fused=2170.0us gap=-96.4us ratio=0.957
+[S=1024] A+B=4762.7us fused=4541.6us gap=-221.1us ratio=0.954
+[S=2048] A+B=9199.1us fused=8792.3us gap=-406.8us ratio=0.956
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/shape_sweep/03_operator_pair_fusion/silu_mm_shape_sweep_results.csv (5 rows)
+SWEEP_DONE
