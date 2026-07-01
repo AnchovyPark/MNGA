@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
-"""Attention-side operator-chain shape sweep on RNGD.
+"""Single-kernel/component sweep for attention-chain shapes on RNGD.
 
-Measures composed attention chains only. Isolated operator costs should come
-from stage 2 operator sweeps if needed.
+This provides isolated measurements for the components used by:
 
-Chains:
-  1. qk_softmax_av
-     QK scores -> softmax -> AV context
-
-  2. rmsnorm_qkv_proj
-     RMSNorm -> QKV projection
-
-  3. softmax_av_oproj_residual
-     softmax -> AV context -> reshape/O projection -> residual add
+  - qk_softmax_av
+  - rmsnorm_qkv_proj
+  - softmax_av_oproj_residual
 
 Usage:
-  python attention_chain_shape_sweep.py
-  python attention_chain_shape_sweep.py 128,512,2048
+  python attention_single_kernel_shape_sweep.py
+  python attention_single_kernel_shape_sweep.py 128,512,2048
 """
 import csv
 import os
@@ -25,12 +18,11 @@ import sys
 from collections import defaultdict
 
 import torch
-import torch.nn.functional as F
 import furiosa.torch  # noqa: F401
 from furiosa.torch.custom_ops import CompileModule
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT_CSV = os.path.join(HERE, "attention_chain_shape_sweep_results.csv")
+OUT_CSV = os.path.join(HERE, "attention_single_kernel_shape_sweep_results.csv")
 
 B = 1
 NH = 32
@@ -41,44 +33,59 @@ N_RUNS = 3
 DEFAULT_S = [128, 512, 2048]
 
 
-class AttentionChain(torch.nn.Module):
-    def __init__(self, chain, s):
+class SingleComponent(torch.nn.Module):
+    def __init__(self, kind, s):
         super().__init__()
-        self.chain = chain
+        self.kind = kind
         self.s = s
-        if chain == "qk_softmax_av":
+        if kind == "qk_matmul":
             self.register_buffer("k", torch.randn(B, NH, HD, s, dtype=DTYPE))
+        elif kind == "av_matmul":
             self.register_buffer("v", torch.randn(B, NH, s, HD, dtype=DTYPE))
-        elif chain == "rmsnorm_qkv_proj":
+        elif kind == "rmsnorm":
             self.register_buffer("gain", torch.randn(D, dtype=DTYPE))
-            self.register_buffer("qkv_weight", torch.randn(D, 3 * D, dtype=DTYPE))
-        elif chain == "softmax_av_oproj_residual":
-            self.register_buffer("v", torch.randn(B, NH, s, HD, dtype=DTYPE))
-            self.register_buffer("o_weight", torch.randn(D, D, dtype=DTYPE))
+        elif kind == "qkv_proj":
+            self.register_buffer("weight", torch.randn(D, 3 * D, dtype=DTYPE))
+        elif kind == "o_proj":
+            self.register_buffer("weight", torch.randn(D, D, dtype=DTYPE))
+        elif kind == "residual_add":
             self.register_buffer("residual", torch.randn(B, s, D, dtype=DTYPE))
+        elif kind == "softmax_scores":
+            pass
         else:
-            raise ValueError(chain)
+            raise ValueError(kind)
 
     def forward(self, x):
-        if self.chain == "qk_softmax_av":
-            x = x @ self.k
-            x = torch.softmax(x, dim=-1)
+        if self.kind == "qk_matmul":
+            return x @ self.k
+        if self.kind == "softmax_scores":
+            return torch.softmax(x, dim=-1)
+        if self.kind == "av_matmul":
             return x @ self.v
-
-        if self.chain == "rmsnorm_qkv_proj":
+        if self.kind == "rmsnorm":
             y = x.float()
             y = y * torch.rsqrt(y.pow(2).mean(-1, keepdim=True) + 1e-5)
-            y = (y * self.gain.float()).to(x.dtype)
-            return y @ self.qkv_weight
+            return (y * self.gain.float()).to(x.dtype)
+        if self.kind == "qkv_proj":
+            return x @ self.weight
+        if self.kind == "o_proj":
+            y = x.permute(0, 2, 1, 3).reshape(B, self.s, D)
+            return y @ self.weight
+        if self.kind == "residual_add":
+            return x + self.residual
+        raise ValueError(self.kind)
 
-        if self.chain == "softmax_av_oproj_residual":
-            y = torch.softmax(x, dim=-1)
-            y = y @ self.v
-            y = y.permute(0, 2, 1, 3).reshape(B, self.s, D)
-            y = y @ self.o_weight
-            return y + self.residual
 
-        raise ValueError(self.chain)
+def input_shape_for(kind, s):
+    if kind == "qk_matmul":
+        return (B, NH, s, HD)
+    if kind in ("softmax_scores", "av_matmul"):
+        return (B, NH, s, s)
+    if kind in ("rmsnorm", "qkv_proj", "residual_add"):
+        return (B, s, D)
+    if kind == "o_proj":
+        return (B, NH, s, HD)
+    raise ValueError(kind)
 
 
 def union_us(intervals):
@@ -96,20 +103,10 @@ def union_us(intervals):
     return total + (cur_e - cur_s)
 
 
-def input_shape_for(chain, s):
-    if chain == "qk_softmax_av":
-        return (B, NH, s, HD)
-    if chain == "rmsnorm_qkv_proj":
-        return (B, s, D)
-    if chain == "softmax_av_oproj_residual":
-        return (B, NH, s, s)
-    raise ValueError(chain)
-
-
-def measure(chain, s, dev):
-    x = torch.randn(*input_shape_for(chain, s), dtype=DTYPE)
+def measure(kind, s, dev):
+    x = torch.randn(*input_shape_for(kind, s), dtype=DTYPE)
     cm = CompileModule.from_exported(
-        torch.export.export(AttentionChain(chain, s), (x,))
+        torch.export.export(SingleComponent(kind, s), (x,))
     )
     cm.to(dev)
     xd = x.to(dev)
@@ -138,7 +135,6 @@ def measure(chain, s, dev):
             union_us(by_name.get("Renegade::TuExec", [])),
             union_us(by_name.get("DMA", [])),
         ))
-
     return {
         "task_us": st.median(r[0] for r in runs),
         "tu_us": st.median(r[1] for r in runs),
@@ -151,37 +147,35 @@ def main():
     if len(sys.argv) > 1:
         seq_lens = [int(x) for x in sys.argv[1].split(",") if x]
 
-    chains = [
-        "qk_softmax_av",
-        "rmsnorm_qkv_proj",
-        "softmax_av_oproj_residual",
+    components = [
+        "qk_matmul",
+        "softmax_scores",
+        "av_matmul",
+        "rmsnorm",
+        "qkv_proj",
+        "o_proj",
+        "residual_add",
     ]
     dev = torch.device("rngd", 0)
     rows = []
     for s in seq_lens:
-        for chain in chains:
-            result = measure(chain, s, dev)
+        for component in components:
+            result = measure(component, s, dev)
             row = dict(
                 B=B,
                 S=s,
                 NH=NH,
                 HD=HD,
                 D=D,
-                chain=chain,
-                chain_task_us=round(result["task_us"], 2),
-                chain_dma_us=round(result["dma_us"], 2),
-                chain_tu_us=round(result["tu_us"], 2),
+                component=component,
+                task_us=round(result["task_us"], 2),
+                dma_us=round(result["dma_us"], 2),
+                tu_us=round(result["tu_us"], 2),
             )
             rows.append(row)
-            print(
-                f"[S={s}] {chain}={result['task_us']:.1f}us",
-                flush=True,
-            )
+            print(f"[S={s}] {component}={result['task_us']:.1f}us", flush=True)
 
-    fields = [
-        "B", "S", "NH", "HD", "D", "chain",
-        "chain_task_us", "chain_dma_us", "chain_tu_us",
-    ]
+    fields = ["B", "S", "NH", "HD", "D", "component", "task_us", "dma_us", "tu_us"]
     with open(OUT_CSV, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
