@@ -129,6 +129,7 @@ def parse_args():
     parser.add_argument("--T", type=int, default=512)
     parser.add_argument("--D", type=int, default=1024)
     parser.add_argument("--runs", type=int, default=3)
+    parser.add_argument("--min-len", type=int, default=1)
     parser.add_argument("--max-len", type=int, default=2)
     parser.add_argument(
         "--out",
@@ -144,10 +145,10 @@ def main():
 
     print(
         f"=== primitive ladder TP=1 B={args.B} T={args.T} D={args.D} "
-        f"max_len={args.max_len} runs={args.runs} ===",
+        f"len={args.min_len}..{args.max_len} runs={args.runs} ===",
         flush=True,
     )
-    for length in range(1, args.max_len + 1):
+    for length in range(args.min_len, args.max_len + 1):
         for seq_tuple in itertools.product(OPS, repeat=length):
             sequence = "".join(seq_tuple)
             row = {

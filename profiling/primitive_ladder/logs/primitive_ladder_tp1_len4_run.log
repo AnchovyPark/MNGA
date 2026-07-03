@@ -1,0 +1,126 @@
+=== primitive ladder TP=1 B=1 T=512 D=1024 max_len=4 runs=3 ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[single M   ] task=64.37us tu=54.62us dma=19.85us
+[single A   ] task=17.20us tu=2.19us dma=14.96us
+[single S   ] task=16.69us tu=6.98us dma=9.65us
+[double MM  ] task=114.99us tu=98.55us dma=31.14us
+[double MA  ] task=66.56us tu=56.76us dma=26.35us
+[double MS  ] task=72.53us tu=62.78us dma=19.75us
+[double AM  ] task=69.44us tu=54.46us dma=25.00us
+[double AA  ] task=22.45us tu=4.37us dma=20.20us
+[double AS  ] task=24.28us tu=9.18us dma=15.05us
+[double SM  ] task=65.41us tu=55.64us dma=19.77us
+[double SA  ] task=22.30us tu=10.28us dma=16.77us
+[double SS  ] task=24.84us tu=13.67us dma=11.11us
+[triple MMM ] task=170.05us tu=147.34us dma=41.98us
+[triple MMA ] task=119.29us tu=103.00us dma=36.95us
+[triple MMS ] task=124.27us tu=107.94us dma=31.07us
+[triple MAM ] task=121.18us tu=104.96us dma=36.32us
+[triple MAA ] task=68.69us tu=58.89us dma=31.61us
+[triple MAS ] task=79.04us tu=69.32us dma=26.22us
+[triple MSM ] task=123.18us tu=106.83us dma=31.16us
+[triple MSA ] task=81.28us tu=61.47us dma=36.31us
+[triple MSS ] task=80.88us tu=71.01us dma=19.85us
+[triple AMM ] task=122.32us tu=100.73us dma=35.94us
+[triple AMA ] task=71.86us tu=56.63us dma=31.67us
+[triple AMS ] task=77.59us tu=62.72us dma=24.89us
+[triple AAM ] task=74.73us tu=56.65us dma=30.30us
+[triple AAA ] task=27.77us tu=6.56us dma=25.52us
+[triple AAS ] task=29.38us tu=11.36us dma=20.15us
+[triple ASM ] task=72.77us tu=57.83us dma=24.95us
+[triple ASA ] task=28.17us tu=13.18us dma=20.21us
+[triple ASS ] task=31.15us tu=16.16us dma=14.93us
+[triple SMM ] task=121.82us tu=105.53us dma=30.79us
+[triple SMA ] task=67.72us tu=57.83us dma=26.16us
+[triple SMS ] task=73.67us tu=63.91us dma=19.81us
+[triple SAM ] task=70.08us tu=59.87us dma=25.12us
+[triple SAA ] task=37.51us tu=22.31us dma=22.46us
+[triple SAS ] task=29.26us tu=17.26us dma=16.71us
+[triple SSM ] task=72.35us tu=62.63us dma=19.73us
+[triple SSA ] task=28.12us tu=16.92us dma=16.76us
+[triple SSS ] task=31.67us tu=20.51us dma=11.11us
+[quad   MMMM] task=225.10us tu=196.14us dma=52.58us
+[quad   MMMA] task=174.41us tu=151.77us dma=47.76us
+[quad   MMMS] task=179.53us tu=156.73us dma=41.94us
+[quad   MMAM] task=172.38us tu=149.75us dma=47.08us
+[quad   MMAA] task=121.60us tu=105.17us dma=42.93us
+[quad   MMAS] task=126.74us tu=110.35us dma=36.45us
+[quad   MMSM] task=180.53us tu=157.84us dma=41.80us
+[quad   MMSA] task=131.75us tu=105.48us dma=46.24us
+[quad   MMSS] task=132.39us tu=116.21us dma=31.00us
+[quad   MAMM] task=176.54us tu=153.75us dma=47.39us
+[quad   MAMA] task=120.51us tu=104.16us dma=41.75us
+[quad   MAMS] task=130.64us tu=114.34us dma=36.33us
+[quad   MAAM] task=120.48us tu=104.14us dma=41.73us
+[quad   MAAA] task=70.97us tu=61.17us dma=37.27us
+[quad   MAAS] task=83.09us tu=62.35us dma=42.89us
+[quad   MASM] task=129.48us tu=113.23us dma=36.50us
+[quad   MASA] task=83.41us tu=63.54us dma=41.78us
+[quad   MASS] task=87.24us tu=77.42us dma=26.27us
+[quad   MSMM] task=178.24us tu=155.61us dma=41.85us
+[quad   MSMA] task=127.60us tu=111.25us dma=37.03us
+[quad   MSMS] task=132.53us tu=116.20us dma=31.15us
+[quad   MSAM] task=135.97us tu=113.42us dma=47.50us
+[quad   MSAA] task=96.25us tu=75.40us dma=42.84us
+[quad   MSAS] task=89.34us tu=68.54us dma=37.29us
+[quad   MSSM] task=131.26us tu=115.04us dma=30.96us
+[quad   MSSA] task=89.41us tu=68.49us dma=37.19us
+[quad   MSSS] task=88.99us tu=79.32us dma=19.69us
+[quad   AMMM] task=177.41us tu=149.52us dma=46.72us
+[quad   AMMA] task=126.81us tu=105.17us dma=42.30us
+[quad   AMMS] task=131.62us tu=110.09us dma=35.86us
+[quad   AMAM] task=124.37us tu=102.94us dma=41.79us
+[quad   AMAA] task=74.02us tu=58.90us dma=36.95us
+[quad   AMAS] task=84.26us tu=69.14us dma=31.52us
+[quad   AMSM] task=130.60us tu=108.98us dma=35.90us
+[quad   AMSA] task=86.60us tu=61.57us dma=41.43us
+[quad   AMSS] task=85.95us tu=70.97us dma=24.98us
+[quad   AAMM] task=127.56us tu=102.94us dma=41.11us
+[quad   AAMA] task=77.14us tu=58.95us dma=36.95us
+[quad   AAMS] task=83.13us tu=65.01us dma=30.42us
+[quad   AAAM] task=80.22us tu=58.91us dma=35.77us
+[quad   AAAA] task=33.00us tu=8.74us dma=30.75us
+[quad   AAAS] task=35.06us tu=13.54us dma=25.82us
+[quad   AASM] task=78.32us tu=60.03us dma=30.50us
+[quad   AASA] task=33.37us tu=15.08us dma=25.55us
+[quad   AASS] task=36.42us tu=18.35us dma=20.19us
+[quad   ASMM] task=129.19us tu=107.74us dma=35.90us
+[quad   ASMA] task=75.13us tu=60.02us dma=30.99us
+[quad   ASMS] task=81.07us tu=66.09us dma=24.96us
+[quad   ASAM] task=79.34us tu=61.84us dma=30.62us
+[quad   ASAA] task=42.99us tu=23.88us dma=27.95us
+[quad   ASAS] task=36.25us tu=19.43us dma=22.39us
+[quad   ASSM] task=79.77us tu=64.81us dma=25.05us
+[quad   ASSA] task=36.09us tu=19.18us dma=22.38us
+[quad   ASSS] task=39.44us tu=22.70us dma=16.68us
+[quad   SMMM] task=176.89us tu=154.34us dma=41.56us
+[quad   SMMA] task=126.35us tu=109.97us dma=37.57us
+[quad   SMMS] task=131.27us tu=114.92us dma=30.85us
+[quad   SMAM] task=123.90us tu=107.73us dma=35.94us
+[quad   SMAA] task=69.73us tu=60.03us dma=31.49us
+[quad   SMAS] task=80.04us tu=70.29us dma=26.08us
+[quad   SMSM] task=130.17us tu=113.79us dma=30.95us
+[quad   SMSA] task=83.12us tu=62.76us dma=36.73us
+[quad   SMSS] task=81.86us tu=72.17us dma=19.71us
+[quad   SAMM] task=126.46us tu=109.46us dma=35.97us
+[quad   SAMA] task=72.47us tu=62.20us dma=31.51us
+[quad   SAMS] task=78.33us tu=68.19us dma=25.07us
+[quad   SAAM] task=86.36us tu=74.21us dma=30.28us
+[quad   SAAA] task=43.57us tu=28.73us dma=28.05us
+[quad   SAAS] task=44.62us tu=29.40us dma=22.45us
+[quad   SASM] task=77.34us tu=67.11us dma=25.14us
+[quad   SASA] task=33.19us tu=21.19us dma=22.40us
+[quad   SASS] task=36.48us tu=24.16us dma=16.73us
+[quad   SSMM] task=128.89us tu=112.51us dma=30.96us
+[quad   SSMA] task=74.93us tu=65.16us dma=25.39us
+[quad   SSMS] task=80.55us tu=70.87us dma=19.75us
+[quad   SSAM] task=75.51us tu=65.71us dma=25.10us
+[quad   SSAA] task=39.70us tu=28.48us dma=22.38us
+[quad   SSAS] task=34.97us tu=23.79us dma=16.79us
+[quad   SSSM] task=79.45us tu=69.61us dma=19.88us
+[quad   SSSA] task=34.78us tu=23.51us dma=16.78us
+[quad   SSSS] task=38.52us tu=27.36us dma=11.11us
+
+[DONE] primitive_ladder_tp1_len4_results.csv (120 rows)
+PRIM4_DONE
