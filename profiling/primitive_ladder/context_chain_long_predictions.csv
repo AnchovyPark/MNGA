@@ -1,0 +1,4 @@
+sequence,length,m_count,actual_us,naive_sum_us,naive_err_pct,ridge_pred_us,ridge_err_pct
+MSMMAX,6,3,577.3,650.8,12.7,560.0,-3.0
+MASXMSM,7,3,578.0,668.8,15.7,573.0,-0.9
+MMSMMAM,7,5,892.0,1029.2,15.4,911.8,2.2
