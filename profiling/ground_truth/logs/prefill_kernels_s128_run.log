@@ -1,0 +1,26 @@
+=== Llama-3.1-8B prefill S=128 TP=8 커널 격리 합 (per layer) ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  input_rmsnorm  x1      35.7us  (합     35.7)
+  q_proj         x1     130.6us  (합    130.6)
+  k_proj         x1      49.2us  (합     49.2)
+  v_proj         x1      77.5us  (합     77.5)
+  qk_scores      x1      82.7us  (합     82.7)
+  softmax        x1      12.4us  (합     12.4)
+  av             x1      29.8us  (합     29.8)
+  o_proj         x1     143.5us  (합    143.5)
+  post_rmsnorm   x1      11.2us  (합     11.2)
+  gate_proj      x1     337.0us  (합    337.0)
+  up_proj        x1     330.5us  (합    330.5)
+  silu           x1      19.3us  (합     19.3)
+  mul            x1      26.2us  (합     26.2)
+  down_proj      x1     258.4us  (합    258.4)
+  residual_add   x2      12.4us  (합     24.9)
+  --- per-layer 합: 1569.0us ---
+
+32 layers 합 : 50.21 ms
+final_norm   : 6.7 us
+lm_head      : 1765.4 us
+===== 예측 prefill(S=128) = 51.98 ms =====
+ground truth = 20.1 ms  →  차이 +31.88 ms (259%)
+PK_DONE
