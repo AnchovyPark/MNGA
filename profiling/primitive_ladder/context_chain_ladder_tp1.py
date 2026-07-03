@@ -20,6 +20,7 @@ Test split:
 Examples:
   python context_chain_ladder_tp1.py --T 128 --D 4096 --runs 3
   python context_chain_ladder_tp1.py --ops MASX --test-lens 4 5 6 7 --samples-per-test-len 200
+  python context_chain_ladder_tp1.py --test-sequences MXMA MSMMA MSMAA
   python context_chain_ladder_tp1.py --list-only
 """
 import argparse
@@ -120,6 +121,15 @@ def build_workloads(args):
             workloads.append(("train", sequence))
             seen.add(("train", sequence))
 
+    explicit_tests = load_explicit_tests(args)
+    if explicit_tests:
+        for sequence in explicit_tests:
+            key = ("test", sequence)
+            if key not in seen:
+                workloads.append(key)
+                seen.add(key)
+        return workloads
+
     rng = random.Random(args.seed)
     triples = ["".join(t) for t in itertools.product(ops, repeat=3)]
     for length in args.test_lens:
@@ -143,6 +153,20 @@ def build_workloads(args):
                 seen.add(key)
 
     return workloads
+
+
+def load_explicit_tests(args):
+    sequences = []
+    if args.test_sequences:
+        sequences.extend(args.test_sequences)
+    if args.test_seq_file:
+        with open(args.test_seq_file) as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                sequences.append(line.split()[0])
+    return unique_keep_order(sequences)
 
 
 def unique_keep_order(values):
@@ -209,6 +233,17 @@ def parse_args():
     parser.add_argument("--train-max-len", type=int, default=3)
     parser.add_argument("--test-lens", nargs="+", type=int, default=[4, 5, 6])
     parser.add_argument("--samples-per-test-len", type=int, default=128)
+    parser.add_argument(
+        "--test-sequences",
+        nargs="*",
+        default=None,
+        help="Explicit test chains. If set, random/stratified test sampling is skipped.",
+    )
+    parser.add_argument(
+        "--test-seq-file",
+        default=None,
+        help="Optional file with one explicit test chain per line.",
+    )
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--list-only", action="store_true")
     parser.add_argument(
@@ -227,7 +262,17 @@ def validate_args(args):
         raise ValueError("--ops must not contain duplicates")
     if args.train_max_len < 1:
         raise ValueError("--train-max-len must be >= 1")
-    if any(length <= args.train_max_len for length in args.test_lens):
+    explicit_tests = load_explicit_tests(args)
+    if explicit_tests:
+        bad = sorted(set("".join(explicit_tests)) - set(args.ops))
+        if bad:
+            raise ValueError(
+                "explicit test sequence has ops outside --ops: "
+                f"{''.join(bad)}"
+            )
+        if any(len(sequence) <= args.train_max_len for sequence in explicit_tests):
+            raise ValueError("explicit test sequences must be longer than train max length")
+    elif any(length <= args.train_max_len for length in args.test_lens):
         raise ValueError("--test-lens must be greater than --train-max-len")
 
 
