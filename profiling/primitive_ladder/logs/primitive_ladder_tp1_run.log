@@ -1,0 +1,18 @@
+=== primitive ladder TP=1 B=1 T=512 D=1024 max_len=2 runs=3 ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[single M   ] task=64.19us tu=54.50us dma=19.67us
+[single A   ] task=17.15us tu=2.19us dma=14.91us
+[single S   ] task=16.90us tu=6.98us dma=9.86us
+[double MM  ] task=114.95us tu=98.56us dma=31.05us
+[double MA  ] task=66.59us tu=56.78us dma=26.28us
+[double MS  ] task=72.57us tu=62.77us dma=19.78us
+[double AM  ] task=69.35us tu=54.47us dma=24.91us
+[double AA  ] task=22.64us tu=4.37us dma=20.39us
+[double AS  ] task=24.17us tu=9.18us dma=14.94us
+[double SM  ] task=65.45us tu=55.65us dma=19.86us
+[double SA  ] task=22.49us tu=10.28us dma=16.96us
+[double SS  ] task=24.87us tu=13.67us dma=11.14us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/primitive_ladder/primitive_ladder_tp1_medium_results.csv (12 rows)
+PRIM_DONE
