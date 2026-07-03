@@ -62,7 +62,11 @@
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd stash pop)",
       "Bash(grep -v \"^\\\\s*$\")",
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/ground_truth_llama.py profiling/ground_truth/logs/ground_truth_run.log profiling/ground_truth/logs/ground_truth_sweep_run.log)",
-      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/prefill_kernels_s128.py profiling/ground_truth/logs/prefill_kernels_s128_run.log)"
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/prefill_kernels_s128.py profiling/ground_truth/logs/prefill_kernels_s128_run.log)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/prefill_chains_s128.py profiling/ground_truth/logs/prefill_chains_s128_run.log)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd pull)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd log --oneline -3)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd show 827158e --stat)"
     ]
   }
 }

@@ -1,0 +1,37 @@
+=== Llama-3.1-8B context windows S=128 TP=8 dtype=bfloat16 len=1..4 runs=3 ===
+families=mlp_tail,attn_tail workloads=30
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[mlp_tail  single G   ] task=318.56us tu=139.53us dma=121.41us sto=0.00us
+[mlp_tail  single I   ] task=51.95us tu=2.24us dma=10.58us sto=0.00us
+[mlp_tail  single X   ] task=61.45us tu=4.07us dma=15.86us sto=0.00us
+[mlp_tail  single D   ] task=293.37us tu=137.78us dma=147.17us sto=0.00us
+[mlp_tail  single R   ] task=61.93us tu=0.94us dma=6.65us sto=0.00us
+[mlp_tail  double GI  ] task=339.34us tu=140.03us dma=121.92us sto=0.00us
+[mlp_tail  double IX  ] task=61.41us tu=6.30us dma=16.23us sto=0.00us
+[mlp_tail  double XD  ] task=281.76us tu=103.04us dma=124.66us sto=0.00us
+[mlp_tail  double DR  ] task=258.64us tu=104.29us dma=115.52us sto=0.00us
+[mlp_tail  triple GIX ] task=318.30us tu=143.61us dma=125.75us sto=0.00us
+[mlp_tail  triple IXD ] task=322.12us tu=104.56us dma=130.87us sto=0.00us
+[mlp_tail  triple XDR ] task=280.36us tu=103.20us dma=124.80us sto=0.00us
+[mlp_tail  quad   GIXD] task=540.00us tu=231.86us dma=228.28us sto=0.00us
+[mlp_tail  quad   IXDR] task=279.78us tu=105.47us dma=124.16us sto=0.00us
+[attn_tail single Q   ] task=14.64us tu=5.69us dma=7.10us sto=0.00us
+[attn_tail single S   ] task=12.45us tu=3.36us dma=4.80us sto=0.00us
+[attn_tail single A   ] task=43.91us tu=5.70us dma=7.98us sto=0.00us
+[attn_tail single O   ] task=128.17us tu=35.06us dma=39.93us sto=0.00us
+[attn_tail single R   ] task=12.13us tu=0.94us dma=6.98us sto=0.00us
+[attn_tail double QS  ] task=20.47us tu=9.14us dma=7.86us sto=0.00us
+[attn_tail double SA  ] task=16.73us tu=4.59us dma=4.72us sto=0.00us
+[attn_tail double AO  ] task=130.51us tu=37.22us dma=44.94us sto=0.00us
+[attn_tail double OR  ] task=130.04us tu=36.16us dma=40.90us sto=0.00us
+[attn_tail triple QSA ] task=21.31us tu=7.31us dma=5.90us sto=0.00us
+[attn_tail triple SAO ] task=130.11us tu=39.33us dma=44.80us sto=0.00us
+[attn_tail triple AOR ] task=132.89us tu=39.33us dma=45.14us sto=0.00us
+[attn_tail quad   QSAO] task=149.43us tu=64.43us dma=66.08us sto=0.00us
+[attn_tail quad   SAOR] task=143.21us tu=60.29us dma=58.74us sto=0.00us
+[mlp_full  full_mlp_no_residual MLP ] task=803.37us tu=356.70us dma=330.80us sto=0.00us
+[mlp_full  full_mlp_residual MLPR] task=805.14us tu=356.49us dma=332.78us sto=0.00us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/ground_truth/llama_context_windows_s128_results.csv (30 rows)
+CW_DONE
