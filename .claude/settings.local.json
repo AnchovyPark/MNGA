@@ -43,7 +43,24 @@
       "Bash(rm -rf ~/.cache/furiosa/llm)",
       "Read(//home/furiosa/바탕화면/pjh/npu_chip_project/**)",
       "Bash(.venv/bin/python -c ' *)",
-      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python tp_allreduce_derisk.py)"
+      "Bash(timeout 300 /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python tp_allreduce_derisk.py)",
+      "Bash(git status *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(ls -la /home/furiosa/바탕화면/pjh/rngd/profiling/primitive_ladder/)",
+      "Bash(echo \"NO_LOCAL_DIR — pull 필요\")",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd stash push -- .claude/settings.local.json)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/primitive_ladder/primitive_ladder_tp1_T128_D256_results.csv profiling/primitive_ladder/logs/primitive_ladder_tp1_small_run.log)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd commit -q -m ' *)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd pull --rebase -q)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd push -q)",
+      "Bash(top -b -n2 -d0.7 -p 748481)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/primitive_ladder/primitive_ladder_tp1_T2048_D4096_results.csv profiling/primitive_ladder/logs/primitive_ladder_tp1_large_run.log)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd rev-parse --short HEAD)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd stash pop)",
+      "Bash(grep -v \"^\\\\s*$\")"
     ]
   }
 }
