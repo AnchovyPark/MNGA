@@ -1,0 +1,7 @@
+sequence,length,actual_us,symbolic_pred_us,symbolic_err_pct,shape_aware_pred_us,shape_aware_err_pct
+MXMA,4,103.6,112.7,8.8,94.8,-8.5
+MSMA,4,102.5,115.1,12.3,97.0,-5.3
+MXMXMA,6,153.3,161.9,5.6,154.2,0.6
+MSMSMA,6,157.7,166.2,5.4,155.3,-1.5
+MASXMSM,7,163.6,179.7,9.8,164.0,0.3
+MMSMMAM,7,235.1,216.5,-7.9,233.0,-0.9
