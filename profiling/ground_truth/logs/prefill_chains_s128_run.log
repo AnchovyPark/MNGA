@@ -1,0 +1,19 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== real chain fused vs 격리합 (S=128, TP=8) ===
+[MLP  gate→silu→mul→down→residual]
+[ATTN qk→softmax→av→o_proj→residual]
+
+ depth | MLP fused / isosum (gap) | ATTN fused / isosum (gap)
+   2   |   383.0 /   326.3 (  +56.7) |    20.3 /    55.9 (  -35.6)
+   3   |   316.1 /   353.2 (  -37.1) |   105.1 /    95.1 (  +10.0)
+   4   |   527.9 /   621.4 (  -93.5) |   132.5 /   224.4 (  -92.0)
+   5   |   530.2 /   633.4 ( -103.1) |   167.8 /   236.5 (  -68.7)
+
+===== 재구성 (×32 + lm_head) =====
+single 합   per-layer 1569us → 51.98 ms
+chain fused per-layer 1333us → 44.42 ms
+ground truth = 20.10 ms
+  single 합   : 2.59x
+  chain fused : 2.21x
+PC_DONE

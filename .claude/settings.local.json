@@ -60,7 +60,9 @@
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/primitive_ladder/primitive_ladder_tp1_T2048_D4096_results.csv profiling/primitive_ladder/logs/primitive_ladder_tp1_large_run.log)",
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd rev-parse --short HEAD)",
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd stash pop)",
-      "Bash(grep -v \"^\\\\s*$\")"
+      "Bash(grep -v \"^\\\\s*$\")",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/ground_truth_llama.py profiling/ground_truth/logs/ground_truth_run.log profiling/ground_truth/logs/ground_truth_sweep_run.log)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/prefill_kernels_s128.py profiling/ground_truth/logs/prefill_kernels_s128_run.log)"
     ]
   }
 }
