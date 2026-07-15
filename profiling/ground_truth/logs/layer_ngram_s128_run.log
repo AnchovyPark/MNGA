@@ -1,0 +1,51 @@
+=== layer n-gram≤3 (Llama-3.1-8B B=1 S=128 TP=8) ===
+train: single 10 + double 10 + triple 9 = 29
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  [train len1 Q          ] task=    42.7us
+  [train len1 S          ] task=    55.8us
+  [train len1 V          ] task=    42.5us
+  [train len1 O          ] task=   131.7us
+  [train len1 R          ] task=    10.6us
+  [train len1 N          ] task=    13.5us
+  [train len1 G          ] task=   312.5us
+  [train len1 I          ] task=    19.4us
+  [train len1 X          ] task=    26.4us
+  [train len1 D          ] task=   290.0us
+  [train len2 QS         ] task=    20.8us
+  [train len2 SV         ] task=    19.1us
+  [train len2 VO         ] task=   128.3us
+  [train len2 OR         ] task=   165.1us
+  [train len2 RN         ] task=    16.5us
+  [train len2 NG         ] task=   344.2us
+  [train len2 GI         ] task=   311.5us
+  [train len2 IX         ] task=    27.5us
+  [train len2 XD         ] task=   280.3us
+  [train len2 DR         ] task=   294.2us
+  [train len3 QSV        ] task=    27.3us
+  [train len3 SVO        ] task=   129.2us
+  [train len3 VOR        ] task=   161.3us
+  [train len3 ORN        ] task=   137.3us
+  [train len3 RNG        ] task=   321.4us
+  [train len3 NGI        ] task=   350.3us
+  [train len3 GIX        ] task=   401.9us
+  [train len3 IXD        ] task=   283.0us
+  [train len3 XDR        ] task=   287.0us
+  [test  len4 ORNG       ] task=   427.4us
+  [test  len5 QSVOR      ] task=   166.8us
+  [test  len6 VORNGI     ] task=   427.2us
+  [test  len6 NGIXDR     ] task=   568.7us
+  [test  len8 SVORNGIX   ] task=   426.5us
+  [test  len11 QSVORNGIXDR] task=   739.0us
+
+=== 예측 (≤triple 학습, train RMSE=15.1us) ===
+  seq          len   actual     pred    err% naive Σsingle    err%
+  ORNG           4    427.4    424.7   -0.6%         468.3   +9.6%
+  QSVOR          5    166.8    164.4   -1.4%         283.5  +69.9%
+  VORNGI         6    427.2    451.1   +5.6%         530.2  +24.1%
+  NGIXDR         6    568.7    654.3  +15.1%         672.4  +18.2%
+  SVORNGIX       8    426.5    519.1  +21.7%         612.5  +43.6%
+  QSVORNGIXDR   11    739.0    763.3   +3.3%         955.8  +29.3%
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/ground_truth/layer_ngram_s128_results.csv (35 rows)
+NGRAM_DONE
