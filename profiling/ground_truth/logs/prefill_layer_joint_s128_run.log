@@ -1,0 +1,21 @@
+=== prefill layer joint ladder S=128 TP=8 (Llama-3.1-8B GQA) ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  attn_block  task=   288.5us  tu=   92.3 dma=  119.4 sto=   2.5 parcopy=   1.7 cluster=  17.8
+  mlp_block   task=   845.0us  tu=  363.7 dma=  335.0 sto=   0.0 parcopy=   2.7 cluster= 329.1
+  full_layer  task=  1074.8us  tu=  472.9 dma=  464.3 sto=   1.9 parcopy=   5.1 cluster= 312.6
+  two_layer   task=  2068.7us  tu=  860.1 dma=  857.2 sto=  18.3 parcopy=  13.5 cluster= 540.4
+
+=== 사다리 (per-layer, us) ===
+  Σ 격리 single      :   1569.0   (2.50x)
+  chain-fused 합      :   1333.0   (2.12x)
+  attn_blk+mlp_blk    :   1133.5   (1.80x)   [attn 289 + mlp 845]
+  full_layer joint    :   1074.8   (1.71x)
+    → 블록경계 fusion 이득: -58.7us (-5%)
+  2-layer joint ÷2    :   1034.3   (1.65x)
+    → layer간 prefetch 이득: -40.4us/layer
+  실제 per-layer (GT) :    628.0   (1.00x)
+
+=== full_layer×32 + lm_head 예측 prefill ===
+  = 36.16 ms  vs GT 20.1 ms  → 1.80x
+LJ_DONE
