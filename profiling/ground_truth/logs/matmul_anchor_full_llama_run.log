@@ -1,0 +1,8 @@
+=== matmul-anchor full Llama (S=2048 TP=8) ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  q_proj       753.9us
+  k_proj       384.8us
+  v_proj       401.6us
+  qk           529.7us
+  av           574.7us
