@@ -1,0 +1,7 @@
+=== prefill layer DEPTH sweep S=128 TP=8 (Llama GQA) ===
+  N      task  per-layer  vs real |    tu/L   dma/L cluster/L
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  1    1086.5     1086.5    1.91x |   480.5   465.1     321.2   (Δ/L   -)
+  2    2065.0     1032.5    1.81x |   434.6   428.4     271.9   (Δ/L -54.0)
+  4    4005.9     1001.5    1.76x |   438.3   430.7     265.5   (Δ/L -31.0)

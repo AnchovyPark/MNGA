@@ -66,7 +66,15 @@
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/prefill_chains_s128.py profiling/ground_truth/logs/prefill_chains_s128_run.log)",
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd pull)",
       "Bash(git -C /home/furiosa/바탕화면/pjh/rngd log --oneline -3)",
-      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd show 827158e --stat)"
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd show 827158e --stat)",
+      "Bash(git -C /home/furiosa/바탕화면/pjh/rngd add profiling/ground_truth/llama_context_windows_s128_results.csv profiling/ground_truth/logs/llama_context_windows_s128_run.log)",
+      "Bash(pkill -f \"context_chain_ladder_tp1.py\")",
+      "Bash(git *)",
+      "Bash(echo \"=== context/attribution 관련 커밋 \\(이 세션\\) ===\")",
+      "Bash(gh auth *)",
+      "Bash(pkill -f \"prefill_layer_depth_s128.py\")",
+      "Bash(/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python layer_ngram_s128.py 2048)",
+      "Bash(/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python prefill_layer_depth_s128.py 2048 1,2)"
     ]
   }
 }

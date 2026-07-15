@@ -1,0 +1,56 @@
+=== context chain ladder NPE=1 B=1 T=128 D=4096 ops=MASX train<=len3 test_lens=4,5,6 samples/test_len=128 runs=3 ===
+workloads=87
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+[0001/0087 train single M       ] task=198.73us tu=144.02us dma=180.90us sto=0.00us
+[0002/0087 train single A       ] task=17.42us tu=2.19us dma=15.18us sto=0.00us
+[0003/0087 train single S       ] task=17.99us tu=6.83us dma=11.10us sto=0.00us
+[0004/0087 train single X       ] task=19.19us tu=4.30us dma=14.83us sto=0.00us
+[0005/0087 train double MM      ] task=381.32us tu=286.62us dma=363.48us sto=0.00us
+[0006/0087 train double MA      ] task=202.07us tu=147.17us dma=186.63us sto=0.00us
+[0007/0087 train double MS      ] task=207.36us tu=151.31us dma=182.10us sto=0.00us
+[0008/0087 train double MX      ] task=204.07us tu=149.28us dma=186.67us sto=0.00us
+[0009/0087 train double AM      ] task=204.91us tu=147.23us dma=187.22us sto=0.00us
+[0010/0087 train double AA      ] task=22.29us tu=4.37us dma=20.04us sto=0.00us
+[0011/0087 train double AS      ] task=25.90us tu=9.16us dma=16.68us sto=0.00us
+[0012/0087 train double AX      ] task=24.56us tu=6.49us dma=20.20us sto=0.00us
+[0013/0087 train double SM      ] task=198.62us tu=151.95us dma=180.93us sto=0.00us
+[0014/0087 train double SA      ] task=22.28us tu=10.30us dma=16.74us sto=0.00us
+[0015/0087 train double SS      ] task=24.82us tu=13.67us dma=11.10us sto=0.00us
+[0016/0087 train double SX      ] task=23.71us tu=11.74us dma=16.74us sto=0.00us
+[0017/0087 train double XM      ] task=204.69us tu=149.35us dma=186.99us sto=0.00us
+[0018/0087 train double XA      ] task=22.30us tu=6.49us dma=20.05us sto=0.00us
+[0019/0087 train double XS      ] task=28.07us tu=11.28us dma=16.74us sto=0.00us
+[0020/0087 train double XX      ] task=24.66us tu=8.60us dma=20.30us sto=0.00us
+[0021/0087 train triple MMM     ] task=543.27us tu=481.05us dma=524.34us sto=0.00us
+[0022/0087 train triple MMA     ] task=384.34us tu=289.80us dma=368.88us sto=0.00us
+[0023/0087 train triple MMS     ] task=389.69us tu=294.07us dma=364.41us sto=0.00us
+[0024/0087 train triple MMX     ] task=386.76us tu=291.91us dma=369.16us sto=0.00us
+[0025/0087 train triple MAM     ] task=385.18us tu=291.20us dma=367.31us sto=0.00us
+[0026/0087 train triple MAA     ] task=204.74us tu=148.83us dma=193.46us sto=0.00us
+[0027/0087 train triple MAS     ] task=209.35us tu=153.48us dma=187.86us sto=0.00us
+[0028/0087 train triple MAX     ] task=206.79us tu=150.95us dma=193.48us sto=0.00us
+[0029/0087 train triple MSM     ] task=384.65us tu=295.33us dma=363.21us sto=0.00us
+[0030/0087 train triple MSA     ] task=210.43us tu=154.28us dma=187.95us sto=0.00us
+[0031/0087 train triple MSS     ] task=214.01us tu=158.15us dma=181.92us sto=0.00us
+[0032/0087 train triple MSX     ] task=211.50us tu=155.31us dma=187.99us sto=0.00us
+[0033/0087 train triple MXM     ] task=385.17us tu=293.31us dma=367.31us sto=0.00us
+[0034/0087 train triple MXA     ] task=206.65us tu=150.95us dma=193.30us sto=0.00us
+[0035/0087 train triple MXS     ] task=211.38us tu=155.59us dma=187.77us sto=0.00us
+[0036/0087 train triple MXX     ] task=208.90us tu=153.06us dma=193.41us sto=0.00us
+[0037/0087 train triple AMM     ] task=387.24us tu=289.83us dma=369.55us sto=0.00us
+[0038/0087 train triple AMA     ] task=207.57us tu=150.38us dma=192.31us sto=0.00us
+[0039/0087 train triple AMS     ] task=213.34us tu=154.52us dma=188.23us sto=0.00us
+[0040/0087 train triple AMX     ] task=209.91us tu=152.50us dma=192.58us sto=0.00us
+[0041/0087 train triple AAM     ] task=210.45us tu=149.42us dma=192.75us sto=0.00us
+[0042/0087 train triple AAA     ] task=27.53us tu=6.56us dma=25.28us sto=0.00us
+[0043/0087 train triple AAS     ] task=31.56us tu=11.35us dma=22.34us sto=0.00us
+[0044/0087 train triple AAX     ] task=29.78us tu=8.67us dma=25.42us sto=0.00us
+[0045/0087 train triple ASM     ] task=204.66us tu=155.17us dma=186.97us sto=0.00us
+[0046/0087 train triple ASA     ] task=29.51us tu=12.66us dma=22.37us sto=0.00us
+[0047/0087 train triple ASS     ] task=32.73us tu=15.86us dma=16.82us sto=0.00us
+[0048/0087 train triple ASX     ] task=30.27us tu=13.53us dma=22.33us sto=0.00us
+[0049/0087 train triple AXM     ] task=210.00us tu=151.53us dma=192.30us sto=0.00us
+[0050/0087 train triple AXA     ] task=27.45us tu=8.67us dma=25.20us sto=0.00us
+[0051/0087 train triple AXS     ] task=33.77us tu=13.46us dma=22.44us sto=0.00us
+[0052/0087 train triple AXX     ] task=29.88us tu=10.79us dma=25.52us sto=0.00us
