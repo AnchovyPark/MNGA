@@ -1,0 +1,39 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/core/attention/attention.py:6: UserWarning: LTW Backend is provided temporarily for compatibility purposes only. This feature may be removed without notice in future versions. (Default behavior, set USE_WTL_BACKEND=1 to use WTL backend)
+  from furiosa.models.core.attention.backends import LLMAttentionBackend
+=== config keys: 100 | partial_sum_policy: {'Bf16ForSplitAndChipAndCluster': {'fp8_chip_communication': None}}
+
+=== native_common.compiler.compile(gate, config=LLM dict) ===
+[1/12] 🔍   Compiling from dfg to primitive
+Done in 0.014288271s
+[2/12] 🔍   Compiling from primitive to kernelized
+Done in 0.001567049s
+[3/12] 🔍   Compiling from kernelized to prelower
+Done in 0.001097811s
+[4/12] 🔍   Compiling from prelower to postlower
+Done in 0.5049053s
+[5/12] 🔍   Compiling from postlower to precommandgen
+Done in 5.0151653s
+[6/12] 🔍   Compiling from precommandgen to commandgraph
+Done in 0.002385114s
+[7/12] 🔍   Compiling from commandgraph to tiledgraph
+Done in 0.12005931s
+[8/12] 🔍   Compiling from tiledgraph to ldfg
+Done in 0.009943372s
+[9/12] 🔍   Compiling from ldfg to cdfg
+Done in 0.011060057s
+[10/12] 🔍   Compiling from cdfg to lir
+Done in 1.2106903s
+[11/12] 🔍   Compiling from lir to resourcelir
+Done in 0.11164185s
+[12/12] 🔍   Compiling from resourcelir to edf
+Done in 0.2598961s
+✨  Finished in 7.262869s
+COMPILED OK. type: CompileResult
+attrs: ['graph_metadata', 'graphs']
+graphs: list len 1
+graph[0]: CompiledGraph
+  attrs: ['cpu_task_num', 'deserialize', 'encapsulate', 'is_edf', 'is_pre_command_gen', 'npu_task_num', 'serialize', 'task_num']
+exit=0
+A_S128_DONE
