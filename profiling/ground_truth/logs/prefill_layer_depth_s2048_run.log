@@ -1,0 +1,10 @@
+=== prefill layer DEPTH sweep S=2048 TP=8 (Llama GQA) ===
+  N      task  per-layer  vs real |    tu/L   dma/L cluster/L
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  1   10588.9    10588.9   12.83x |  5086.0  2614.2    2586.6   (Δ/L   -)
+  2   20821.5    10410.8   12.62x |  4918.0  1755.9     655.7   (Δ/L -178.1)
+
+실제 per-layer ≈ 825us (GT 20.1ms - lm_head, /32)
+per-layer가 깊이로 실제값에 수렴하면 gap=깊이 amortization, plateau면 컴파일 경로 차이.
+DEPTH2048_DONE
