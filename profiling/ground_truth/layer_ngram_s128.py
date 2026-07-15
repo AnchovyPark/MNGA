@@ -14,10 +14,10 @@ model: op + 좌/우/ctx ridge (analyze_context_attribution 와 동일), ≤tripl
 실제 Llama-3.1-8B B=1 S=128 TP=8 bf16. 예측 맞으면 추가 프로파일 없이 Llama 적용.
 """
 import csv
-import math
 import os
 import statistics as st
-from collections import Counter, defaultdict
+import sys
+from collections import defaultdict
 
 import torch
 import torch.nn.functional as F
@@ -29,10 +29,11 @@ nd.set_fusion(8)
 from furiosa.torch.custom_ops import CompileModule  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT_CSV = os.path.join(HERE, "layer_ngram_s128_results.csv")
 
 D, NH, HD, KV, INTER = 4096, 32, 128, 8, 14336
-B, S = 1, 128
+B = 1
+S = int(sys.argv[1]) if len(sys.argv) > 1 else 128
+OUT_CSV = os.path.join(HERE, f"layer_ngram_s{S}_results.csv")
 DTYPE = torch.bfloat16
 N_RUNS = 3
 BOS, EOS = "BOS", "EOS"
@@ -179,8 +180,7 @@ def main():
     train = singles + doubles + triples
     tests = ["ORNG", "QSVOR", "VORNGI", "NGIXDR", "SVORNGIX", CHAIN]
 
-    print(f"=== layer n-gram≤3 (Llama-3.1-8B B={B} S={S} TP=8) ===", flush=True)
-    print(f"train: single {len(singles)} + double {len(doubles)} + triple {len(triples)} = {len(train)}", flush=True)
+    print(f"=== layer n-gram windows (Llama-3.1-8B B={B} S={S} TP=8) ===", flush=True)
 
     task = {}
     rows = []
@@ -188,29 +188,17 @@ def main():
         for seq in seqs:
             if seq in task:
                 continue
-            t = measure(seq)
+            try:
+                t = measure(seq)
+            except Exception as exc:
+                print(f"  [{split:5s} {seq:11s}] FAIL {type(exc).__name__}: {str(exc)[:90]}", flush=True)
+                continue
             task[seq] = t
             rows.append(dict(split=split, sequence=seq, length=len(seq),
                              ops="->".join(OP_NAME[o] for o in seq), task_us=round(t, 2)))
             print(f"  [{split:5s} len{len(seq)} {seq:11s}] task={t:8.1f}us", flush=True)
 
-    names, coef = fit_ridge([(featurize(s), task[s]) for s in train], 1.0)
-    tr_rmse = math.sqrt(sum((predict(s, names, coef) - task[s])**2 for s in train) / len(train))
-
-    print(f"\n=== 예측 (≤triple 학습, train RMSE={tr_rmse:.1f}us) ===", flush=True)
-    print(f"  {'seq':12s} {'len':>3} {'actual':>8} {'pred':>8} {'err%':>7} {'naive Σsingle':>13} {'err%':>7}", flush=True)
-    for seq in tests:
-        act = task[seq]; pr = predict(seq, names, coef)
-        naive = sum(task[o] for o in seq)  # residual R single reused
-        e = (pr - act) / act * 100; ne = (naive - act) / act * 100
-        print(f"  {seq:12s} {len(seq):>3} {act:8.1f} {pr:8.1f} {e:+6.1f}% {naive:13.1f} {ne:+6.1f}%", flush=True)
-        for r in rows:
-            if r["sequence"] == seq:
-                r["pred_us"] = round(pr, 2); r["err_pct"] = round(e, 2)
-                r["naive_us"] = round(naive, 2); r["naive_err_pct"] = round(ne, 2)
-
-    fields = ["split", "sequence", "length", "ops", "task_us", "pred_us", "err_pct",
-              "naive_us", "naive_err_pct"]
+    fields = ["split", "sequence", "length", "ops", "task_us"]
     with open(OUT_CSV, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         w.writeheader(); w.writerows(rows)

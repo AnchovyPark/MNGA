@@ -1,0 +1,41 @@
+=== layer n-gram windows (Llama-3.1-8B B=1 S=2048 TP=8) ===
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+  [train len1 Q          ] task=   542.2us
+  [train len1 S          ] task=   846.3us
+  [train len1 V          ] task=   633.7us
+  [train len1 O          ] task=   766.1us
+  [train len1 R          ] task=    94.8us
+  [train len1 N          ] task=    82.5us
+  [train len1 G          ] task=  2437.1us
+  [train len1 I          ] task=   196.5us
+  [train len1 X          ] task=   288.8us
+  [train len1 D          ] task=  2837.8us
+  [train len2 QS         ] task=   982.7us
+  [train len2 SV         ] task=   944.2us
+  [train len2 VO         ] task=  1354.1us
+  [train len2 OR         ] task=   782.2us
+  [train len2 RN         ] task=   116.1us
+  [train len2 NG         ] task=  2530.5us
+  [train len2 GI         ] task=  2445.1us
+  [train len2 IX         ] task=   287.9us
+  [train len2 XD         ] task=  2938.8us
+  [train len2 DR         ] task=  2804.7us
+  [train len3 QSV        ] task=  1208.4us
+  [train len3 SVO        ] task=  1681.9us
+  [train len3 VOR        ] task=  1373.1us
+  [train len3 ORN        ] task=   827.8us
+  [train len3 RNG        ] task=  2585.0us
+  [train len3 NGI        ] task=  2544.5us
+  [train len3 GIX        ] task=  2500.3us
+  [train len3 IXD        ] task=  3009.6us
+  [train len3 XDR        ] task=  2909.8us
+  [test  len4 ORNG       ] task=  3247.4us
+  [test  len5 QSVOR      ] task=  2007.7us
+  [test  len6 VORNGI     ] task=  3929.0us
+  [test  len6 NGIXDR     ] task=  5104.3us
+  [test  len8 SVORNGIX   ] task=  4209.2us
+  [test  len11 QSVORNGIXDR] task=  7358.1us
+
+[DONE] /home/furiosa/바탕화면/pjh/rngd/profiling/ground_truth/layer_ngram_s2048_results.csv (35 rows)
+S2048_DONE
