@@ -1,0 +1,6 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+=== gate 241 GFLOP TP=8 S=2048 ===
+  None baseline                  task=  2434.9us (  99 TFLOPS)  tu=  1086.3us ( 221)
+  tactic=ForLlmModelPrefill      task=  2863.7us (  84 TFLOPS)  tu=  1347.3us ( 179)
+  tactic=Prefill+cast+scatter    task=  2865.9us (  84 TFLOPS)  tu=  1347.3us ( 179)
