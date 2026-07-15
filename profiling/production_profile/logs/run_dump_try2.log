@@ -1,0 +1,19 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/core/attention/attention.py:6: UserWarning: LTW Backend is provided temporarily for compatibility purposes only. This feature may be removed without notice in future versions. (Default behavior, set USE_WTL_BACKEND=1 to use WTL backend)
+  from furiosa.models.core.attention.backends import LLMAttentionBackend
+[run] artifact=/home/furiosa/llama1b_profiled
+[run] FURIOSA_PROFILER_OUTPUT_PATHS=/home/furiosa/llama1b_trace
+[run] TUC_PROFILE_LEVEL=info
+[2m2026-07-15T18:03:56.986549548+09:00[0m [32m INFO[0m [2mfuriosa_llm_common::artifact::types::next_gen[0m[2m:[0m Loading artifact from path: /home/furiosa/llama1b_profiled
+[2m2026-07-15T18:03:58.892813309+09:00[0m [32m INFO[0m [2mfuriosa_llm_common::artifact::types::commons[0m[2m:[0m Loading artifact with schema version: 3.0
+[2m2026-07-15T18:03:59.273452144+09:00[0m [32m INFO[0m [2mfuriosa::llm::engine[0m[2m:[0m Loaded target artifact: SchemaVersion { major: 3, minor: 0 }
+[2m2026-07-15T18:03:59.273501904+09:00[0m [32m INFO[0m [2mfuriosa::llm::engine[0m[2m:[0m Parallelism Config: tp=8, pp=1, dp=1
+Traceback (most recent call last):
+  File "/home/furiosa/바탕화면/pjh/rngd/profiling/production_profile/run_profiled_dump.py", line 31, in <module>
+    llm = LLM(art)
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/api.py", line 216, in __init__
+    self._init_from_artifact(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/api.py", line 383, in _init_from_artifact
+    self.engine = NativeLLMEngine(
+ValueError: NPU error: Npu npu0pe0-3: Failed to open "/dev/rngd/npu0ch4r": Os { code: 95, kind: Unsupported, message: "Operation not supported" }

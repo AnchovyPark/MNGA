@@ -1,0 +1,67 @@
+leader_device,name,cycle
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",106142
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",41049
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",359402
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",41305
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",358262
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40977
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",363992
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40457
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",361930
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40779
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",361420
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40665
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",367860
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40718
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",368438
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40928
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",361610
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40438
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",360917
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40453
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",360486
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40548
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",361776
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40736
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",365042
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40516
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",368348
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40712
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",360050
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40431
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",361134
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 128, kv_cache_size: 0 }) #0",40632
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",1275788
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",103864
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",86280
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",379345
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85913
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",372814
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85661
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",375364
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85417
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",374906
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85963
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",373438
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",86235
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",379977
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85297
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",379588
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85267
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",371998
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85821
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",376612
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85649
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",376740
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85099
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",376966
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85717
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",379858
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",86019
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",374730
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85005
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",371586
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",85287
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",369556
+"npu0pe0-3","Attention(AttentionBucket { batch_size: 1, attention_size: 256, kv_cache_size: 128 }) #0",88461
+"npu0pe0-3","Tokenwise(TokenwiseBucket { input_size: 128 }) #0",1260631

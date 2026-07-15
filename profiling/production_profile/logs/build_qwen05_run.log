@@ -1,0 +1,46 @@
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/torch/xpu/__init__.py:62: UserWarning: XPU device count is zero! (Triggered internally at /pytorch/c10/xpu/XPUFunctions.cpp:113.)
+  return torch._C._xpu_getDeviceCount()
+/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/core/attention/attention.py:6: UserWarning: LTW Backend is provided temporarily for compatibility purposes only. This feature may be removed without notice in future versions. (Default behavior, set USE_WTL_BACKEND=1 to use WTL backend)
+  from furiosa.models.core.attention.backends import LLMAttentionBackend
+[build] model=furiosa-ai/Qwen2.5-0.5B-Instruct -> /home/furiosa/qwen05_profiled (workers=8)
+[build] overrides: enable_tuc_profile=True, profile_sync=True
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files:  10%|█         | 1/10 [00:00<00:04,  1.94it/s]Fetching 10 files:  30%|███       | 3/10 [00:00<00:01,  5.28it/s]Fetching 10 files:  50%|█████     | 5/10 [00:01<00:01,  2.75it/s]Fetching 10 files: 100%|██████████| 10/10 [00:01<00:00,  5.81it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+Casting bfloat16 to torch.bfloat16.
+Fetching 10 files:   0%|          | 0/10 [00:00<?, ?it/s]Fetching 10 files: 100%|██████████| 10/10 [00:00<00:00, 7286.84it/s]
+Traceback (most recent call last):
+  File "/home/furiosa/바탕화면/pjh/rngd/profiling/production_profile/build_profiled_artifact.py", line 35, in <module>
+    builder.build(save_dir, num_compile_workers=workers, num_pipeline_builder_workers=1)
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/artifact/builder.py", line 363, in build
+    target_model_artifact, target_model_pipelines = self._build_model_artifact(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/artifact/builder.py", line 233, in _build_model_artifact
+    param_file_metadata = get_param_file_with_cache(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/trace.py", line 588, in get_param_file_with_cache
+    model.instantiate_model(), cache_path_, "safetensors", max_shard_size
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/parallelize/model_creation_info.py", line 19, in instantiate_model
+    return self.metadata.pretrained_model()
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/metadata/metadata.py", line 381, in pretrained_model
+    return self._pretrained_model(run_gc)  # type: ignore[arg-type]
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/metadata/metadata.py", line 364, in _pretrained_model
+    return auto_model_cls.from_pretrained(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/optimum/modeling_base.py", line 407, in from_pretrained
+    return from_pretrained_method(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/optimum/modeling.py", line 414, in _from_pretrained
+    model = instantiate_model(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/optimum/modeling.py", line 345, in instantiate_model
+    model = _load_weights()
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa_llm/optimum/modeling.py", line 330, in _load_weights
+    return optimized_cls.create(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/deprecated/classic.py", line 199, in wrapper_function
+    return wrapped_(*args_, **kwargs_)
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/common/export/serve/causal.py", line 200, in create
+    return cls.from_pretrained(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/common/export/serve/causal.py", line 119, in from_pretrained
+    return cls._build(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/common/export/serve/base.py", line 94, in _build
+    loaded = load_pretrained_weights(
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/common/load/loader.py", line 60, in load_pretrained_weights
+    state_dict = load_state_dict(local_dir)
+  File "/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/models/common/load/loader.py", line 87, in load_state_dict
+    raise ValueError(
+ValueError: Currently, only safetensors files are supported. safetensors file not found in /home/furiosa/.cache/huggingface/hub/models--furiosa-ai--Qwen2.5-0.5B-Instruct/snapshots/ca96a4eadd7398ac1d00b647c195f3aba8d4b9be. 
