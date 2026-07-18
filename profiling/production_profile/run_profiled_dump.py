@@ -33,7 +33,7 @@ tok = llm.tokenizer
 
 # controlled prefill prompt of ~n_tok tokens
 base = ("The theory of relativity fundamentally changed physics by unifying space and "
-        "time into a single continuum and describing gravity as curvature. ") * 40
+        "time into a single continuum and describing gravity as curvature. ") * 120
 ids = tok.encode(base)[:n_tok]
 prompt = tok.decode(ids, skip_special_tokens=True)
 print(f"[run] prompt ~{len(tok.encode(prompt))} tokens", flush=True)
