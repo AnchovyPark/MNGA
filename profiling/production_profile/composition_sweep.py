@@ -13,10 +13,15 @@ import torch, furiosa.torch  # noqa
 from furiosa.torch import native_device as nd
 nd.set_fusion(8)
 from furiosa.native_common.compiler import compile as native_compile, create_llm_compiler_config_with_layer_range
+from furiosa.native_common.compiler import approx_per_layer_params_b
 from furiosa_llm.parallelize.layer_range import LayerRange, TransformerBlock
 
-D, INTER, NH, HD, KV = 2048, 8192, 32, 64, 8
 S = int(sys.argv[1]) if len(sys.argv) > 1 else 128
+MODEL = sys.argv[2] if len(sys.argv) > 2 else "1b"
+# model -> (D, INTER, NH, HD, KV)
+D, INTER, NH, HD, KV = {"1b": (2048, 8192, 32, 64, 8),
+                        "8b": (4096, 14336, 32, 128, 8)}[MODEL]
+APPROX = approx_per_layer_params_b(D, INTER)
 DT = torch.bfloat16
 OUTDIR = os.environ.get("SD", "/tmp/csweep")
 OPS = ["q", "k", "v", "o", "gate", "up", "down"]
@@ -38,7 +43,7 @@ def p(*a): print(*a, flush=True)
 def _cfg():
     lr = LayerRange(start=TransformerBlock(idx=0), end=TransformerBlock(idx=0))
     return yaml.safe_load(create_llm_compiler_config_with_layer_range(
-        "llama", "generate", 0.22, 1, 8, 1, S, S, lr, True, False, False, False))
+        "llama", "generate", APPROX, 1, 8, 1, S, S, lr, True, False, False, False))
 
 
 def compile_read(mod, inp, tag):
