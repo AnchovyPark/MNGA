@@ -85,7 +85,18 @@
       "Read(//opt/**)",
       "Read(//etc/**)",
       "Read(//home/furiosa/**)",
-      "Bash($V *)"
+      "Bash($V *)",
+      "Bash(lsb_release -a)",
+      "Read(//usr/lib/**)",
+      "Bash(dpkg -l openssh-server)",
+      "Read(//usr/sbin/**)",
+      "Bash(systemctl is-active *)",
+      "Bash(systemctl is-enabled *)",
+      "Bash(ip -brief addr)",
+      "Bash(ip route *)",
+      "Bash(sudo -n ufw status)",
+      "Bash(ufw status *)",
+      "Bash(systemctl list-units *)"
     ]
   }
 }

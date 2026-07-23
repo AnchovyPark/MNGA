@@ -1,132 +1,81 @@
 #!/usr/bin/env python3
-"""config vs context 분리 실험 (컴파일러 2026.3.0 전용).
+"""config vs context 분리 실험 (컴파일러 2026.3.0 전용). 한 프로세스=한 (target,seq,hint) 측정.
 
-배경: 격리 커널 latency와 in-model latency의 격차(1B/8B에서 최대 12x)는
-  (a) config 성분 = 격리가 저품질로 컴파일됨  +  (b) context 성분 = cross-op fusion/overlap 상실
-이 섞인 것. 2026.2.0에선 격리를 저품질로만 컴파일 가능해 둘을 분리 못 했다.
-2026.3.0은 World-1 compile()이 production knob(ForLlmModelComputeBound, scheduler_beam_search,
-use_attention_kernel 등 23/100)을 받고 결과를 TpModule로 실행까지 한다 → 처음으로 분리 가능.
+핵심 질문: "격리 커널 == in-model 커널? latency 같나?"
+격차 = (a) config 성분(격리 저품질) + (b) context 성분(cross-op fusion 상실).
+2026.3.0은 World-1 compile()이 production tactic(ForLlmModelComputeBound)+beam+attn을 받고
+Runnable을 TpModule/CompileModule로 device 실행까지 함 → 처음으로 격리를 near-production 품질로
+컴파일+실행 가능. 이걸 in-model 실측과 비교.
 
-이 스크립트: o_proj 단일 matmul을 (1) 저품질(NoConstraint) (2) near-production(ForLlmModelComputeBound
-+ production 값) 두 config로 컴파일→실행, latency 비교. 두 숫자의 비율 = config 성분.
-near-production 격리 vs 알려진 in-model 실측 잔차 = context(+77-knob 잔여 config) 성분.
+주의(2026.3.0): set_fusion(8)은 import 직후 맨 먼저. aten::matmul 미지원→2D aten::mm. 입력을 .to(device).
+teardown 크래시(device 정리) 회피 위해 os._exit(0).
 
-⚠️ 첫 실행 프로브다. 2026.3.0 실제 API 동작(Runnable/TpModule.run 인자, weight 처리, 타이밍)을
-   하드웨어에서 확인하며 반복 수정할 것. 방어적으로 짜서 실패 지점을 진단 출력한다.
-
-사용: <2026.3.0 venv>/bin/python config_vs_context_30.py [seq] [model]
+사용: /home/furiosa/venv3030/bin/python config_vs_context_30.py <seq> <target> <hint>
+  target = oproj | tokenwise ;  hint = NoConstraint | ForLlmModelComputeBound
+출력: RESULT <hint> <target> <seq> <median_us> <min_us>
 """
-import sys, time, statistics as st
+import os, sys, time, statistics as st
 
 import torch
-import furiosa.torch  # noqa
-from furiosa.torch import native_device as nd
+import furiosa.torch as ft
+ft.set_fusion(8)  # ★맨 먼저★
+from furiosa.torch._C.config.compiler import CompilerConfig, TacticHintConfig
 
-S = int(sys.argv[1]) if len(sys.argv) > 1 else 512
-MODEL = sys.argv[2] if len(sys.argv) > 2 else "1b"
-D, INTER, NH, HD, KV = {"1b": (2048, 8192, 32, 64, 8),
-                        "8b": (4096, 14336, 32, 128, 8)}[MODEL]
+S = int(sys.argv[1])
+TARGET = sys.argv[2]
+HINT = sys.argv[3]
+DEV = "furiosa:0"
+D, INTER, NH, HD, KV = 2048, 8192, 32, 64, 8
 DT = torch.bfloat16
-ITERS, WARMUP = 50, 10
-
-
-def p(*a):
-    print(*a, flush=True)
-
-
-def version_guard():
-    import furiosa.torch.compiler as tc
-    knobs = [x for x in dir(tc.Config) if not x.startswith("_")]
-    hints = [x for x in dir(tc.TacticHintConfig) if not x.startswith("_")]
-    p(f"[env] World-1 Config knob {len(knobs)}개, tactic_hint={hints}")
-    ok = "scheduler_beam_search" in knobs and "ForLlmModelComputeBound" in hints
-    if not ok:
-        p("!! 이 venv는 2026.3.0 아님 (scheduler_beam_search / ForLlmModelComputeBound 없음). 중단.")
-        sys.exit(2)
-    return tc
-
-
-def prod_values(seq):
-    """production dict에서 노출된 knob의 실제 값을 뽑아 near-production config에 반영."""
-    import yaml
-    from furiosa.native_common.compiler import create_llm_compiler_config_with_layer_range, approx_per_layer_params_b
-    from furiosa_llm.parallelize.layer_range import LayerRange, TransformerBlock
-    lr = LayerRange(start=TransformerBlock(idx=0), end=TransformerBlock(idx=0))
-    ap = approx_per_layer_params_b(D, INTER)
-    d = yaml.safe_load(create_llm_compiler_config_with_layer_range(
-        "llama", "generate", ap, 1, 8, 1, seq, seq, lr, True, False, False, False))
-    return d
+ITERS, WARMUP = 40, 10
 
 
 class OProj(torch.nn.Module):
     def __init__(self):
-        super().__init__()
-        self.register_buffer("w", torch.randn(NH * HD, D, dtype=DT))
-
+        super().__init__(); self.register_buffer("w", torch.randn(NH*HD, D, dtype=DT))
     def forward(self, x):
-        return (x @ self.w,)
+        return torch.mm(x, self.w)
 
 
-def make_config(tc, hint_name, pd):
-    """World-1 CompilerConfig 구성. hint_name= 'NoConstraint'(저품질) or 'ForLlmModelComputeBound'."""
-    H = tc.TacticHintConfig
-    kw = dict(tactic_hint=getattr(H, hint_name))
-    # near-production일 때만 production 값 반영 (노출된 핵심 knob)
-    if hint_name != "NoConstraint":
-        for k in ("scheduler_beam_search", "expected_total_beam_states", "use_attention_kernel",
-                  "weight_sharding_threshold_in_bytes", "tensor_unit_bridge_threshold_in_page",
-                  "local_population_threshold", "sparsify_moe"):
-            if k in pd:
-                try:
-                    kw[k] = pd[k]
-                except Exception:
-                    pass
-    try:
-        return tc.Config(**kw)
-    except Exception as e:
-        p(f"  [config] full kw 실패({e}); tactic_hint만으로 재시도")
-        return tc.Config(tactic_hint=getattr(H, hint_name))
-
-
-def compile_and_time(tc, mod, x, cfg, tag):
-    ep = torch.export.export(mod, (x,))
-    p(f"  [{tag}] export ok, compile 시작...")
-    runnable = tc.compile(ep, cfg)
-    p(f"  [{tag}] compile ok -> {type(runnable).__name__}")
-    from furiosa.torch._C.module import TpModule
-    tp = TpModule.from_runnable(runnable, [x])
-    # warmup
-    for _ in range(WARMUP):
-        tp.run()
-    ts = []
-    for _ in range(ITERS):
-        t0 = time.perf_counter()
-        tp.run()
-        ts.append((time.perf_counter() - t0) * 1e6)  # us
-    return st.median(ts), min(ts)
+class Tokenwise(torch.nn.Module):
+    """full Tokenwise 번들: q,k,v,o proj + gate/up/down MLP. in-model Tokenwise supertask와 같은 op 구성."""
+    def __init__(self):
+        super().__init__()
+        for n, sh in [("wq",(D,NH*HD)),("wk",(D,KV*HD)),("wv",(D,KV*HD)),("wo",(NH*HD,D)),
+                      ("wg",(D,INTER)),("wu",(D,INTER)),("wd",(INTER,D))]:
+            self.register_buffer(n, torch.randn(*sh, dtype=DT))
+    def forward(self, x):
+        q = torch.mm(x, self.wq); k = torch.mm(x, self.wk); v = torch.mm(x, self.wv)
+        o = torch.mm(q, self.wo); x2 = x + o
+        g = torch.mm(x2, self.wg); u = torch.mm(x2, self.wu)
+        d = torch.mm(torch.nn.functional.silu(g) * u, self.wd)
+        return (k, v, d)
 
 
 def main():
-    nd.set_fusion(8)
-    tc = version_guard()
-    pd = prod_values(S)
-    x = torch.randn(1, S, NH * HD, dtype=DT)
-    mod = OProj()
-    p(f"\n=== config-vs-context: o_proj (1,{S},{NH*HD})@({NH*HD},{D}), {MODEL} ===")
-    res = {}
-    for hint in ("NoConstraint", "ForLlmModelComputeBound"):
-        try:
-            med, mn = compile_and_time(tc, mod, x, make_config(tc, hint, pd), hint)
-            res[hint] = med
-            p(f"  [{hint}] latency median={med:.1f}us  min={mn:.1f}us")
-        except Exception as e:
-            import traceback
-            p(f"  [{hint}] 실패: {e}")
-            traceback.print_exc()
-    if len(res) == 2:
-        lo, hi = res["NoConstraint"], res["ForLlmModelComputeBound"]
-        p(f"\n[config 성분] 저품질/고품질 = {lo/hi:.2f}x (고품질이 이만큼 빠름)")
-        p(f"[다음] 이 고품질 격리값({hi:.1f}us)을 in-model o_proj 실측과 비교 → 잔차 = context 성분")
+    mod, x = (OProj(), torch.randn(S, NH*HD, dtype=DT)) if TARGET == "oproj" \
+        else (Tokenwise(), torch.randn(S, D, dtype=DT))
+    kw = dict(tactic_hint=getattr(TacticHintConfig, HINT))
+    if HINT != "NoConstraint":
+        kw.update(scheduler_beam_search=True, use_attention_kernel=True)
+    cfg = CompilerConfig(**kw)
+    cm = ft.CompileModule.from_module(mod, (x,), compiler_config=cfg).to(DEV)
+    xd = x.to(DEV)
+    stream = ft.current_stream(DEV)
+    for _ in range(WARMUP):
+        cm(xd)
+    stream.synchronize()
+    # ★배치 타이밍★: ITERS 호출을 큐잉 후 마지막에 stream.synchronize() 한 번 → 총 wall÷ITERS = device time
+    reps = []
+    for _ in range(5):  # 5블록 median
+        t0 = time.perf_counter()
+        for _ in range(ITERS):
+            cm(xd)
+        stream.synchronize()
+        reps.append((time.perf_counter() - t0) / ITERS * 1e6)  # per-call us
+    print(f"RESULT {HINT} {TARGET} {S} {st.median(reps):.1f} {min(reps):.1f}", flush=True)
+    sys.stdout.flush()
+    os._exit(0)  # teardown 크래시 회피
 
 
 if __name__ == "__main__":
