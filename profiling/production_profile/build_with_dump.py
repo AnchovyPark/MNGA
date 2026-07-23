@@ -12,19 +12,30 @@ import os
 
 from furiosa_llm.artifact.builder import ArtifactBuilder
 try:
-    from furiosa_llm.artifact.types.config import CompilerConfig
+    from furiosa_llm.artifact.types.config import CompilerConfig, BucketConfig
 except Exception:
-    from furiosa_llm.artifact.types import CompilerConfig
+    from furiosa_llm.artifact.types import CompilerConfig, BucketConfig
 
 model = sys.argv[1]
 save_dir = sys.argv[2]
 cache_dir = sys.argv[3]
 workers = int(sys.argv[4]) if len(sys.argv) > 4 else 1
 
+# 명시 bucket: prefill seq 128/256/512/1024 + decode 1개(생성모델 필수).
+# preset 없는 모델(Qwen 등)도 빌드되고, 유닛 수가 적어 빌드 훨씬 빠름.
+BUCKETS = BucketConfig(
+    prefill_buckets=[(1, 128), (1, 256), (1, 512), (1, 1024)],
+    decode_buckets=[(1, 2048)],
+    tokenwise_seq_lens=[128, 256, 512, 1024],
+    skip_validation=True,   # prefill+decode+tokenwise만 주고 "4필드 다 필요" 규칙 우회
+)
+
 print(f"[build] {model} -> {save_dir}", flush=True)
 print(f"[build] cache_dir={cache_dir}  dump={os.environ.get('FURIOSA_COMPILE_DUMP_PATH')}", flush=True)
+print(f"[build] buckets: prefill {BUCKETS.prefill_buckets}  decode {BUCKETS.decode_buckets}", flush=True)
 b = ArtifactBuilder(
     model,
+    bucket_config=BUCKETS,
     compiler_config=CompilerConfig(
         compiler_config_overrides={"enable_tuc_profile": True, "profile_sync": True}),
 )

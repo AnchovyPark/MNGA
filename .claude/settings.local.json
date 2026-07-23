@@ -74,7 +74,18 @@
       "Bash(gh auth *)",
       "Bash(pkill -f \"prefill_layer_depth_s128.py\")",
       "Bash(/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python layer_ngram_s128.py 2048)",
-      "Bash(/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python prefill_layer_depth_s128.py 2048 1,2)"
+      "Bash(/home/furiosa/바탕화면/pjh/npu_chip_project/.venv/bin/python prefill_layer_depth_s128.py 2048 1,2)",
+      "Bash(find /home/furiosa/바탕화면/pjh/npu_chip_project/.venv/lib/python3.10/site-packages/furiosa/torch -name compiler*.py -o -path *compiler/__init__.py)",
+      "Bash(grep -oE \"[\\\\\"'][A-Za-z_]+[\\\\\"']$\")",
+      "Bash(conda env *)",
+      "Bash(lsmod)",
+      "Bash(dpkg -l)",
+      "Bash(apt list *)",
+      "Read(//usr/share/**)",
+      "Read(//opt/**)",
+      "Read(//etc/**)",
+      "Read(//home/furiosa/**)",
+      "Bash($V *)"
     ]
   }
 }
