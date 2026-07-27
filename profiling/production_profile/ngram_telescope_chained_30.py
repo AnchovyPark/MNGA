@@ -22,7 +22,12 @@ from furiosa.torch.profiler import Profiler
 
 S = int(sys.argv[1]) if len(sys.argv) > 1 else 512
 DEV = "furiosa:0"
-D, INTER, NH, HD, KV = 2048, 8192, 32, 64, 8
+# 크기를 env로 임의 지정 (Llama 구조 고정, 크기 다양화). 없으면 1b 기본.
+if "DIMS" in os.environ:  # "D,INTER,NH,HD,KV"
+    D, INTER, NH, HD, KV = map(int, os.environ["DIMS"].split(","))
+else:
+    D, INTER, NH, HD, KV = {"1b": (2048, 8192, 32, 64, 8),
+                            "8b": (4096, 14336, 32, 128, 8)}[os.environ.get("MODEL", "1b")]
 DT = torch.bfloat16
 EPS = 1e-5
 SDIR = "/tmp/claude-1002/-home-furiosa------pjh-rngd/8464c59e-3432-4d59-9ccc-d34e43519088/scratchpad"
@@ -105,7 +110,8 @@ def main():
     # 단일 window 모드: argv[2] = 쉼표구분 ops (fresh 프로세스로 degrade 회피)
     win = sys.argv[2].split(",")
     c = dev_cyc(win)
-    print(f"CYC {'_'.join(win)} {S} {c}", flush=True)
+    # self-describing: 크기 + window + seq + cyc
+    print(f"ROW {D} {INTER} {NH} {HD} {KV} {'_'.join(win)} {S} {c}", flush=True)
     sys.stdout.flush(); os._exit(0)
 
 
