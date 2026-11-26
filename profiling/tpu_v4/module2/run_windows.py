@@ -5,6 +5,7 @@
   python run_windows.py --dims 2048,8192,32,64,8 --seq 512 --windows all \
       --out data_windows_tpu_v4.txt --hlo hlo_windows_tpu_v4.txt
   --windows: "all" (U+W2+W3+full = 43개), "all5"(W4,W5 포함), "len4,5"(길이 4·5만),
+             "m2"(W1~W5 + full + 덩어리 0:6, 6:15 = 68개),
              또는 "lo:hi,lo:hi"
   --copies N: 입력 사본 N개를 돌려 쓴다 (Step 1 비교용, 기본 1)
   --retry: 실패(event 수 불일치, 0) window를 fresh process에서 한 번 더 잰다
@@ -30,6 +31,8 @@ def parse_windows(spec, kn):
         return kn.all_windows(3)
     if spec == "all5":
         return kn.all_windows(5)
+    if spec == "m2":  # Module 2 Step 3 기본: W1~W5 + full + 덩어리 full (A=0:6, B=6:15)
+        return kn.all_windows(5) + [(0, 6), (6, 15)]
     if spec.startswith("len"):  # 예: len4,5 → 길이 4, 5 window만
         Ls = [int(x) for x in spec[3:].split(",")]
         n = len(kn.TOKENS)
