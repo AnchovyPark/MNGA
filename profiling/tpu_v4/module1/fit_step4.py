@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 4: kernel 단독 latency 예측 model fitting과 평가 (TPU_MODULE1_KERNEL.md §4 Step 4).
 
-usage: fit_step4.py [--data file] [--target sync|dev] [--types gemm,add,...] [--out coef.json]
+usage: fit_step4.py [--data file] [--target sync|dev] [--types gemm,add,...] [--out coef.json] [--p2n]
 입력: step3/data_kernels_tpu_v4.txt (KROW), points_step3_meta.txt (출처)
 대상 값: sync_min_us (기본, Module 1 대표값). --target dev 이면 §4 정의 dev_min_us.
 
@@ -18,6 +18,8 @@ model (type별로 따로 fitting):
                (같은 입력 반복 측정에서는 CMEM 이하 weight가 이전 실행의 prefetch로 CMEM에 남는다)
       vector : U = a + b·flops + c·bytes + d·bytes·[M < 1024]   (Step 2의 add M=1024 계단)
       rope   : vector + e·M   (행마다 붙는 고정 비용. head 수가 적을수록 원소당 시간이 크다)
+  P2n gemm : (비교용, --p2n) P2에서 128 MiB 구분을 뺀 것 (weight 대역폭 하나).
+             copies8에서도 P2보다 나쁘다 (T1 7.2 vs 4.0%): 사본 순환이라도 작은 weight가 byte당 느리다.
 
 split: T1 무작위 80/20 (seed 5개), T2 크기 leave-one-out (10회), T3 seq 외삽 (양방향),
        T4 model 유래 → model 밖.
@@ -69,10 +71,10 @@ def design(model, rows):
         if model == "P1":
             f, b = feats(t, M, K, N, HD)
             X.append([1.0, f / 1e9, b / 1e6])
-        elif model == "P2" and t == "gemm":
+        elif model in ("P2", "P2n") and t == "gemm":
             Mp, Kp, Np = ceil_to(M, 8), ceil_to(K, 128), ceil_to(N, 128)
             w = B * Kp * Np
-            fits = 1.0 if B * K * N <= CMEM else 0.0
+            fits = 1.0 if B * K * N <= CMEM and model == "P2" else 0.0
             X.append([2.0 * Mp * Kp * Np / 1e9, B * (Mp * Kp + Mp * Np) / 1e6,
                       w / 1e6 * fits, w / 1e6 * (1 - fits)])
         elif model == "P2":
@@ -95,8 +97,10 @@ def fit(model, rows):
         return None
     X = design(model, rows)
     y = np.array([r["y"] for r in rows])
-    if model == "P2" and rows[0]["key"][0] == "gemm":
+    if model in ("P2", "P2n") and rows[0]["key"][0] == "gemm":
         x0 = [2, 1e3 / 275, 1e3 / 1200, 1e3 / 2000, 1e3 / 1200, 0.1]
+        # (시험 후 되돌림) HBM 항(act, 큰 weight)에 HBM peak 1228.8 GB/s 하한을 두면 copies8 lm_head M=8 −62%→−15%이지만
+        # 학습 범위 안 T1 4.0→5.5%(목표 밖), lm_head M=512 +17%→+28%. 채택하지 않는다 (2차 범위 기록).
         return least_squares(lambda p: (_gemm_p2(p, X) - y) / y, x0,
                              bounds=([0] * 6, [np.inf] * 5 + [1])).x
     w = 1.0 / y  # 상대오차 최소화
@@ -111,7 +115,7 @@ def predict(model, coef, rows):
             f, b = feats(*r["key"])
             out.append(max(f / PEAK_FLOPS, b / PEAK_BW) * 1e6)
         return np.array(out)
-    if model == "P2" and rows[0]["key"][0] == "gemm":
+    if model in ("P2", "P2n") and rows[0]["key"][0] == "gemm":
         return _gemm_p2(coef, design(model, rows))
     return design(model, rows) @ coef
 
@@ -185,6 +189,8 @@ def evaluate(rows, types, models):
             if not tet or len(trt) < 5:
                 continue
             for m in models:
+                if m == "P2n" and t != "gemm":
+                    continue
                 coef = fit(m, trt)
                 e = errs(predict(m, coef, tet), tet)
                 acc[name][t][m][0].extend(e.tolist())
@@ -202,7 +208,7 @@ def main():
     types = sorted({r["key"][0] for r in rows})
     if "--types" in sys.argv:
         types = sys.argv[sys.argv.index("--types") + 1].split(",")
-    models = ["P0", "P1", "P2"]
+    models = ["P0", "P1", "P2", "P2n"] if "--p2n" in sys.argv else ["P0", "P1", "P2"]
     print(f"target={target}  rows={len(rows)}  failed(excluded)={len(fails)} {fails[:10]}")
     res, worst = evaluate(rows, types, models)
     for split in ["T1", "T2", "T3_lo2hi", "T3_hi2lo", "T4"]:
@@ -213,6 +219,8 @@ def main():
               f"{'MAPE<20us':>10s}(n)  {'MAPE>=20us':>10s}(n)")
         for t in types:
             for m in models:
+                if m == "P2n" and t != "gemm":
+                    continue
                 s = res[split].get(t, {}).get(m)
                 if not s:
                     continue

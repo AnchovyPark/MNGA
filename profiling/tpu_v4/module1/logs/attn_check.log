@@ -1,0 +1,21 @@
+NH=16 KV=4 HD=64 S=256: attn max|err|=0.0138  split max|err|=0.0138  |ref|max=2.86
+   qk       convolution,copy,fusion,fusion:kLoop,fusion:kOutput
+   scale    broadcast,convert,fusion,fusion:kLoop,multiply
+   mask     broadcast,compare,fusion,fusion:kLoop,iota,select
+   softmax  add,broadcast,convert,copy-done,copy-start,divide,exponential,fusion,fusion:kLoop,fusion:kOutput,maximum,reduce,reduce-window,subtract
+   av       convolution,copy,copy-done,copy-start,fusion,fusion:kLoop,fusion:kOutput
+   attn     add,broadcast,compare,convert,convolution,copy,copy-done,copy-start,divide,exponential,fusion,fusion:kLoop,fusion:kOutput,iota,maximum,multiply,reduce,select,subtract
+NH=40 KV=8 HD=128 S=512: attn max|err|=0.0171  split max|err|=0.0179  |ref|max=3.25
+   qk       convolution,copy,fusion,fusion:kLoop,fusion:kOutput
+   scale    broadcast,convert,fusion,fusion:kLoop,multiply
+   mask     broadcast,compare,fusion,fusion:kLoop,iota,select
+   softmax  add,broadcast,convert,copy-done,copy-start,divide,exponential,fusion,fusion:kLoop,fusion:kOutput,maximum,reduce,reduce-window,subtract
+   av       convolution,copy,copy-done,copy-start,fusion,fusion:kLoop,fusion:kOutput
+   attn     add,broadcast,cc:ConcatBitcast,compare,convert,convolution,copy,custom-call,divide,exponential,fusion,fusion:kLoop,fusion:kOutput,iota,maximum,multiply,reduce,select,slice-done,slice-start,subtract
+NH=24 KV=6 HD=64 S=384: attn max|err|=0.0182  split max|err|=0.0182  |ref|max=3.11
+   qk       convolution,copy,fusion,fusion:kLoop,fusion:kOutput
+   scale    broadcast,convert,fusion,fusion:kLoop,multiply
+   mask     broadcast,compare,fusion,fusion:kLoop,iota,select
+   softmax  add,broadcast,convert,copy-done,copy-start,divide,exponential,fusion,fusion:kLoop,fusion:kOutput,maximum,reduce,reduce-window,subtract
+   av       convolution,copy,copy-done,copy-start,fusion,fusion:kLoop,fusion:kOutput
+   attn     add,broadcast,compare,convert,convolution,copy,copy-done,copy-start,divide,exponential,fusion,fusion:kLoop,fusion:kOutput,iota,maximum,multiply,reduce,select,subtract

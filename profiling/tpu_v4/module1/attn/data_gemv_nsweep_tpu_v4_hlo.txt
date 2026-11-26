@@ -1,0 +1,13 @@
+HLO gemm 1 2048 32768 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 40960 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 49152 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 57344 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 65536 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 65664 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 81920 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 98304 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 114688 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 128000 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 128256 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 131072 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape
+HLO gemm 1 2048 152064 0 add,broadcast,convert,fusion,fusion:kLoop,multiply,reduce,reshape

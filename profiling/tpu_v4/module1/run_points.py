@@ -5,6 +5,8 @@ usage: run_points.py <points.txt> <out_data.txt> [--copies N]
   points.txt 각 행: <type> <M> <K> <N> <HD>   (gemm: x[M,K]@w[K,N], HD=0 /
                                               vector: x[M,N], K=0, rope만 HD)
   --copies N : 입력 사본 N개를 돌려 쓰며 측정 (기본 1 = 같은 입력 반복)
+  attention type (qk scale mask softmax av attn, ../kernels_attn.py)은 같은 다섯 칸을
+  <type> <S> <NH> <KV> <HD> 로 쓴다 (M=S, K=NH, N=KV).
 
 출력 (out_data.txt):
   KROW type M K N HD dev_min_us dev_med_us wall_min_us n_samples sync_min_us sync_med_us
@@ -24,10 +26,13 @@ import jax
 import jax.numpy as jnp
 
 import kernels as kn
+import kernels_attn as ka
 import measure as ms
 
 
 def arg_shapes(t, M, K, N, HD):
+    if t in ka.TYPES:
+        return ka.arg_shapes(t, M, K, N, HD)
     if t == "gemm":
         return [(M, K), (K, N)]
     if t == "rmsnorm":
@@ -70,7 +75,8 @@ def main():
         for i, p in enumerate(todo):
             t, M, K, N, HD = p[0], *map(int, p[1:])
             shps = arg_shapes(t, M, K, N, HD)
-            fn = kn.KERNELS[t]
+            # scale·mask·softmax 점은 HD=0: scale 상수만 HD를 쓰고 latency와 무관 → 128로 (1.0이면 XLA가 지운다)
+            fn = ka.make(t, K, N, HD or 128) if t in ka.TYPES else kn.KERNELS[t]
             r = None
             for attempt in range(2):
                 try:
