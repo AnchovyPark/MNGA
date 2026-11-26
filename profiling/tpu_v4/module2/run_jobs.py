@@ -23,10 +23,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PARTS = os.path.join(HERE, "parts")
 
 
+STEM = "windows"   # --stem로 바꾼다 (예: variants → data_variants_copies2_tpu_v4.txt)
+
+
 def files(copies):
     sfx = "" if copies == 1 else f"_copies{copies}"
-    return (os.path.join(HERE, f"data_windows{sfx}_tpu_v4.txt"),
-            os.path.join(HERE, f"hlo_windows{sfx}_tpu_v4.txt"))
+    return (os.path.join(HERE, f"data_{STEM}{sfx}_tpu_v4.txt"),
+            os.path.join(HERE, f"hlo_{STEM}{sfx}_tpu_v4.txt"))
 
 
 def done_keys(path):
@@ -36,6 +39,8 @@ def done_keys(path):
             p = l.split()
             if p and p[0] == "WROW":
                 keys.add((",".join(p[1:6]), p[7]))
+            elif p and p[0] == "SROW":
+                keys.add((",".join(p[1:6]), p[9]))
     return keys
 
 
@@ -45,7 +50,11 @@ def main():
     ap.add_argument("--windows", default="all")
     ap.add_argument("--nchips", type=int, default=4)
     ap.add_argument("--noskip", action="store_true", help="이미 있는 (크기, seq)도 잰다 (다른 window 추가용)")
+    ap.add_argument("--stem", default="windows", help="출력 파일 이름 data_<stem>...")
+    ap.add_argument("--script", default="run_windows.py", help="측정 script (run_synth.py도 같은 인자를 받는다)")
     a = ap.parse_args()
+    global STEM
+    STEM = a.stem
     os.makedirs(PARTS, exist_ok=True)
 
     jobs = []
@@ -72,12 +81,12 @@ def main():
                 dims, seq, copies = q.get_nowait()
             except queue.Empty:
                 return
-            tag = f"{dims.replace(',', '_')}_s{seq}_c{copies}"
+            tag = f"{STEM}_{dims.replace(',', '_')}_s{seq}_c{copies}"
             pd, ph = os.path.join(PARTS, tag + ".txt"), os.path.join(PARTS, tag + "_hlo.txt")
             for p in (pd, ph):
                 if os.path.exists(p):
                     os.remove(p)
-            cmd = [sys.executable, os.path.join(HERE, "run_windows.py"), "--dims", dims,
+            cmd = [sys.executable, os.path.join(HERE, a.script), "--dims", dims,
                    "--seq", seq, "--windows", a.windows, "--copies", str(copies),
                    "--retry", "--out", pd, "--hlo", ph]
             with open(os.path.join(PARTS, tag + ".log"), "w") as lf:

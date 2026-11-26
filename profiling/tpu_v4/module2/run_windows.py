@@ -6,6 +6,8 @@
       --out data_windows_tpu_v4.txt --hlo hlo_windows_tpu_v4.txt
   --windows: "all" (U+W2+W3+full = 43개), "all5"(W4,W5 포함), "len4,5"(길이 4·5만),
              "m2"(W1~W5 + full + 덩어리 0:6, 6:15 = 68개),
+             "variants"(variants.py의 token 나누기 변형에 필요한 op 집합 전부),
+             "attn"(attn.py LAYER 20 token의 W1~W3 + full + 덩어리),
              또는 "lo:hi,lo:hi"
   --copies N: 입력 사본 N개를 돌려 쓴다 (Step 1 비교용, 기본 1)
   --retry: 실패(event 수 불일치, 0) window를 fresh process에서 한 번 더 잰다
@@ -63,14 +65,35 @@ def main():
     D, INTER, NH, HD, KV = map(int, a.dims.split(","))
     shp = kn.shapes(D, INTER, NH, HD, KV, a.seq)
     key = f"{D} {INTER} {NH} {HD} {KV}"
-    for lo, hi in parse_windows(a.windows, kn):
-        name = kn.window_name(lo, hi)
+    if a.windows == "variants":  # (a) token 나누기 변형의 op 집합 window (variants.py)
+        import variants as vr
+        items = [(vr.set_name(ops), ops) for ops in vr.all_sets()]
+    elif a.windows == "attn":    # Step 7.2 attention 포함 layer (attn.py)
+        import attn as at
+        shp = at.shapes(D, INTER, NH, HD, KV, a.seq)
+        items = [(at.window_name(lo, hi), (lo, hi)) for lo, hi in at.all_windows(3)]
+    else:
+        items = [(kn.window_name(lo, hi), (lo, hi)) for lo, hi in parse_windows(a.windows, kn)]
+    for name, spec in items:
         try:
-            r = ms.measure_window(lo, hi, shp, reps=a.reps, n_copies=a.copies)
+            if a.windows in ("variants", "attn"):
+                if a.windows == "variants":
+                    fn, arg_names, _ = vr.set_window(spec)
+                    args = kn.make_args(arg_names, shp)
+                    tag = "s_" + name.replace("+", "_")
+                else:
+                    fn, arg_names, _ = at.window(*spec)
+                    args = at.make_args(arg_names, shp)
+                    tag = "a%02d_%02d" % spec
+                r = ms.measure_fn(fn, args, tag, reps=a.reps, n_copies=a.copies)
+                r["ok"] = (r["n_exec"] == a.reps and r["n_events"] == 2 * a.reps and min(r["dev_us"]) > 0)
+            else:
+                r = ms.measure_window(*spec, shp, reps=a.reps, n_copies=a.copies)
         except Exception as e:  # noqa: BLE001
             r = {"dev_us": [], "sync_us": [], "wall_us": [float("nan")], "n_exec": 0,
                  "n_events": 0, "hlo_ops": [], "ok": False, "err": repr(e)[:200]}
-        if not r["ok"] and a.retry:
+        if not r["ok"] and a.retry and a.windows not in ("variants", "attn"):
+            lo, hi = spec
             cmd = [sys.executable, __file__, "--dims", a.dims, "--seq", str(a.seq),
                    "--windows", f"{lo}:{hi}", "--reps", str(a.reps),
                    "--copies", str(a.copies), "--json"]

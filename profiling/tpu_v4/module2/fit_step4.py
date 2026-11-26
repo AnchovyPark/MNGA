@@ -68,13 +68,16 @@ def token_meta(dims, seq):
     meta = {}
     for name, kind, ins, params in kn.CHAIN:
         out = shp[name]
-        elems = out[0] * out[1]
+        elems = math.prod(out)
         wb = sum(2 * math.prod(shp[p]) for p in params)
         if kind == "gemm":
             K = shp[ins[0]][1]
             fl = 2 * seq * K * out[1]
+        elif kind in ("qk", "av"):     # attention (attn.py): 2·NH·S·S·HD
+            fl = 2 * NH * seq * seq * HD
         else:
-            fl = {"rmsnorm": 4, "rope": 3, "silu": 4, "mul": 1, "add": 1}[kind] * elems
+            fl = {"rmsnorm": 4, "rope": 3, "silu": 4, "mul": 1, "add": 1,
+                  "scale": 1, "mask": 1, "softmax": 5}[kind] * elems
         meta[name] = {"flops": fl, "wbytes": wb, "obytes": 2 * elems}
     return meta
 
@@ -115,11 +118,17 @@ def feats(r, S, type_keys):
     if S >= 2:
         for p in range(L - 1):
             a, b = r["toks"][p], r["toks"][p + 1]
-            direct = 1.0 if a in INPUTS[b] else 0.0
+            if "direct" in r:      # 합성 chain 행 (fit_step7_synth.py)
+                direct = r["direct"][p]
+            else:
+                direct = 1.0 if a in INPUTS[b] else 0.0
             f += [direct, direct * r["meta"][p]["obytes"] / HBM_B_US / su]
         # window 밖으로 나가는 bytes (materialize 양)
-        outs = _outs(r["i"], r["i"] + L)
-        ob = sum(r["meta"][r["toks"].index(o)]["obytes"] for o in outs)
+        if "out_bytes" in r:
+            ob = r["out_bytes"]
+        else:
+            outs = _outs(r["i"], r["i"] + L)
+            ob = sum(r["meta"][r["toks"].index(o)]["obytes"] for o in outs)
         f += [ob / HBM_B_US / su]
     if S >= 3:
         D, INTER, NH, HD, KV = r["dims"]
