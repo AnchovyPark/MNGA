@@ -1,0 +1,3 @@
+__pycache__/
+profiling/tpu_v4/module1/**/*.part*
+profiling/tpu_v4/module1/**/*.pts.*
