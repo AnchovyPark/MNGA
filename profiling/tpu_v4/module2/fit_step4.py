@@ -45,6 +45,22 @@ def load(path):
     return data
 
 
+def load_upred(path):
+    """Module 1 예측 U: {(dims, seq): {token: us}}. 형식 UPRED D INTER NH HD KV token seq u_pred_us."""
+    up = defaultdict(dict)
+    for l in open(path):
+        p = l.split()
+        if p and p[0] == "UPRED":
+            up[(tuple(int(x) for x in p[1:6]), int(p[7]))][p[6]] = float(p[8])
+    return up
+
+
+def with_upred(r, up):
+    """test 행의 U를 예측 U로 바꾼 사본 (Step 6)."""
+    u = up[(r["dims"], r["seq"])]
+    return {**r, "U": [u[t] for t in r["toks"]]}
+
+
 def token_meta(dims, seq):
     """token별 flops, weight bytes, 출력 bytes."""
     D, INTER, NH, HD, KV = dims
@@ -262,6 +278,8 @@ def _eval_task(task):
         test = [r for r in rows if tef(r)]
         if not test or not train:
             continue
+        if _EV.get("upred"):
+            test = [with_upred(r, _EV["upred"]) for r in test]
         ph = fit_pair_h([r for r in rows_by_L[2] if trf(r)]) if model == "M2" else None
         wh = fit_predict(model, S, target, train, test, type_keys[L], ph)
         for r, w in zip(test, wh):
@@ -270,10 +288,12 @@ def _eval_task(task):
     return task, (float(np.mean(errs)) if errs else float("nan"), preds)
 
 
-def evaluate(rows_by_L, kinds=("E1", "E2", "E3"), configs=CONFIGS, procs=48):
-    """{(L, model, S, target, split): (MAPE, 행별 (key, i, W, W_hat))}. task별 process 병렬."""
+def evaluate(rows_by_L, kinds=("E1", "E2", "E3"), configs=CONFIGS, procs=48, upred=None):
+    """{(L, model, S, target, split): (MAPE, 행별 (key, i, W, W_hat))}. task별 process 병렬.
+    upred가 있으면 test 행의 U를 Module 1 예측값으로 바꾼다 (학습은 측정 U)."""
     import multiprocessing as mp
     _EV["rows"] = rows_by_L
+    _EV["upred"] = upred
     _EV["tk"] = {L: sorted({r["types"] for r in rows}) for L, rows in rows_by_L.items()}
     tasks = [(L, k, c) for L in rows_by_L for k in kinds for c in configs]
     with mp.get_context("fork").Pool(min(procs, len(tasks))) as pool:
@@ -288,8 +308,8 @@ def tele_range(get, lo, hi, L):
     return get(L, lo) + sum(get(L, i) - get(L - 1, i) for i in range(lo + 1, hi - L + 1))
 
 
-def step5(data, res, model, S, target, split="E1"):
-    """덩어리별·합 telescope. 측정 U와 예측 W2·W3 (split의 held-out 예측)."""
+def step5(data, res, model, S, target, split="E1", upred=None):
+    """덩어리별·합 telescope. 측정(또는 upred면 예측) U와 예측 W2·W3 (split의 held-out 예측)."""
     pred = {}
     for L in (2, 3):
         for key, i, W, wh in res[(L, model, S, target, split)][1]:
@@ -297,7 +317,8 @@ def step5(data, res, model, S, target, split="E1"):
     out = []
     for key, d in sorted(data.items()):
         meas = lambda L, i: d[kn.window_name(i, i + L)]  # noqa: E731
-        hat = lambda L, i: d[kn.window_name(i, i + 1)] if L == 1 else pred[(key, L, i)]  # noqa: E731
+        uh = (lambda i: upred[key][kn.TOKENS[i]]) if upred else (lambda i: d[kn.window_name(i, i + 1)])  # noqa: E731
+        hat = lambda L, i: uh(i) if L == 1 else pred[(key, L, i)]  # noqa: E731
         row = {"dims": key[0], "seq": key[1]}
         try:
             for s, (lo, hi) in SUB.items():
@@ -305,9 +326,10 @@ def step5(data, res, model, S, target, split="E1"):
                 row[s] = {"full": full, "uni": tele_range(meas, lo, hi, 1) / full,
                           "tele3": tele_range(meas, lo, hi, 3) / full,
                           "tele3_hat": tele_range(hat, lo, hi, 3) / full,
+                          "uni_hat": tele_range(hat, lo, hi, 1) / full,
                           "signs": [float(np.sign(hat(3, i) - meas(3, i))) for i in range(lo, hi - 2)]}
             fAB = row["A"]["full"] + row["B"]["full"]
-            for k in ("uni", "tele3", "tele3_hat"):
+            for k in ("uni", "uni_hat", "tele3", "tele3_hat"):
                 row["AB_" + k] = (row["A"][k] * row["A"]["full"] + row["B"][k] * row["B"]["full"]) / fAB
             row["full15"] = d[kn.window_name(0, N)]
         except KeyError:
@@ -322,6 +344,9 @@ def main():
     ap.add_argument("--out", default=None)
     ap.add_argument("--seqs", default=None, help="쓸 seq 목록 (예: 512,2048)")
     ap.add_argument("--best", default=None, help="Step 5 model, 예: M3gbm,2,r")
+    ap.add_argument("--upred", default=None, help="Step 6: Module 1 예측 U 파일 (test 행 U를 바꾼다)")
+    ap.add_argument("--configs", default=None, help="평가할 config만, 예: M0,0,r;M3gbm,1,r;M3gbm,2,r")
+    ap.add_argument("--kinds", default=None, help="split 목록, 예: E1")
     a = ap.parse_args()
     data = load(a.path)
     if a.seqs:
@@ -332,7 +357,16 @@ def main():
     print(f"# {a.path}: 크기 {len(sizes)}종, seq {seqs}")
     rows_by_L = {L: build_rows(data, L) for L in (2, 3)}
     kinds = ("E1", "E2", "E3") if len(seqs) > 1 else ("E1",)
-    res = evaluate(rows_by_L, kinds)
+    if a.kinds:
+        kinds = tuple(a.kinds.split(","))
+    global CONFIGS
+    if a.configs:
+        CONFIGS = [(m, int(x), t) for m, x, t in (c.split(",") for c in a.configs.split(";"))]
+    upred = load_upred(a.upred) if a.upred else None
+    if upred:
+        errs = [abs(upred[k][t] / d[t] - 1) for k, d in data.items() for t in kn.TOKENS if t in d and t in upred.get(k, {})]
+        print(f"# Step 6: U 예측 {a.upred}: 측정 U 대비 MAPE {100 * np.mean(errs):.2f}% (max {100 * np.max(errs):.1f}%, {len(errs)}개)")
+    res = evaluate(rows_by_L, kinds, CONFIGS, upred=upred)
 
     for L in (3, 2):
         print(f"\n## W{L} MAPE (%)  행 {len(rows_by_L[L])}개")
@@ -352,7 +386,7 @@ def main():
     for key, i, W, wh in rows:
         print(f"  {key[0]} s{key[1]:5d} {kn.window_name(i, i + 3):22s} W={W:8.2f} hat={wh:8.2f} err={100 * (wh / W - 1):+6.2f}%")
 
-    s5 = step5(data, res, *best)
+    s5 = step5(data, res, *best, upred=upred)
     print(f"\n## Step 5: 덩어리별 telescope / full (E1 held-out 예측, model {best})")
     print(f"{'dims':24s} {'seq':>5s} | {'A uni':>6s} {'A t3':>6s} {'A t3^':>6s} | {'B uni':>6s} {'B t3':>6s} {'B t3^':>6s} | {'AB uni':>6s} {'AB t3':>6s} {'AB t3^':>6s} | (A+B)/full15")
     for r in s5:
@@ -361,7 +395,7 @@ def main():
               f"{r['B']['uni']:6.3f} {r['B']['tele3']:6.3f} {r['B']['tele3_hat']:6.3f} | "
               f"{r['AB_uni']:6.3f} {r['AB_tele3']:6.3f} {r['AB_tele3_hat']:6.3f} | "
               f"{(r['A']['full'] + r['B']['full']) / r['full15']:.3f}")
-    for k in ("uni", "tele3", "tele3_hat"):
+    for k in ("uni", "uni_hat", "tele3", "tele3_hat"):
         for part in ("A", "B"):
             e = [abs(r[part][k] - 1) for r in s5]
             print(f"  {part} {k:9s} MAPE {100 * np.mean(e):6.2f}%  max {100 * np.max(e):6.2f}%")
