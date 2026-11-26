@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Step 4: kernel 단독 latency 예측 model fitting과 평가 (TPU_MODULE1_KERNEL.md §4 Step 4).
 
-usage: fit_step4.py [--target sync|dev] [--types gemm,add,...] [--out coef.json]
+usage: fit_step4.py [--data file] [--target sync|dev] [--types gemm,add,...] [--out coef.json]
 입력: step3/data_kernels_tpu_v4.txt (KROW), points_step3_meta.txt (출처)
 대상 값: sync_min_us (기본, Module 1 대표값). --target dev 이면 §4 정의 dev_min_us.
 
@@ -11,9 +11,13 @@ model (type별로 따로 fitting):
       (https://docs.cloud.google.com/tpu/docs/v4). profiler plane stats(core당 139.8 TFLOPS,
       614.4 GB/s ×2 core)도 같은 값.
   P1  U = a + b·flops + c·bytes, 상대오차 최소화(가중 최소제곱, weight 1/U).
-  P2  U = a + b·flops_pad + c·bytes_pad + d·max(flops_pad/PEAK_FLOPS, bytes_pad/PEAK_BW)
-      flops_pad/bytes_pad = TPU tile(128 lane × 8 sublane, MXU 128×128)로 올림한 shape로 계산.
-      (Step 2에서 찾은 규칙을 feature로 넣는 자리. 결과는 memory 기록 참고.)
+  P2  Step 2·3에서 찾은 규칙을 넣은 model. shape는 TPU tile(M→8, K·N→128)로 올려서 쓴다.
+      gemm   : fitted roofline, weight가 CMEM(128 MiB)에 들어가는지로 weight 대역폭을 나눈다.
+               U = a + max(C, Mm) + e·min(C, Mm),  C = flops/Fe,
+               Mm = act_bytes/Ba + w_bytes·[w ≤ CMEM]/Bc + w_bytes·[w > CMEM]/Bh
+               (같은 입력 반복 측정에서는 CMEM 이하 weight가 이전 실행의 prefetch로 CMEM에 남는다)
+      vector : U = a + b·flops + c·bytes + d·bytes·[M < 1024]   (Step 2의 add M=1024 계단)
+      rope   : vector + e·M   (행마다 붙는 고정 비용. head 수가 적을수록 원소당 시간이 크다)
 
 split: T1 무작위 80/20 (seed 5개), T2 크기 leave-one-out (10회), T3 seq 외삽 (양방향),
        T4 model 유래 → model 밖.
@@ -26,11 +30,13 @@ import sys
 from collections import defaultdict
 
 import numpy as np
+from scipy.optimize import least_squares
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PEAK_FLOPS = 275e12
 PEAK_BW = 1200e9
 B = 2  # bf16 bytes
+CMEM = 128 * 2**20  # TPU v4 CMEM 128 MiB
 
 
 def ceil_to(x, m):
@@ -63,11 +69,25 @@ def design(model, rows):
         if model == "P1":
             f, b = feats(t, M, K, N, HD)
             X.append([1.0, f / 1e9, b / 1e6])
+        elif model == "P2" and t == "gemm":
+            Mp, Kp, Np = ceil_to(M, 8), ceil_to(K, 128), ceil_to(N, 128)
+            w = B * Kp * Np
+            fits = 1.0 if B * K * N <= CMEM else 0.0
+            X.append([2.0 * Mp * Kp * Np / 1e9, B * (Mp * Kp + Mp * Np) / 1e6,
+                      w / 1e6 * fits, w / 1e6 * (1 - fits)])
         elif model == "P2":
             f, b = feats(t, M, K, N, HD, pad=True)
-            rl = max(f / PEAK_FLOPS, b / PEAK_BW) * 1e6
-            X.append([1.0, f / 1e9, b / 1e6, rl])
+            x = [1.0, f / 1e9, b / 1e6, (b / 1e6 if M < 1024 else 0.0)]
+            if t == "rope":
+                x.append(M / 1e3)
+            X.append(x)
     return np.array(X)
+
+
+def _gemm_p2(p, X):
+    comp = X[:, 0] * p[1]
+    mem = X[:, 1] * p[2] + X[:, 2] * p[3] + X[:, 3] * p[4]
+    return p[0] + np.maximum(comp, mem) + p[5] * np.minimum(comp, mem)
 
 
 def fit(model, rows):
@@ -75,6 +95,10 @@ def fit(model, rows):
         return None
     X = design(model, rows)
     y = np.array([r["y"] for r in rows])
+    if model == "P2" and rows[0]["key"][0] == "gemm":
+        x0 = [2, 1e3 / 275, 1e3 / 1200, 1e3 / 2000, 1e3 / 1200, 0.1]
+        return least_squares(lambda p: (_gemm_p2(p, X) - y) / y, x0,
+                             bounds=([0] * 6, [np.inf] * 5 + [1])).x
     w = 1.0 / y  # 상대오차 최소화
     coef, *_ = np.linalg.lstsq(X * w[:, None], y * w, rcond=None)
     return coef
@@ -87,6 +111,8 @@ def predict(model, coef, rows):
             f, b = feats(*r["key"])
             out.append(max(f / PEAK_FLOPS, b / PEAK_BW) * 1e6)
         return np.array(out)
+    if model == "P2" and rows[0]["key"][0] == "gemm":
+        return _gemm_p2(coef, design(model, rows))
     return design(model, rows) @ coef
 
 
@@ -108,7 +134,7 @@ def summarize(e, ys):
     }
 
 
-def load(target):
+def load(target, data_path=None):
     src = {}
     for ln in open(os.path.join(HERE, "points_step3_meta.txt")):
         if ln.startswith("#"):
@@ -116,7 +142,7 @@ def load(target):
         p = ln.split()
         src[(p[0], *map(int, p[1:5]))] = p[5].split(",")
     rows, fails = [], []
-    for ln in open(os.path.join(HERE, "step3", "data_kernels_tpu_v4.txt")):
+    for ln in open(data_path or os.path.join(HERE, "step3", "data_kernels_tpu_v4.txt")):
         p = ln.split()
         if not p or p[0] != "KROW":
             continue
@@ -171,7 +197,8 @@ def evaluate(rows, types, models):
 
 def main():
     target = sys.argv[sys.argv.index("--target") + 1] if "--target" in sys.argv else "sync"
-    rows, fails = load(target)
+    data = sys.argv[sys.argv.index("--data") + 1] if "--data" in sys.argv else None
+    rows, fails = load(target, data)
     types = sorted({r["key"][0] for r in rows})
     if "--types" in sys.argv:
         types = sys.argv[sys.argv.index("--types") + 1].split(",")
