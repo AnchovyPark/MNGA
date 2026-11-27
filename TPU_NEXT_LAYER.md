@@ -1,5 +1,7 @@
 # TPU 다음 단계 A — attention을 포함한 layer 1개의 n-gram 예측
 
+> 이 문서는 [`TERMS.md`](TERMS.md) 이전에 썼고 이미 끝난 작업이다. 예전 표기(token, window, `U`, `W3`, telescope 등)는 `TERMS.md` §7의 대응표로 읽는다. 새 글에는 `TERMS.md` 용어를 쓴다.
+
 작성일 2026-11-26. 대상: **Module 2를 맡은 VM** (`~/venvs/vm3_jax`). 같은 시기에 Module 1 VM은 [`TPU_NEXT_MODEL.md`](TPU_NEXT_MODEL.md)를 한다.
 
 먼저 읽을 것:

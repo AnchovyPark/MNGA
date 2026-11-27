@@ -1,5 +1,7 @@
 # TPU module 공통 규칙 (Module 1·2)
 
+> 이 문서는 [`TERMS.md`](TERMS.md) 이전에 썼고 이미 끝난 작업이다. 예전 표기(token, window, `U`, `W3`, telescope 등)는 `TERMS.md` §7의 대응표로 읽는다. 새 글에는 `TERMS.md` 용어를 쓴다.
+
 작성일 2026-11-26. 대상: TPU v4 VM 두 대에서 각각 Module 1, Module 2를 맡는 세션(사람 또는 agent).
 
 자기 module 지시서보다 이 문서를 먼저 읽는다.

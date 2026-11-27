@@ -1,5 +1,7 @@
 # TPU v4 n-gram latency 예측 검증 지시서
 
+> 이 문서는 [`TERMS.md`](TERMS.md) 이전에 썼고 이미 끝난 작업이다. 예전 표기(token, window, `U`, `W3`, telescope 등)는 `TERMS.md` §7의 대응표로 읽는다. 새 글에는 `TERMS.md` 용어를 쓴다.
+
 작성일 2026-11-26. 대상: TPU v4 VM에서 이 repo를 받아 실험을 수행하는 세션(사람 또는 agent).
 
 ## 1. 목적

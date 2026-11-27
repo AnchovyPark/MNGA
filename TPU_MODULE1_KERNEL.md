@@ -1,5 +1,7 @@
 # TPU Module 1 지시서 — shape로 kernel 단독 latency 예측
 
+> 이 문서는 [`TERMS.md`](TERMS.md) 이전에 썼고 이미 끝난 작업이다. 예전 표기(token, window, `U`, `W3`, telescope 등)는 `TERMS.md` §7의 대응표로 읽는다. 새 글에는 `TERMS.md` 용어를 쓴다.
+
 작성일 2026-11-26. 대상: TPU v4 VM에서 Module 1을 맡는 세션.
 
 먼저 [`TPU_MODULES_COMMON.md`](TPU_MODULES_COMMON.md)를 읽는다. token 단위, 공통 코드, 측정 규칙, Step 0·1은 그 문서에 있다.
