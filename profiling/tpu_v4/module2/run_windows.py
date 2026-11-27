@@ -8,6 +8,7 @@
              "m2"(W1~W5 + full + 덩어리 0:6, 6:15 = 68개),
              "variants"(variants.py의 token 나누기 변형에 필요한 op 집합 전부),
              "attn"(attn.py LAYER 20 token의 W1~W3 + full + 덩어리),
+             "attn1"(attention core를 token 1개로 볼 때 더 필요한 window, attn.ATT1_EXTRA),
              또는 "lo:hi,lo:hi"
   --copies N: 입력 사본 N개를 돌려 쓴다 (Step 1 비교용, 기본 1)
   --retry: 실패(event 수 불일치, 0) window를 fresh process에서 한 번 더 잰다
@@ -68,15 +69,16 @@ def main():
     if a.windows == "variants":  # (a) token 나누기 변형의 op 집합 window (variants.py)
         import variants as vr
         items = [(vr.set_name(ops), ops) for ops in vr.all_sets()]
-    elif a.windows == "attn":    # Step 7.2 attention 포함 layer (attn.py)
+    elif a.windows in ("attn", "attn1"):    # Step 7.2 attention 포함 layer (attn.py)
         import attn as at
         shp = at.shapes(D, INTER, NH, HD, KV, a.seq)
-        items = [(at.window_name(lo, hi), (lo, hi)) for lo, hi in at.all_windows(3)]
+        wins = at.all_windows(3) if a.windows == "attn" else at.ATT1_EXTRA
+        items = [(at.window_name(lo, hi), (lo, hi)) for lo, hi in wins]
     else:
         items = [(kn.window_name(lo, hi), (lo, hi)) for lo, hi in parse_windows(a.windows, kn)]
     for name, spec in items:
         try:
-            if a.windows in ("variants", "attn"):
+            if a.windows in ("variants", "attn", "attn1"):
                 if a.windows == "variants":
                     fn, arg_names, _ = vr.set_window(spec)
                     args = kn.make_args(arg_names, shp)
@@ -92,7 +94,7 @@ def main():
         except Exception as e:  # noqa: BLE001
             r = {"dev_us": [], "sync_us": [], "wall_us": [float("nan")], "n_exec": 0,
                  "n_events": 0, "hlo_ops": [], "ok": False, "err": repr(e)[:200]}
-        if not r["ok"] and a.retry and a.windows not in ("variants", "attn"):
+        if not r["ok"] and a.retry and a.windows not in ("variants", "attn", "attn1"):
             lo, hi = spec
             cmd = [sys.executable, __file__, "--dims", a.dims, "--seq", str(a.seq),
                    "--windows", f"{lo}:{hi}", "--reps", str(a.reps),

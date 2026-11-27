@@ -73,6 +73,8 @@ LAYER = (kn.CHAIN[:6] + [
 TOKENS = [t[0] for t in LAYER]
 LAYER_OUT = ["add2"]     # layer 전체가 내보내는 값 (다음 layer 입력)
 SUB = {"A": (0, 6), "ATT": (6, 11), "B": (11, 20), "QKV_ATT": (0, 11), "ATT_B": (6, 20)}
+# attention core(qk..av, 6:11)를 token 1개 "attn"으로 볼 때 (16 token) W2·W3에 더 필요한 window
+ATT1_EXTRA = [(5, 11), (6, 12), (4, 11), (5, 12), (6, 13)]
 
 
 def shapes(D, INTER, NH, HD, KV, S):
