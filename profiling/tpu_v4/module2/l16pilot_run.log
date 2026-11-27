@@ -1,0 +1,4 @@
+chip2 l16pilot_2048_8192_32_64_8_s512_c1 rc=0 rows=73
+chip0 l16pilot_2048_8192_32_64_8_s512_c2 rc=0 rows=73
+chip3 l16pilot_2048_8192_32_64_8_s2048_c1 rc=0 rows=73
+chip1 l16pilot_2048_8192_32_64_8_s2048_c2 rc=0 rows=73

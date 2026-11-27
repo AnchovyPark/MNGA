@@ -1,0 +1,12 @@
+(256, 512, 4, 64, 2) 64 L16 rope_k max|err|/max|ref| = 0.00e+00 OK
+(256, 512, 4, 64, 2) 64 L16 v max|err|/max|ref| = 0.00e+00 OK
+(256, 512, 4, 64, 2) 64 L16 add2 max|err|/max|ref| = 0.00e+00 OK
+(256, 512, 4, 64, 2) 64 L20 rope_k max|err|/max|ref| = 0.00e+00 OK
+(256, 512, 4, 64, 2) 64 L20 v max|err|/max|ref| = 0.00e+00 OK
+(256, 512, 4, 64, 2) 64 L20 add2 max|err|/max|ref| = 0.00e+00 OK
+(384, 1024, 6, 64, 3) 128 L16 rope_k max|err|/max|ref| = 0.00e+00 OK
+(384, 1024, 6, 64, 3) 128 L16 v max|err|/max|ref| = 0.00e+00 OK
+(384, 1024, 6, 64, 3) 128 L16 add2 max|err|/max|ref| = 0.00e+00 OK
+(384, 1024, 6, 64, 3) 128 L20 rope_k max|err|/max|ref| = 0.00e+00 OK
+(384, 1024, 6, 64, 3) 128 L20 v max|err|/max|ref| = 0.00e+00 OK
+(384, 1024, 6, 64, 3) 128 L20 add2 max|err|/max|ref| = 0.00e+00 OK

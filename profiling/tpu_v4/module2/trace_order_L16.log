@@ -1,0 +1,60 @@
+# L16 2048,8192,32,64,8 seq 512 window 0:16 outs=['rope_k', 'v', 'add2']  module 413.5 us (TPU:0), op 82개
+       0.1     5.0us  multiply_reduce_fusion.1     fusion:kLoop                 f32[512]{0:T(512)S(3)}           rmsnorm
+       5.2     0.4us  fusion.42                    fusion:kLoop                 bf16[512]{0:T(512)(128)(2,1)S(3)} rmsnorm
+       5.6    14.7us  fusion.21                    fusion:kOutput               bf16[512,512]{0,1:T(8,128)(2,1)S(3)} gemm,rmsnorm
+      20.4     0.8us  slice_negate_fusion.1        ?                                                             
+      21.1    21.3us  slice-done                   slice-done                   bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} 
+      42.4     0.5us  slice-done.1                 slice-done                   bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} 
+      43.4     0.5us  slice-done.3                 slice-done                   bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} 
+      44.0    25.4us  fusion.19                    fusion:kOutput               bf16[512,2048]{0,1:T(8,128)(2,1)S(3)} gemm,rmsnorm
+      69.4     1.7us  slice_negate_fusion          ?                                                             
+      71.0     1.0us  iota_compare_fusion          fusion:kLoop                 pred[512,512]{0,1:T(8,128)(4,1)S(3)} _mask
+      72.3    16.5us  fusion.47                    ?                                                             
+      88.8     0.5us  convert.3                    convert                      f32[8,4,512]{2,1,0:T(4,128)S(3)} _softmax
+      89.2    13.4us  fusion                       fusion:kLoop                 f32[8,4,512]{2,1,0:T(4,128)S(3)} _softmax
+     102.9     6.6us  fusion.20                    fusion:kOutput               bf16[512,512]{0,1:T(8,128)(2,1)S(3)} gemm,rmsnorm
+     109.5    19.1us  fusion.1                     fusion:kOutput               bf16[8,64,4,512]{3,1,2,0:T(8,128)(2,1)S(3)} _av,_softmax
+     128.9    21.2us  slice-start.8                ?                                                             
+     150.1    20.7us  multiply_reduce_fusion       ?                                                             
+     170.8     0.4us  fusion.44                    fusion:kLoop                 bf16[512]{0:T(512)(128)(2,1)S(3)} rmsnorm
+     171.5    65.7us  fusion.18                    fusion:kOutput               bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} gemm,rmsnorm
+     237.6    65.8us  fusion.17                    fusion:kOutput               bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} gemm,rmsnorm
+     303.7    70.0us  fusion.14                    fusion:kOutput               bf16[512,2048]{1,0:T(8,128)(2,1)} add,gemm,mul,silu
+     373.8     0.8us  pad_maximum_fusion           fusion:kLoop                 bf16[512,8,64]{0,2,1:T(8,128)(2,1)S(3)} _softmax,rope
+     374.6     0.6us  broadcast.6                  broadcast                    bf16[8,64]{1,0:T(8,128)(2,1)S(3)} rope
+     375.2     0.7us  reshape                      reshape                      bf16[512]{0:T(512)(128)(2,1)S(3)} rope
+     375.8     0.6us  broadcast.8                  broadcast                    bf16[8,64]{1,0:T(8,128)(2,1)S(3)} rope
+     376.4     0.7us  reshape.2                    reshape                      bf16[512]{0:T(512)(128)(2,1)S(3)} rope
+     377.1     1.5us  fusion.35                    fusion:kLoop                 bf16[512,512]{0,1:T(8,128)(2,1)S(3)} rope
+     378.6     1.7us  copy.9                       copy                         bf16[512,512]{1,0:T(8,128)(2,1)} 
+     380.3     1.7us  copy.10                      copy                         bf16[512,512]{1,0:T(8,128)(2,1)} 
+# L16 2048,8192,32,64,8 seq 2048 window 0:16 outs=['rope_k', 'v', 'add2']  module 2058.3 us (TPU:0), op 123개
+       0.2    15.6us  multiply_reduce_fusion.1     fusion:kLoop                 f32[2048]{0:T(1024)S(3)}         rmsnorm
+      15.7     0.4us  fusion.32                    fusion:kLoop                 bf16[2048]{0:T(1024)(128)(2,1)S(3)} rmsnorm
+      16.2    34.3us  copy-done.2                  copy-done                    bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} 
+      50.6    31.1us  fusion.11                    fusion:kOutput               bf16[2048,512]{0,1:T(8,128)(2,1)S(3)} gemm,rmsnorm
+      81.7     1.7us  slice_negate_fusion.1        ?                                                             
+      83.6    73.0us  fusion.9                     fusion:kOutput               bf16[2048,2048]{0,1:T(8,128)(2,1)S(3)} gemm,rmsnorm
+     156.6     5.0us  slice_negate_fusion          ?                                                             
+     161.6    10.0us  iota_compare_fusion          fusion:kLoop                 pred[2048,2048]{0,1:T(8,128)(4,1)S(3)} _mask
+     171.9   259.0us  fusion.36                    ?                                                             
+     430.9     0.7us  convert.3                    convert                      f32[8,4,2048]{2,1,0:T(4,128)S(3)} _softmax
+     431.5   269.5us  fusion                       fusion:kLoop                 f32[8,4,2048]{2,1,0:T(4,128)S(3)} _softmax
+     701.2    24.2us  fusion.10                    fusion:kOutput               bf16[2048,512]{0,1:T(8,128)(2,1)S(3)} gemm,rmsnorm
+     725.5   276.2us  fusion.1                     fusion:kOutput               bf16[8,64,4,2048]{3,1,2,0:T(8,128)(2,1)S(3)} _av,_softmax
+    1001.7     7.3us  copy.1                       copy                         bf16[2048,2048]{0,1:T(8,128)(2,1)S(3)} 
+    1009.5    68.1us  multiply_reduce_fusion       ?                                                             
+    1077.6     0.4us  fusion.34                    fusion:kLoop                 bf16[2048]{0:T(1024)(128)(2,1)S(3)} rmsnorm
+    1078.4   332.6us  fusion.8                     fusion:kOutput               bf16[2048,8192]{1,0:T(8,128)(2,1)} gemm,rmsnorm
+    1411.6   311.7us  fusion.2                     fusion:kOutput               bf16[2048,8192]{1,0:T(8,128)(2,1)} gemm,mul,rmsnorm,silu
+    1723.9   269.2us  convolution_add_fusion       fusion:kOutput               bf16[2048,2048]{0,1:T(8,128)(2,1)S(3)} add,gemm
+    1993.1     9.6us  copy.5                       copy                         bf16[2048,2048]{1,0:T(8,128)(2,1)} 
+    2003.1     1.8us  pad_maximum_fusion           fusion:kLoop                 bf16[2048,8,64]{0,2,1:T(8,128)(2,1)S(3)} _softmax,rope
+    2004.9     0.6us  broadcast.6                  broadcast                    bf16[8,64]{1,0:T(8,128)(2,1)S(3)} rope
+    2005.5     0.7us  reshape                      reshape                      bf16[512]{0:T(512)(128)(2,1)S(3)} rope
+    2006.2     0.6us  broadcast.8                  broadcast                    bf16[8,64]{1,0:T(8,128)(2,1)S(3)} rope
+    2006.8     0.7us  reshape.2                    reshape                      bf16[512]{0:T(512)(128)(2,1)S(3)} rope
+    2007.7     3.1us  fusion.25                    fusion:kLoop                 bf16[2048,512]{0,1:T(8,128)(2,1)S(3)} rope
+    2010.8     5.5us  copy.3                       copy                         bf16[2048,512]{1,0:T(8,128)(2,1)} 
+    2016.3     5.4us  copy.4                       copy                         bf16[2048,512]{1,0:T(8,128)(2,1)} 
+    2021.7    19.2us  copy-done.1                  copy-done                    bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} 
