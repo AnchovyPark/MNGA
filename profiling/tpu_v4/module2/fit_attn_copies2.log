@@ -1,0 +1,106 @@
+## 측정 telescope / full (MAPE %, 크기·seq 전체)
+  1024,2816,16,64,4        128  layer uni 2.722  t3 1.381  | ATT share 0.28  | (A+ATT+B)/layer 1.489
+  1024,2816,16,64,4        512  layer uni 2.798  t3 1.266  | ATT share 0.36  | (A+ATT+B)/layer 1.212
+  1024,2816,16,64,4       1024  layer uni 2.616  t3 1.097  | ATT share 0.43  | (A+ATT+B)/layer 1.124
+  1024,2816,16,64,4       2048  layer uni 2.572  t3 0.888  | ATT share 0.51  | (A+ATT+B)/layer 0.940
+  1536,4096,24,64,6        128  layer uni 2.403  t3 1.314  | ATT share 0.19  | (A+ATT+B)/layer 1.371
+  1536,4096,24,64,6        512  layer uni 2.443  t3 1.195  | ATT share 0.27  | (A+ATT+B)/layer 1.117
+  1536,4096,24,64,6       1024  layer uni 2.597  t3 1.151  | ATT share 0.38  | (A+ATT+B)/layer 1.075
+  1536,4096,24,64,6       2048  layer uni 2.157  t3 0.854  | ATT share 0.54  | (A+ATT+B)/layer 1.056
+  2048,5504,16,128,4       128  layer uni 1.805  t3 1.075  | ATT share 0.10  | (A+ATT+B)/layer 1.135
+  2048,5504,16,128,4       512  layer uni 1.919  t3 1.119  | ATT share 0.15  | (A+ATT+B)/layer 1.058
+  2048,5504,16,128,4      1024  layer uni 1.984  t3 1.103  | ATT share 0.21  | (A+ATT+B)/layer 1.088
+  2048,5504,16,128,4      2048  layer uni 1.930  t3 0.922  | ATT share 0.31  | (A+ATT+B)/layer 1.010
+  2048,8192,32,64,8        128  layer uni 1.807  t3 1.052  | ATT share 0.09  | (A+ATT+B)/layer 1.092
+  2048,8192,32,64,8        512  layer uni 2.058  t3 1.107  | ATT share 0.17  | (A+ATT+B)/layer 1.045
+  2048,8192,32,64,8       1024  layer uni 2.168  t3 1.094  | ATT share 0.25  | (A+ATT+B)/layer 1.022
+  2048,8192,32,64,8       2048  layer uni 1.932  t3 0.859  | ATT share 0.42  | (A+ATT+B)/layer 1.026
+  2560,6912,20,128,4       128  layer uni 1.659  t3 1.041  | ATT share 0.08  | (A+ATT+B)/layer 1.058
+  2560,6912,20,128,4       512  layer uni 1.862  t3 1.133  | ATT share 0.13  | (A+ATT+B)/layer 1.064
+  2560,6912,20,128,4      1024  layer uni 1.805  t3 1.064  | ATT share 0.18  | (A+ATT+B)/layer 1.006
+  2560,6912,20,128,4      2048  layer uni 1.806  t3 0.952  | ATT share 0.32  | (A+ATT+B)/layer 1.024
+  3072,8192,24,128,8       128  layer uni 1.444  t3 0.919  | ATT share 0.05  | (A+ATT+B)/layer 1.131
+  3072,8192,24,128,8       512  layer uni 1.695  t3 1.073  | ATT share 0.10  | (A+ATT+B)/layer 1.033
+  3072,8192,24,128,8      1024  layer uni 1.735  t3 1.064  | ATT share 0.15  | (A+ATT+B)/layer 1.009
+  3072,8192,24,128,8      2048  layer uni 1.709  t3 0.976  | ATT share 0.27  | (A+ATT+B)/layer 1.016
+  3584,18944,28,128,4      128  layer uni 1.242  t3 1.043  | ATT share 0.03  | (A+ATT+B)/layer 1.054
+  3584,18944,28,128,4      512  layer uni 1.319  t3 0.998  | ATT share 0.06  | (A+ATT+B)/layer 1.039
+  3584,18944,28,128,4     1024  layer uni 1.310  t3 0.936  | ATT share 0.08  | (A+ATT+B)/layer 1.002
+  3584,18944,28,128,4     2048  layer uni 1.379  t3 0.929  | ATT share 0.16  | (A+ATT+B)/layer 1.011
+  4096,11008,32,128,8      128  layer uni 1.233  t3 1.207  | ATT share 0.03  | (A+ATT+B)/layer 1.033
+  4096,11008,32,128,8      512  layer uni 1.560  t3 1.068  | ATT share 0.07  | (A+ATT+B)/layer 1.014
+  4096,11008,32,128,8     1024  layer uni 1.527  t3 1.009  | ATT share 0.10  | (A+ATT+B)/layer 0.980
+  4096,11008,32,128,8     2048  layer uni 1.503  t3 0.932  | ATT share 0.21  | (A+ATT+B)/layer 0.976
+  4096,14336,32,128,8      128  layer uni 1.189  t3 1.202  | ATT share 0.02  | (A+ATT+B)/layer 1.021
+  4096,14336,32,128,8      512  layer uni 1.442  t3 0.997  | ATT share 0.06  | (A+ATT+B)/layer 0.981
+  4096,14336,32,128,8     1024  layer uni 1.420  t3 0.961  | ATT share 0.09  | (A+ATT+B)/layer 0.965
+  4096,14336,32,128,8     2048  layer uni 1.396  t3 0.902  | ATT share 0.17  | (A+ATT+B)/layer 0.965
+  5120,13824,40,128,8      128  layer uni 1.136  t3 0.965  | ATT share 0.03  | (A+ATT+B)/layer 0.962
+  5120,13824,40,128,8      512  layer uni 1.337  t3 1.022  | ATT share 0.07  | (A+ATT+B)/layer 1.076
+  5120,13824,40,128,8     1024  layer uni 1.446  t3 1.031  | ATT share 0.09  | (A+ATT+B)/layer 1.028
+  5120,13824,40,128,8     2048  layer uni 1.454  t3 0.956  | ATT share 0.19  | (A+ATT+B)/layer 0.999
+  layer  uni  78.80%  t2  15.67%  t3   9.92%
+  A      uni  22.73%  t2   4.48%  t3   3.31%
+  ATT    uni 242.29%  t2  25.78%  t3  26.32%
+  B      uni  35.07%  t2  14.14%  t3   6.83%
+  layer seq   128: uni  66.40%  t2  23.96%  t3  14.31%
+  layer seq   512: uni  84.32%  t2  18.86%  t3   9.89%
+  layer seq  1024: uni  86.09%  t2  11.28%  t3   7.16%
+  layer seq  2048: uni  78.38%  t2   8.57%  t3   8.30%
+
+## W3 예측 MAPE (%)  행 720
+  M0     S0  E1  46.98  E2  46.98
+  M3gbm  S0  E1   4.67  E2   8.26
+  M3gbm  S1  E1   3.76  E2   7.24
+  M3gbm  S2  E1   3.85  E2   8.43
+
+## W2 예측 MAPE (%)  행 760
+  M0     S0  E1  29.06  E2  29.06
+  M3gbm  S0  E1   2.85  E2   4.99
+  M3gbm  S1  E1   2.40  E2   4.33
+  M3gbm  S2  E1   2.24  E2   5.34
+
+## 예측 window로 layer telescope (E1, GBM S2) / full layer
+  1024,2816,16,64,4        128  uni 2.722  t3 1.381  t3_hat 1.301
+  1024,2816,16,64,4        512  uni 2.798  t3 1.266  t3_hat 1.220
+  1024,2816,16,64,4       1024  uni 2.616  t3 1.097  t3_hat 1.043
+  1024,2816,16,64,4       2048  uni 2.572  t3 0.888  t3_hat 0.929
+  1536,4096,24,64,6        128  uni 2.403  t3 1.314  t3_hat 1.265
+  1536,4096,24,64,6        512  uni 2.443  t3 1.195  t3_hat 1.286
+  1536,4096,24,64,6       1024  uni 2.597  t3 1.151  t3_hat 1.185
+  1536,4096,24,64,6       2048  uni 2.157  t3 0.854  t3_hat 0.854
+  2048,5504,16,128,4       128  uni 1.805  t3 1.075  t3_hat 1.052
+  2048,5504,16,128,4       512  uni 1.919  t3 1.119  t3_hat 1.202
+  2048,5504,16,128,4      1024  uni 1.984  t3 1.103  t3_hat 1.164
+  2048,5504,16,128,4      2048  uni 1.930  t3 0.922  t3_hat 0.984
+  2048,8192,32,64,8        128  uni 1.807  t3 1.052  t3_hat 1.099
+  2048,8192,32,64,8        512  uni 2.058  t3 1.107  t3_hat 1.154
+  2048,8192,32,64,8       1024  uni 2.168  t3 1.094  t3_hat 1.128
+  2048,8192,32,64,8       2048  uni 1.932  t3 0.859  t3_hat 0.852
+  2560,6912,20,128,4       128  uni 1.659  t3 1.041  t3_hat 1.056
+  2560,6912,20,128,4       512  uni 1.862  t3 1.133  t3_hat 1.190
+  2560,6912,20,128,4      1024  uni 1.805  t3 1.064  t3_hat 1.088
+  2560,6912,20,128,4      2048  uni 1.806  t3 0.952  t3_hat 0.941
+  3072,8192,24,128,8       128  uni 1.444  t3 0.919  t3_hat 1.177
+  3072,8192,24,128,8       512  uni 1.695  t3 1.073  t3_hat 1.106
+  3072,8192,24,128,8      1024  uni 1.735  t3 1.064  t3_hat 1.099
+  3072,8192,24,128,8      2048  uni 1.709  t3 0.976  t3_hat 0.956
+  3584,18944,28,128,4      128  uni 1.242  t3 1.043  t3_hat 1.106
+  3584,18944,28,128,4      512  uni 1.319  t3 0.998  t3_hat 0.943
+  3584,18944,28,128,4     1024  uni 1.310  t3 0.936  t3_hat 0.918
+  3584,18944,28,128,4     2048  uni 1.379  t3 0.929  t3_hat 0.898
+  4096,11008,32,128,8      128  uni 1.233  t3 1.207  t3_hat 1.050
+  4096,11008,32,128,8      512  uni 1.560  t3 1.068  t3_hat 1.041
+  4096,11008,32,128,8     1024  uni 1.527  t3 1.009  t3_hat 1.010
+  4096,11008,32,128,8     2048  uni 1.503  t3 0.932  t3_hat 0.911
+  4096,14336,32,128,8      128  uni 1.189  t3 1.202  t3_hat 1.114
+  4096,14336,32,128,8      512  uni 1.442  t3 0.997  t3_hat 0.972
+  4096,14336,32,128,8     1024  uni 1.420  t3 0.961  t3_hat 0.951
+  4096,14336,32,128,8     2048  uni 1.396  t3 0.902  t3_hat 0.900
+  5120,13824,40,128,8      128  uni 1.136  t3 0.965  t3_hat 0.987
+  5120,13824,40,128,8      512  uni 1.337  t3 1.022  t3_hat 0.959
+  5120,13824,40,128,8     1024  uni 1.446  t3 1.031  t3_hat 1.007
+  5120,13824,40,128,8     2048  uni 1.454  t3 0.956  t3_hat 0.935
+  uni MAPE 78.80% (max 179.8%)  t3 MAPE 9.92% (max 38.1%)  t3_hat MAPE 10.63% (max 30.1%)
+
+## attention window의 custom-call (치환 확인): {('custom-call', '512'): 92, ('custom-call:ConcatBitcast', '512'): 92, ('custom-call', '2048'): 103, ('custom-call:ConcatBitcast', '2048'): 103, ('custom-call', '128'): 35, ('custom-call:ConcatBitcast', '128'): 35, ('custom-call', '1024'): 119, ('custom-call:ConcatBitcast', '1024'): 119}
