@@ -1,0 +1,5 @@
+backend cpu
+dims=(256, 512, 4, 64, 2) n=3 seq=64 max|x|=3.03e+04: rel |unroll-scan| x=0.0253  |unroll-layerwise| x=0.0253  kv max=0.0247
+   model logits (1, 1000): rel |unroll-scan|=0.00441  |unroll-(emb+stack+head)|=0  finite=True
+dims=(384, 1024, 6, 64, 3) n=4 seq=128 max|x|=7.22e+04: rel |unroll-scan| x=0.0213  |unroll-layerwise| x=0.0213  kv max=0.016
+   model logits (1, 2048): rel |unroll-scan|=0.0248  |unroll-(emb+stack+head)|=0  finite=True

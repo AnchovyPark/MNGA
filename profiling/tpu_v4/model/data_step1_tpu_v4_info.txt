@@ -1,0 +1,52 @@
+INFO LROW 2048 8192 32 64 8 1 128 layer_w2 compile_s=2.4 peak_GiB=0.230 arg_GiB=0.114 temp_GiB=0.000 out_GiB=0.001 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 128 unroll compile_s=2.3 peak_GiB=0.116 arg_GiB=0.114 temp_GiB=0.000 out_GiB=0.001 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 128 unroll_w2 compile_s=2.2 peak_GiB=0.230 arg_GiB=0.114 temp_GiB=0.000 out_GiB=0.001 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 128 scan compile_s=2.3 peak_GiB=0.116 arg_GiB=0.114 temp_GiB=0.000 out_GiB=0.001 n_ops=23
+INFO LROW 2048 8192 32 64 8 1 512 layer_w2 compile_s=4.0 peak_GiB=0.240 arg_GiB=0.115 temp_GiB=0.000 out_GiB=0.003 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 512 unroll compile_s=4.4 peak_GiB=0.127 arg_GiB=0.115 temp_GiB=0.000 out_GiB=0.003 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 512 unroll_w2 compile_s=3.8 peak_GiB=0.240 arg_GiB=0.115 temp_GiB=0.000 out_GiB=0.003 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 512 scan compile_s=3.8 peak_GiB=0.230 arg_GiB=0.115 temp_GiB=0.000 out_GiB=0.003 n_ops=27
+INFO LROW 2048 8192 32 64 8 1 1024 layer_w2 compile_s=3.6 peak_GiB=0.251 arg_GiB=0.117 temp_GiB=0.017 out_GiB=0.006 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 1024 unroll compile_s=3.9 peak_GiB=0.230 arg_GiB=0.117 temp_GiB=0.017 out_GiB=0.006 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 1024 unroll_w2 compile_s=3.2 peak_GiB=0.251 arg_GiB=0.117 temp_GiB=0.017 out_GiB=0.006 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 1024 scan compile_s=3.0 peak_GiB=0.240 arg_GiB=0.117 temp_GiB=0.016 out_GiB=0.006 n_ops=23
+INFO LROW 2048 8192 32 64 8 1 2048 layer_w2 compile_s=4.2 peak_GiB=0.271 arg_GiB=0.121 temp_GiB=0.253 out_GiB=0.012 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 2048 unroll compile_s=4.0 peak_GiB=0.230 arg_GiB=0.121 temp_GiB=0.253 out_GiB=0.012 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 2048 unroll_w2 compile_s=4.0 peak_GiB=0.271 arg_GiB=0.121 temp_GiB=0.253 out_GiB=0.012 n_ops=28
+INFO LROW 2048 8192 32 64 8 1 2048 scan compile_s=4.0 peak_GiB=0.251 arg_GiB=0.121 temp_GiB=0.251 out_GiB=0.012 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 128 layer_w2 compile_s=3.2 peak_GiB=0.381 arg_GiB=0.188 temp_GiB=0.000 out_GiB=0.001 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 128 unroll compile_s=3.4 peak_GiB=0.230 arg_GiB=0.188 temp_GiB=0.000 out_GiB=0.001 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 128 unroll_w2 compile_s=3.0 peak_GiB=0.381 arg_GiB=0.188 temp_GiB=0.000 out_GiB=0.001 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 128 scan compile_s=3.1 peak_GiB=0.251 arg_GiB=0.188 temp_GiB=0.000 out_GiB=0.001 n_ops=23
+INFO LROW 3072 8192 24 128 8 1 512 layer_w2 compile_s=4.7 peak_GiB=0.394 arg_GiB=0.190 temp_GiB=0.000 out_GiB=0.005 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 512 unroll compile_s=5.1 peak_GiB=0.381 arg_GiB=0.190 temp_GiB=0.000 out_GiB=0.005 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 512 unroll_w2 compile_s=4.9 peak_GiB=0.396 arg_GiB=0.190 temp_GiB=0.000 out_GiB=0.005 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 512 scan compile_s=4.7 peak_GiB=0.251 arg_GiB=0.190 temp_GiB=0.000 out_GiB=0.005 n_ops=23
+INFO LROW 3072 8192 24 128 8 1 1024 layer_w2 compile_s=5.5 peak_GiB=0.402 arg_GiB=0.193 temp_GiB=0.017 out_GiB=0.010 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 1024 unroll compile_s=5.8 peak_GiB=0.381 arg_GiB=0.193 temp_GiB=0.017 out_GiB=0.010 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 1024 unroll_w2 compile_s=5.0 peak_GiB=0.402 arg_GiB=0.193 temp_GiB=0.017 out_GiB=0.010 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 1024 scan compile_s=5.1 peak_GiB=0.394 arg_GiB=0.193 temp_GiB=0.032 out_GiB=0.010 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 2048 layer_w2 compile_s=5.6 peak_GiB=0.425 arg_GiB=0.199 temp_GiB=0.194 out_GiB=0.020 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 2048 unroll compile_s=5.4 peak_GiB=0.381 arg_GiB=0.199 temp_GiB=0.194 out_GiB=0.020 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 2048 unroll_w2 compile_s=5.6 peak_GiB=0.425 arg_GiB=0.199 temp_GiB=0.194 out_GiB=0.020 n_ops=27
+INFO LROW 3072 8192 24 128 8 1 2048 scan compile_s=4.9 peak_GiB=0.402 arg_GiB=0.199 temp_GiB=0.193 out_GiB=0.020 n_ops=27
+INFO LROW 4096 14336 32 128 8 1 128 layer_w2 compile_s=2.7 peak_GiB=0.820 arg_GiB=0.407 temp_GiB=0.000 out_GiB=0.001 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 128 unroll compile_s=3.3 peak_GiB=0.413 arg_GiB=0.407 temp_GiB=0.000 out_GiB=0.001 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 128 unroll_w2 compile_s=2.2 peak_GiB=0.818 arg_GiB=0.407 temp_GiB=0.000 out_GiB=0.001 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 128 scan compile_s=2.1 peak_GiB=0.413 arg_GiB=0.407 temp_GiB=0.032 out_GiB=0.001 n_ops=27
+INFO LROW 4096 14336 32 128 8 1 512 layer_w2 compile_s=6.0 peak_GiB=0.837 arg_GiB=0.410 temp_GiB=0.028 out_GiB=0.006 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 512 unroll compile_s=6.5 peak_GiB=0.820 arg_GiB=0.410 temp_GiB=0.028 out_GiB=0.006 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 512 unroll_w2 compile_s=6.0 peak_GiB=0.831 arg_GiB=0.410 temp_GiB=0.028 out_GiB=0.006 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 512 scan compile_s=6.9 peak_GiB=0.818 arg_GiB=0.410 temp_GiB=0.033 out_GiB=0.006 n_ops=27
+INFO LROW 4096 14336 32 128 8 1 1024 layer_w2 compile_s=3.4 peak_GiB=0.845 arg_GiB=0.414 temp_GiB=0.080 out_GiB=0.012 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 1024 unroll compile_s=3.4 peak_GiB=0.818 arg_GiB=0.414 temp_GiB=0.080 out_GiB=0.012 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 1024 unroll_w2 compile_s=3.4 peak_GiB=0.856 arg_GiB=0.414 temp_GiB=0.080 out_GiB=0.012 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 1024 scan compile_s=3.5 peak_GiB=0.831 arg_GiB=0.414 temp_GiB=0.066 out_GiB=0.012 n_ops=27
+INFO LROW 4096 14336 32 128 8 1 2048 layer_w2 compile_s=3.5 peak_GiB=0.896 arg_GiB=0.422 temp_GiB=0.286 out_GiB=0.023 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 2048 unroll compile_s=3.5 peak_GiB=0.818 arg_GiB=0.422 temp_GiB=0.286 out_GiB=0.023 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 2048 unroll_w2 compile_s=3.5 peak_GiB=0.896 arg_GiB=0.422 temp_GiB=0.286 out_GiB=0.023 n_ops=28
+INFO LROW 4096 14336 32 128 8 1 2048 scan compile_s=3.4 peak_GiB=0.831 arg_GiB=0.422 temp_GiB=0.251 out_GiB=0.023 n_ops=27
+INFO MROW 4096 14336 32 128 8 32 128256 512 unroll full compile_s=14.4 peak_GiB=15.096 arg_GiB=14.958 temp_GiB=0.102 out_GiB=0.063 n_ops=33
+INFO MROW 4096 14336 32 128 8 32 128256 2048 unroll full compile_s=13.7 peak_GiB=15.226 arg_GiB=14.958 temp_GiB=0.391 out_GiB=0.250 n_ops=33
+INFO MROW 4096 14336 32 128 8 32 128256 512 scan full compile_s=3.3 peak_GiB=15.025 arg_GiB=14.958 temp_GiB=0.000 out_GiB=0.063 n_ops=33
+INFO MROW 4096 14336 32 128 8 32 128256 2048 scan full compile_s=3.6 peak_GiB=15.465 arg_GiB=14.958 temp_GiB=0.258 out_GiB=0.250 n_ops=33
