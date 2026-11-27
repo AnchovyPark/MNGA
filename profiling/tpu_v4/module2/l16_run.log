@@ -1,0 +1,1 @@
+# 원래 run log는 측정 중 git stash/pop으로 덮여 잃음 (2026-11-27). 결과: 40 job 전부 완료, data_l16_copies2_tpu_v4.txt 2920행 = 73 window × 40, FAIL 0, nan 0. job별 log는 parts/l16_*.log (gitignore).
