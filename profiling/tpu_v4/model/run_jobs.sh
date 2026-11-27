@@ -1,30 +1,32 @@
 #!/bin/bash
 # job 목록을 chip NCHIPS(기본 4)개 process가 나눠 측정하고 job 순서대로 합친다.
 # usage: run_jobs.sh <jobs.txt> <out.txt>
-#   part 파일 <out stem>.part<c>.txt (+ _info.txt, .log). 다시 돌리면 이미 잰 key는 건너뛴다.
+#   part 파일 parts/<out stem>.part<c>.txt (+ _info.txt, .log). 다시 돌리면 이미 잰 key는 건너뛴다.
 set -u
 JOBS=$1; OUT=$2
 HERE=$(cd "$(dirname "$0")" && pwd)
 PY=${PY:-$HOME/venvs/jaxtpu/bin/python}
 NC=${NCHIPS:-4}
 STEM=${OUT%.txt}
+PARTS=$(dirname "$STEM")/parts/$(basename "$STEM")  # part 파일 (git 밖, 합친 파일에 모든 행이 있다)
+mkdir -p "$(dirname "$PARTS")"
 rm -rf "$STEM.claims"
 for c in $(seq 0 $((NC-1))); do
   TPU_VISIBLE_CHIPS=$c TPU_CHIPS_PER_PROCESS_BOUNDS=1,1,1 TPU_PROCESS_BOUNDS=1,1,1 \
-  TPU_PROCESS_PORT=$((8476+c)) "$PY" -I "$HERE/run_model.py" "$JOBS" "$STEM.part$c.txt" "$STEM.claims" \
-    "$STEM.part*.txt" >> "$STEM.part$c.log" 2>&1 &
+  TPU_PROCESS_PORT=$((8476+c)) "$PY" -I "$HERE/run_model.py" "$JOBS" "$PARTS.part$c.txt" "$STEM.claims" \
+    "$PARTS.part*.txt" >> "$PARTS.part$c.log" 2>&1 &
 done
 wait
 rm -rf "$STEM.claims"
-JAX_PLATFORMS=cpu "$PY" -I - "$HERE" "$JOBS" "$STEM" <<'PYEOF'
+JAX_PLATFORMS=cpu "$PY" -I - "$HERE" "$JOBS" "$STEM" "$PARTS" <<'PYEOF'
 import glob, sys
 sys.path.insert(0, sys.argv[1])
 import run_model as rm
-jobs, stem = sys.argv[2], sys.argv[3]
+jobs, stem, parts = sys.argv[2], sys.argv[3], sys.argv[4]
 keys = [rm.row_key(j) for j in (l.split("#")[0].strip() for l in open(jobs)) if j]
 for suf in (".txt", "_info.txt"):
     rows = {}  # key -> 행 list (실패 행도 지우지 않는다. 분석은 key별 마지막 성공 행을 쓴다)
-    for f in sorted(glob.glob(f"{stem}.part[0-9]*{suf}")):
+    for f in sorted(glob.glob(f"{parts}.part[0-9]*{suf}")):
         if suf == ".txt" and f.endswith("_info.txt"):
             continue
         for l in open(f):

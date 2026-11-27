@@ -118,7 +118,7 @@ def model_job(dims, n, seq, mode, part):
     return fn, [[t, embed, cos, sin, *lp, gf, lm_head] for t in toks]
 
 
-def measure(fn, arg_sets, warmup=WARMUP, iters=ITERS):
+def measure(fn, arg_sets, warmup=WARMUP, iters=ITERS, keep_trace=None):
     """module1 measure.measure와 같은 정의 (sync_min = 두 core 모두 시작한 뒤 ~ 마지막 종료).
     추가로 compile 시간과 memory analysis를 돌려준다."""
     t0 = time.perf_counter()
@@ -144,7 +144,7 @@ def measure(fn, arg_sets, warmup=WARMUP, iters=ITERS):
         t = time.perf_counter()
         run(i)
         walls.append((time.perf_counter() - t) * 1e6)
-    tdir = tempfile.mkdtemp(prefix="mdtr_")
+    tdir = keep_trace or tempfile.mkdtemp(prefix="mdtr_")
     try:
         with jax.profiler.trace(tdir):
             for i in range(iters):
@@ -152,7 +152,8 @@ def measure(fn, arg_sets, warmup=WARMUP, iters=ITERS):
         paths = glob.glob(os.path.join(tdir, "**", "*.xplane.pb"), recursive=True)
         ex = ms._executions(paths[-1], name) if paths else []
     finally:
-        shutil.rmtree(tdir, ignore_errors=True)
+        if keep_trace is None:
+            shutil.rmtree(tdir, ignore_errors=True)
     syncs = [c for _, c in ex]
     ok = len(syncs) == iters and min(syncs, default=0) > 0
     try:

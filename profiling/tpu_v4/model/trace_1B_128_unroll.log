@@ -1,0 +1,495 @@
+
+==== 1B seq 128 unroll N=1: sync_min 134.5 us  lines=['Async XLA Ops', 'Pallas Primitives', 'TC Overlay', 'XLA Modules', 'XLA Ops', '_counters_']
+  HLO copy-start 8개, cross-program prefetch: ['L0.wg']
+  HLO program 안 weight prefetch (slice-start→ConcatBitcast, S(3)) 1: %custom-call<-L0.wd
+  HLO parameter in S(3) 76: %param_0.140 = f32[128]{0:T(128)S(3)} parameter(0) | %param_2.74 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(2) | %param_3.42 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(3) | %param_0.92 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} parameter(0) | %param_2.72 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(2) | %param_1.102 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} parameter(1)
+  core0 op sum 134.1 us (실행 30회 평균), op 50종
+  -- 실행 19 (module 141.9 us) op 순서: start_us dur_us name
+         7.7      0.0  %copy-start = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1)}
+         7.8      0.0  %copy-start.2 = (bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[128,2048]{1,0:T(8,128)(2,1)} 
+         7.8      0.0  %copy-start.4 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_0_
+         7.8      0.0  %copy-start.6 = (bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[1,1,64]{2,1,0:T(2,128)(2,1)} 
+         7.8      0.0  %copy-start.7 = (bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[1,1,64]{2,1,0:T(2,128)(2,1)} 
+         7.9      0.0  %copy-start.5 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_5_
+         7.9      2.3  %multiply_reduce_fusion.1 = f32[128]{0:T(128)S(3)} fusion(bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1), kind=kLoop, calls=%fused_computation.14
+        10.1      0.4  %add_rsqrt_fusion.1 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %multiply_reduce_fusion.1), kind=kLoop, calls=%fused_computation
+        10.5      0.7  %broadcast.13 = bf16[8,64]{1,0:T(8,128)(2,1)S(3)} broadcast(bf16[64]{0:T(256)(128)(2,1)} %bitcast.45), dimensions={1}
+        11.2      0.7  %reshape.6 = bf16[512]{0:T(512)(128)(2,1)S(3)} reshape(bf16[8,64]{1,0:T(8,128)(2,1)S(3)} %broadcast.13)
+        11.9      0.7  %broadcast.15 = bf16[8,64]{1,0:T(8,128)(2,1)S(3)} broadcast(bf16[64]{0:T(256)(128)(2,1)} %bitcast.43), dimensions={1}
+        12.6      0.7  %reshape.16 = bf16[512]{0:T(512)(128)(2,1)S(3)} reshape(bf16[8,64]{1,0:T(8,128)(2,1)S(3)} %broadcast.15)
+        13.3      0.4  %iota_compare_fusion = pred[128,128]{0,1:T(8,128)(4,1)S(3)} fusion(), kind=kLoop, calls=%fused_computation.49
+        13.7      0.0  %copy-start.1 = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1
+        13.7      7.2  %fusion.21 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)} %lp_2_.1, bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1, bf16[2048
+        20.9      7.5  %fusion.22 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)} %lp_3_.1, bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1, bf16[2048
+        28.4      0.0  %copy-start.3 = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) copy-start(bf16[128,512]{1,0:T(8,128)(2,1)S(3)}
+        28.4      1.0  %copy.9 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.22)
+        29.4      0.9  %copy.10 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.21)
+        30.3      0.5  %slice_negate_fusion.1 = (bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,64]{0,2,1:T(8,128)(2,1)S
+        30.8      0.5  %pad_maximum_fusion = bf16[128,8,64]{0,2,1:T(8,128)(2,1)S(3)} fusion(bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)} %get-tuple-element.3, bf16[128,8,32]{0,2,
+        31.3      1.0  %copy.14 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} copy(bf16[128,512]{0,1:T(8,128)(2,1)S(3)} %bitcast.42)
+        32.3      1.0  %multiply_add_fusion = bf16[128,512]{1,0:T(8,128)(2,1)} fusion(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %copy.14, bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fu
+        33.2      0.0  %copy-done.2 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}
+        33.3      0.0  %copy-done.4 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+        33.3      0.0  %slice-start = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)(2
+        33.3     15.5  %fusion.20 = bf16[128,2048]{0,1:T(8,128)(2,1)S(3)} fusion(bf16[2048,2048]{1,0:T(8,128)(2,1)} %lp_1_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-don
+        48.9      0.0  %copy-done.3 = bf16[128,512]{1,0:T(8,128)(2,1)} copy-done((bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) %copy
+        48.9      0.8  %slice_negate_fusion = (bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,32,64]{0,2,1:T(8,128)(2,1)
+        49.7      0.0  %copy-done.6 = bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)} copy-done((bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}
+        49.7      0.1  %copy-done.7 = bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)} copy-done((bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}
+        49.7      3.4  %fusion.45 = (bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)}, bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,4,32]{0,3,2,1:T(8,128)(2,1)S(3)}
+        53.2      0.4  %convert.3 = f32[8,4,128]{2,1,0:T(4,128)S(3)} convert(bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)} %get-tuple-element.4)
+        53.6      1.9  %fusion.3 = f32[8,4,128]{2,1,0:T(4,128)S(3)} fusion(bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)} %get-tuple-element.5, f32[8,4,128]{2,1,0:T(4,128)S(3)
+        55.5      0.1  %slice-start.1 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        55.6      2.0  %fusion.10 = bf16[8,64,4,128]{3,1,2,0:T(8,128)(2,1)S(3)} fusion(bf16[128,8,64,1]{0,2,3,1:T(8,128)(2,1)S(3)} %bitcast.41, bf16[8,4,128,128]{2,3,1,0:T(8
+        57.6     16.2  %multiply_reduce_fusion = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-done.2, b
+        73.8      0.4  %add_rsqrt_fusion = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.6), kind=kLoop, calls=%fused_computation.52
+        74.2      0.1  %copy-done = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)
+        74.2      0.0  %copy-done.5 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+        74.2      0.1  %slice-start.2 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        74.3      0.0  %slice-start.3 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        74.3     18.3  %fusion.19 = bf16[128,8192]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} %copy-done, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %ge
+        92.6      0.1  %copy-done.1 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(
+        92.7      0.0  %slice-done = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+        92.7      0.1  %slice-done.1 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+        92.8      1.2  %slice-done.2 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+        93.9      8.1  %slice-done.3 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       102.0      0.1  %custom-call = bf16[8192,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done, bf16[2048,2048]{1,0:T(8,128)(2,1
+       102.0     39.8  %fusion.16 = bf16[128,2048]{1,0:T(8,128)(2,1)} fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-element.7, bf16[8192,2048]{1,0:T(8,128)(2,1)S(3
+  -- 같은 실행의 Async XLA Ops (start_us dur_us name | 그 동안 돈 XLA Ops)
+         7.7     66.5  %copy-start                              | %add_rsqrt_fusion %add_rsqrt_fusion.1 %broadcast.13 %broadcast.15 %convert.3 %copy-done %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.6 %copy-done.7 %copy-s
+         7.8     25.5  %copy-start.2                            | %add_rsqrt_fusion.1 %broadcast.13 %broadcast.15 %copy-done.2 %copy-start.1 %copy-start.2 %copy-start.3 %copy-start.4 %copy-start.5 %copy-start.6 %copy-start.7 %
+         7.8     25.5  %copy-start.4                            | %add_rsqrt_fusion.1 %broadcast.13 %broadcast.15 %copy-done.2 %copy-done.4 %copy-start.1 %copy-start.3 %copy-start.4 %copy-start.5 %copy-start.6 %copy-start.7 %c
+         7.8     41.9  %copy-start.6                            | %add_rsqrt_fusion.1 %broadcast.13 %broadcast.15 %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.6 %copy-start.1 %copy-start.3 %copy-start.5 %copy-start.6 %cop
+         7.8     41.9  %copy-start.7                            | %add_rsqrt_fusion.1 %broadcast.13 %broadcast.15 %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.6 %copy-done.7 %copy-start.1 %copy-start.3 %copy-start.5 %copy
+         7.9     66.4  %copy-start.5                            | %add_rsqrt_fusion %add_rsqrt_fusion.1 %broadcast.13 %broadcast.15 %convert.3 %copy-done %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.5 %copy-done.6 %copy-d
+        13.7     79.0  %copy-start.1                            | %add_rsqrt_fusion %convert.3 %copy-done %copy-done.1 %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.5 %copy-done.6 %copy-done.7 %copy-start.1 %copy-start.3 %
+        28.4     20.5  %copy-start.3                            | %copy-done.2 %copy-done.3 %copy-done.4 %copy-start.3 %copy.10 %copy.14 %copy.9 %fusion.20 %multiply_add_fusion %pad_maximum_fusion %slice-start %slice_negate_fu
+        33.3     59.4  %slice-start                             | %add_rsqrt_fusion %convert.3 %copy-done %copy-done.1 %copy-done.3 %copy-done.5 %copy-done.6 %copy-done.7 %fusion.10 %fusion.19 %fusion.20 %fusion.3 %fusion.45 %
+        55.5     37.2  %slice-start.1                           | %add_rsqrt_fusion %copy-done %copy-done.1 %copy-done.5 %fusion.10 %fusion.19 %multiply_reduce_fusion %slice-done %slice-done.1 %slice-start.1 %slice-start.2 %sl
+        74.2     19.7  %slice-start.2                           | %copy-done.1 %fusion.19 %slice-done %slice-done.1 %slice-done.2 %slice-start.2 %slice-start.3
+        74.3     27.7  %slice-start.3                           | %copy-done.1 %fusion.19 %slice-done %slice-done.1 %slice-done.2 %slice-done.3 %slice-start.3
+  (trace dir /tmp/mdtr__clh80pw)
+
+==== 1B seq 128 unroll N=2: sync_min 254.9 us  lines=['Async XLA Ops', 'Pallas Primitives', 'TC Overlay', 'XLA Modules', 'XLA Ops', '_counters_']
+  HLO copy-start 12개, cross-program prefetch: ['L0.wg']
+  HLO program 안 weight prefetch (slice-start→ConcatBitcast, S(3)) 6: %custom-call<-L0.wd; %custom-call.4<-L1.wk; %custom-call.5<-L1.wv; %custom-call.1<-L1.wg; %custom-call.2<-L1.wd; %custom-call.3<-L1.wu
+  HLO parameter in S(3) 162: %param_0.280 = f32[128]{0:T(128)S(3)} parameter(0) | %param_2.148 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(2) | %param_3.85 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(3) | %param_0.188 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} parameter(0) | %param_2.146 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(2) | %param_1.206 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} parameter(1)
+  core0 op sum 254.6 us (실행 30회 평균), op 121종
+  -- 실행 6 (module 274.7 us) op 순서: start_us dur_us name
+        19.7      0.0  %copy-start = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1)}
+        19.7      0.0  %copy-start.3 = (bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[128,2048]{1,0:T(8,128)(2,1)} 
+        19.7      0.0  %copy-start.6 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_0_
+        19.8      0.0  %copy-start.10 = (bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[1,1,64]{2,1,0:T(2,128)(2,1)}
+        19.8      0.0  %copy-start.11 = (bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[1,1,64]{2,1,0:T(2,128)(2,1)}
+        19.8      0.0  %copy-start.8 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_5_
+        19.8      2.6  %multiply_reduce_fusion.3 = f32[128]{0:T(128)S(3)} fusion(bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1), kind=kLoop, calls=%fused_computation.29
+        22.4      0.4  %add_rsqrt_fusion.3 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %multiply_reduce_fusion.3), kind=kLoop, calls=%fused_computation
+        22.8      0.7  %broadcast.25 = bf16[8,64]{1,0:T(8,128)(2,1)S(3)} broadcast(bf16[64]{0:T(256)(128)(2,1)} %bitcast.87), dimensions={1}
+        23.5      0.7  %reshape.12 = bf16[512]{0:T(512)(128)(2,1)S(3)} reshape(bf16[8,64]{1,0:T(8,128)(2,1)S(3)} %broadcast.25)
+        24.2      0.7  %broadcast.27 = bf16[8,64]{1,0:T(8,128)(2,1)S(3)} broadcast(bf16[64]{0:T(256)(128)(2,1)} %bitcast.84), dimensions={1}
+        24.9      0.7  %reshape.14 = bf16[512]{0:T(512)(128)(2,1)S(3)} reshape(bf16[8,64]{1,0:T(8,128)(2,1)S(3)} %broadcast.27)
+        25.6      0.4  %iota_compare_fusion = pred[128,128]{0,1:T(8,128)(4,1)S(3)} fusion(), kind=kLoop, calls=%fused_computation.98
+        26.0      0.0  %copy-start.2 = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1
+        26.0      7.2  %fusion.41 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)} %lp_2_.1, bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1, bf16[2048
+        33.1      7.5  %fusion.42 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)} %lp_3_.1, bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1, bf16[2048
+        40.6      0.0  %copy-start.4 = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) copy-start(bf16[128,512]{1,0:T(8,128)(2,1)S(3)}
+        40.6      1.0  %copy.18 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.42)
+        41.6      0.9  %copy.19 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.41)
+        42.6      0.5  %slice_negate_fusion.3 = (bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,64]{0,2,1:T(8,128)(2,1)S
+        43.1      0.5  %pad_maximum_fusion = bf16[128,8,64]{0,2,1:T(8,128)(2,1)S(3)} fusion(bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)} %get-tuple-element.7, bf16[128,8,32]{0,2,
+        43.6      1.0  %copy.28 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} copy(bf16[128,512]{0,1:T(8,128)(2,1)S(3)} %bitcast.82)
+        44.5      0.0  %copy-done.3 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}
+        44.6      0.1  %copy-done.6 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+        44.6      0.0  %slice-start = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)(2
+        44.6     15.4  %fusion.40 = bf16[128,2048]{0,1:T(8,128)(2,1)S(3)} fusion(bf16[2048,2048]{1,0:T(8,128)(2,1)} %lp_1_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-don
+        60.0      0.0  %copy-done.4 = bf16[128,512]{1,0:T(8,128)(2,1)} copy-done((bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) %copy
+        60.1      0.8  %slice_negate_fusion.1 = (bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,32,64]{0,2,1:T(8,128)(2,
+        60.8      0.0  %copy-done.10 = bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)} copy-done((bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)
+        60.9      0.0  %copy-done.11 = bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)} copy-done((bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)
+        60.9      3.4  %fusion.90 = (bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)}, bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,4,32]{0,3,2,1:T(8,128)(2,1)S(3)}
+        64.4      0.4  %convert.6 = f32[8,4,128]{2,1,0:T(4,128)S(3)} convert(bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)} %get-tuple-element.10)
+        64.8      1.9  %fusion.7 = f32[8,4,128]{2,1,0:T(4,128)S(3)} fusion(bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)} %get-tuple-element.11, f32[8,4,128]{2,1,0:T(4,128)S(3
+        66.7      0.1  %slice-start.1 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        66.8      2.0  %fusion.20 = bf16[8,64,4,128]{3,1,2,0:T(8,128)(2,1)S(3)} fusion(bf16[128,8,64,1]{0,2,3,1:T(8,128)(2,1)S(3)} %bitcast.81, bf16[8,4,128,128]{2,3,1,0:T(8
+        68.8     16.2  %multiply_reduce_fusion.2 = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-done.3,
+        85.0      0.4  %add_rsqrt_fusion.2 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.12), kind=kLoop, calls=%fused_computation.105
+        85.4      0.1  %copy-done = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)
+        85.5      0.0  %copy-done.8 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+        85.5      0.1  %slice-start.2 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        85.5      0.0  %slice-start.3 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        85.5      0.1  %slice-start.16 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        85.6      0.0  %slice-start.17 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        85.6      0.1  %slice-start.20 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        85.7      0.0  %slice-start.21 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        85.7     18.3  %fusion.38 = bf16[128,8192]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} %copy-done, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %ge
+       104.0      0.1  %copy-done.2 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(
+       104.1      0.0  %slice-done = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       104.1      0.1  %slice-done.1 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       104.1      1.7  %slice-done.2 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       105.8      8.2  %slice-done.3 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       114.0      0.1  %custom-call = bf16[8192,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done, bf16[2048,2048]{1,0:T(8,128)(2,1
+       114.0      0.0  %slice-start.18 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       114.1      0.1  %slice-start.19 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       114.1      0.0  %copy-start.7 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_9_
+       114.1      0.0  %slice-start.22 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       114.1      0.1  %slice-start.23 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       114.2      0.0  %slice-start.4 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)(
+       114.2      0.1  %slice-start.5 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)(
+       114.3      0.0  %slice-start.6 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)(
+       114.3      0.1  %slice-start.12 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       114.3      0.0  %slice-start.13 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       114.4      0.1  %slice-start.14 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       114.5     40.9  %multiply_reduce_fusion.1 = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-el
+       155.4      0.4  %add_rsqrt_fusion.1 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.14), kind=kLoop, calls=%fused_computation.104
+       155.8      0.1  %slice-done.16 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       155.8      0.0  %slice-done.17 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       155.8      0.1  %slice-done.18 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       155.9      0.0  %slice-done.19 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       155.9      0.1  %copy-done.7 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+       156.0      0.0  %custom-call.4 = bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,512]{1,0:T(8,128)(2,1)S(3)} %slice-done.16, bf16[512,512]{1,0:T(8,128)(2,1
+       156.0      0.1  %slice-start.8 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+       156.1      2.1  %fusion.44 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} %custom-call.4, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %
+       158.2      0.1  %slice-done.20 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       158.3      0.0  %slice-done.21 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       158.3      0.1  %slice-done.22 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       158.3      0.0  %slice-done.23 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       158.3      0.1  %custom-call.5 = bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,512]{1,0:T(8,128)(2,1)S(3)} %slice-done.20, bf16[512,512]{1,0:T(8,128)(2,1
+       158.4      2.1  %fusion.45 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} %custom-call.5, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %
+       160.5      0.0  %copy-start.5 = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) copy-start(bf16[128,512]{1,0:T(8,128)(2,1)S(3)}
+       160.5      1.0  %copy.23 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.45)
+       161.5      0.9  %copy.24 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.44)
+       162.5      0.5  %slice_negate_fusion.2 = (bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,64]{0,2,1:T(8,128)(2,1)S
+       163.0      0.5  %pad_maximum_fusion.1 = bf16[128,8,64]{0,2,1:T(8,128)(2,1)S(3)} fusion(bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)} %get-tuple-element.5, bf16[128,8,32]{0,
+       163.4      1.0  %copy.29 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} copy(bf16[128,512]{0,1:T(8,128)(2,1)S(3)} %bitcast.83)
+       164.4      0.0  %slice-start.7 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)(
+       164.4      1.2  %multiply_add_fusion = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)}) fusion(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %copy.29, bf16
+       165.7     15.6  %fusion.43 = bf16[128,2048]{0,1:T(8,128)(2,1)S(3)} fusion(bf16[2048,2048]{1,0:T(8,128)(2,1)} %lp_10_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tup
+       181.2      0.0  %copy-done.5 = bf16[128,512]{1,0:T(8,128)(2,1)} copy-done((bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) %copy
+       181.2      0.1  %slice-start.9 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+       181.3      0.7  %slice_negate_fusion = (bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,32,64]{0,2,1:T(8,128)(2,1)
+       182.1      3.4  %fusion.91 = (bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)}, bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,4,32]{0,3,2,1:T(8,128)(2,1)S(3)}
+       185.5      0.4  %convert.7 = f32[8,4,128]{2,1,0:T(4,128)S(3)} convert(bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)} %get-tuple-element.16)
+       185.9      1.9  %fusion.6 = f32[8,4,128]{2,1,0:T(4,128)S(3)} fusion(bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)} %get-tuple-element.17, f32[8,4,128]{2,1,0:T(4,128)S(3
+       187.9      2.0  %fusion.21 = bf16[8,64,4,128]{3,1,2,0:T(8,128)(2,1)S(3)} fusion(bf16[128,8,64,1]{0,2,3,1:T(8,128)(2,1)S(3)} %bitcast.80, bf16[8,4,128,128]{2,3,1,0:T(8
+       189.9      0.0  %copy-start.9 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_14
+       189.9     16.1  %multiply_reduce_fusion = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-elem
+       206.0      0.4  %add_rsqrt_fusion = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.18), kind=kLoop, calls=%fused_computation.103
+       206.4      0.1  %slice-done.4 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       206.5      0.0  %slice-done.5 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       206.5      0.1  %slice-done.6 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       206.5      0.0  %slice-done.7 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       206.6      2.8  %copy-done.9 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+       209.4      0.1  %custom-call.1 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} %slice-done.4, bf16[512,8192]{1,0:T(8,128)(2
+       209.5      0.0  %slice-start.10 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128
+       209.5      0.1  %slice-start.11 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128
+       209.5      0.1  %slice-start.15 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       209.7     18.3  %fusion.39 = bf16[128,8192]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} %custom-call.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}
+       228.0      0.1  %slice-done.12 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       228.1      0.0  %slice-done.13 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       228.1      0.1  %slice-done.14 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       228.2      0.0  %slice-done.8 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       228.2      0.1  %slice-done.9 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       228.2      0.0  %slice-done.10 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[
+       228.2      0.1  %slice-done.11 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[
+       228.3      6.3  %slice-done.15 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       234.6      0.1  %custom-call.2 = bf16[8192,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done.8, bf16[2048,2048]{1,0:T(8,128)
+       234.6      0.0  %custom-call.3 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} %slice-done.12, bf16[512,8192]{1,0:T(8,128)(
+       234.6      0.0  %copy-start.1 = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1
+       234.6     39.9  %fusion.32 = bf16[128,2048]{1,0:T(8,128)(2,1)} fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-element.19, bf16[8192,2048]{1,0:T(8,128)(2,1)S(
+       274.5      0.1  %copy-done.1 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(
+  -- 같은 실행의 Async XLA Ops (start_us dur_us name | 그 동안 돈 XLA Ops)
+        19.7     65.8  %copy-start                              | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %broadcast.25 %broadcast.27 %convert.6 %copy-done %copy-done.10 %copy-done.11 %copy-done.3 %copy-done.4 %copy-done.6 %co
+        19.7     24.9  %copy-start.3                            | %add_rsqrt_fusion.3 %broadcast.25 %broadcast.27 %copy-done.3 %copy-start.10 %copy-start.11 %copy-start.2 %copy-start.3 %copy-start.4 %copy-start.6 %copy-start.8
+        19.7     24.9  %copy-start.6                            | %add_rsqrt_fusion.3 %broadcast.25 %broadcast.27 %copy-done.3 %copy-done.6 %copy-start.10 %copy-start.11 %copy-start.2 %copy-start.4 %copy-start.6 %copy-start.8 
+        19.8     41.1  %copy-start.10                           | %add_rsqrt_fusion.3 %broadcast.25 %broadcast.27 %copy-done.10 %copy-done.3 %copy-done.4 %copy-done.6 %copy-start.10 %copy-start.11 %copy-start.2 %copy-start.4 %
+        19.8     41.1  %copy-start.11                           | %add_rsqrt_fusion.3 %broadcast.25 %broadcast.27 %copy-done.10 %copy-done.11 %copy-done.3 %copy-done.4 %copy-done.6 %copy-start.11 %copy-start.2 %copy-start.4 %c
+        19.8     65.7  %copy-start.8                            | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %broadcast.25 %broadcast.27 %convert.6 %copy-done %copy-done.10 %copy-done.11 %copy-done.3 %copy-done.4 %copy-done.6 %co
+        26.0     78.1  %copy-start.2                            | %add_rsqrt_fusion.2 %convert.6 %copy-done %copy-done.10 %copy-done.11 %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.6 %copy-done.8 %copy-start.2 %copy-start
+        40.6     19.4  %copy-start.4                            | %copy-done.3 %copy-done.4 %copy-done.6 %copy-start.4 %copy.18 %copy.19 %copy.28 %fusion.40 %pad_maximum_fusion %slice-start %slice_negate_fusion.3
+        44.6     59.5  %slice-start                             | %add_rsqrt_fusion.2 %convert.6 %copy-done %copy-done.10 %copy-done.11 %copy-done.2 %copy-done.4 %copy-done.8 %fusion.20 %fusion.38 %fusion.40 %fusion.7 %fusion.
+        66.7     37.4  %slice-start.1                           | %add_rsqrt_fusion.2 %copy-done %copy-done.2 %copy-done.8 %fusion.20 %fusion.38 %multiply_reduce_fusion.2 %slice-done %slice-done.1 %slice-start.1 %slice-start.1
+        85.5     20.4  %slice-start.2                           | %copy-done.2 %fusion.38 %slice-done %slice-done.1 %slice-done.2 %slice-start.16 %slice-start.17 %slice-start.2 %slice-start.20 %slice-start.21 %slice-start.3
+        85.5     28.4  %slice-start.3                           | %copy-done.2 %fusion.38 %slice-done %slice-done.1 %slice-done.2 %slice-done.3 %slice-start.16 %slice-start.17 %slice-start.20 %slice-start.21 %slice-start.3
+        85.5     70.3  %slice-start.16                          | %add_rsqrt_fusion.1 %copy-done.2 %copy-start.7 %custom-call %fusion.38 %multiply_reduce_fusion.1 %slice-done %slice-done.1 %slice-done.16 %slice-done.2 %slice-d
+        85.6     70.2  %slice-start.17                          | %add_rsqrt_fusion.1 %copy-done.2 %copy-start.7 %custom-call %fusion.38 %multiply_reduce_fusion.1 %slice-done %slice-done.1 %slice-done.16 %slice-done.17 %slice-
+        85.6     72.6  %slice-start.20                          | %add_rsqrt_fusion.1 %copy-done.2 %copy-done.7 %copy-start.7 %custom-call %custom-call.4 %fusion.38 %fusion.44 %multiply_reduce_fusion.1 %slice-done %slice-done.
+        85.7     72.6  %slice-start.21                          | %add_rsqrt_fusion.1 %copy-done.2 %copy-done.7 %copy-start.7 %custom-call %custom-call.4 %fusion.38 %fusion.44 %multiply_reduce_fusion.1 %slice-done %slice-done.
+       114.0     41.9  %slice-start.18                          | %add_rsqrt_fusion.1 %copy-start.7 %multiply_reduce_fusion.1 %slice-done.16 %slice-done.17 %slice-done.18 %slice-start.12 %slice-start.13 %slice-start.14 %slice-
+       114.1     41.9  %slice-start.19                          | %add_rsqrt_fusion.1 %copy-start.7 %multiply_reduce_fusion.1 %slice-done.16 %slice-done.17 %slice-done.18 %slice-done.19 %slice-start.12 %slice-start.13 %slice-s
+       114.1     41.9  %copy-start.7                            | %add_rsqrt_fusion.1 %copy-done.7 %copy-start.7 %multiply_reduce_fusion.1 %slice-done.16 %slice-done.17 %slice-done.18 %slice-done.19 %slice-start.12 %slice-star
+       114.1     44.2  %slice-start.22                          | %add_rsqrt_fusion.1 %copy-done.7 %custom-call.4 %fusion.44 %multiply_reduce_fusion.1 %slice-done.16 %slice-done.17 %slice-done.18 %slice-done.19 %slice-done.20 
+       114.1     44.2  %slice-start.23                          | %add_rsqrt_fusion.1 %copy-done.7 %custom-call.4 %fusion.44 %multiply_reduce_fusion.1 %slice-done.16 %slice-done.17 %slice-done.18 %slice-done.19 %slice-done.20 
+       114.2     92.3  %slice-start.4                           | %add_rsqrt_fusion %add_rsqrt_fusion.1 %convert.7 %copy-done.5 %copy-done.7 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.4 %custom-call.5 
+       114.2     92.3  %slice-start.5                           | %add_rsqrt_fusion %add_rsqrt_fusion.1 %convert.7 %copy-done.5 %copy-done.7 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.4 %custom-call.5 
+       114.3     92.3  %slice-start.6                           | %add_rsqrt_fusion %add_rsqrt_fusion.1 %convert.7 %copy-done.5 %copy-done.7 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.4 %custom-call.5 
+       114.3    113.8  %slice-start.12                          | %add_rsqrt_fusion %add_rsqrt_fusion.1 %convert.7 %copy-done.5 %copy-done.7 %copy-done.9 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.1 %c
+       114.3    113.7  %slice-start.13                          | %add_rsqrt_fusion %add_rsqrt_fusion.1 %convert.7 %copy-done.5 %copy-done.7 %copy-done.9 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.1 %c
+       114.4    113.8  %slice-start.14                          | %add_rsqrt_fusion %add_rsqrt_fusion.1 %convert.7 %copy-done.5 %copy-done.7 %copy-done.9 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.1 %c
+       156.0     72.2  %slice-start.8                           | %add_rsqrt_fusion %convert.7 %copy-done.5 %copy-done.9 %copy-start.5 %copy-start.9 %copy.23 %copy.24 %copy.29 %custom-call.1 %custom-call.5 %fusion.21 %fusion.3
+       160.5     20.7  %copy-start.5                            | %copy-done.5 %copy-start.5 %copy.23 %copy.24 %copy.29 %fusion.43 %multiply_add_fusion %pad_maximum_fusion.1 %slice-start.7 %slice_negate_fusion.2
+       164.4     42.1  %slice-start.7                           | %add_rsqrt_fusion %convert.7 %copy-done.5 %copy-start.9 %fusion.21 %fusion.43 %fusion.6 %fusion.91 %multiply_add_fusion %multiply_reduce_fusion %slice-done.4 %s
+       181.2     47.0  %slice-start.9                           | %add_rsqrt_fusion %convert.7 %copy-done.9 %copy-start.9 %custom-call.1 %fusion.21 %fusion.39 %fusion.6 %fusion.91 %multiply_reduce_fusion %slice-done.12 %slice-
+       189.9     19.5  %copy-start.9                            | %add_rsqrt_fusion %copy-done.9 %copy-start.9 %multiply_reduce_fusion %slice-done.4 %slice-done.5 %slice-done.6 %slice-done.7
+       209.5     18.8  %slice-start.10                          | %fusion.39 %slice-done.10 %slice-done.12 %slice-done.13 %slice-done.14 %slice-done.8 %slice-done.9 %slice-start.10 %slice-start.11 %slice-start.15
+       209.5     18.8  %slice-start.11                          | %fusion.39 %slice-done.10 %slice-done.11 %slice-done.12 %slice-done.13 %slice-done.14 %slice-done.8 %slice-done.9 %slice-start.11 %slice-start.15
+       209.5     25.0  %slice-start.15                          | %fusion.39 %slice-done.10 %slice-done.11 %slice-done.12 %slice-done.13 %slice-done.14 %slice-done.15 %slice-done.8 %slice-done.9 %slice-start.15
+       234.6     39.9  %copy-start.1                            | %copy-done.1 %copy-start.1 %fusion.32
+  (trace dir /tmp/mdtr_0gacggvg)
+
+==== 1B seq 128 unroll N=3: sync_min 389.0 us  lines=['Async XLA Ops', 'Pallas Primitives', 'TC Overlay', 'XLA Modules', 'XLA Ops', '_counters_']
+  HLO copy-start 15개, cross-program prefetch: ['L0.wg']
+  HLO program 안 weight prefetch (slice-start→ConcatBitcast, S(3)) 11: %custom-call<-L0.wd; %custom-call.7<-L1.wk; %custom-call.8<-L1.wv; %custom-call.3<-L1.wg; %custom-call.1<-L1.wd; %custom-call.2<-L1.wu; %custom-call.9<-L2.wk; %custom-call.10<-L2.wv; %custom-call.6<-L2.wo; %custom-call.4<-L2.wg; %custom-call.5<-L2.wd
+  HLO parameter in S(3) 249: %param_0.420 = f32[128]{0:T(128)S(3)} parameter(0) | %param_0.287 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} parameter(0) | %param_2.222 = bf16[128]{0:T(256)(128)(2,1)S(3)} parameter(2) | %param_1.311 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} parameter(1) | %param_1.292 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} parameter(1) | %param_2.221 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} parameter(2)
+  core0 op sum 389.0 us (실행 30회 평균), op 190종
+  -- 실행 10 (module 408.5 us) op 순서: start_us dur_us name
+        18.9      0.0  %copy-start = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1)}
+        19.0      0.0  %copy-start.3 = (bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[128,2048]{1,0:T(8,128)(2,1)} 
+        19.0      0.0  %copy-start.10 = (bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[1,1,64]{2,1,0:T(2,128)(2,1)}
+        19.0      0.0  %copy-start.11 = (bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[1,1,64]{2,1,0:T(2,128)(2,1)}
+        19.1      0.0  %copy-start.7 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_0_
+        19.1      0.0  %copy-start.12 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_5
+        19.1      2.6  %multiply_reduce_fusion.5 = f32[128]{0:T(128)S(3)} fusion(bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1), kind=kLoop, calls=%fused_computation.44
+        21.7      0.4  %add_rsqrt_fusion.5 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %multiply_reduce_fusion.5), kind=kLoop, calls=%fused_computation
+        22.1      0.0  %copy-start.2 = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1
+        22.1      7.4  %fusion.61 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)} %lp_2_.1, bf16[128,2048]{1,0:T(8,128)(2,1)} %x.1, bf16[2048
+        29.4      1.0  %copy.28 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.61)
+        30.4      0.4  %slice_negate_fusion.5 = (bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,64]{0,2,1:T(8,128)(2,1)S
+        30.9      0.1  %copy-done.3 = bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}
+        30.9      0.0  %slice-start = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)(2
+        30.9     15.8  %fusion.60 = bf16[128,2048]{0,1:T(8,128)(2,1)S(3)} fusion(bf16[2048,2048]{1,0:T(8,128)(2,1)} %lp_1_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-don
+        46.8      0.8  %slice_negate_fusion.2 = (bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,32,64]{0,2,1:T(8,128)(2,
+        47.6      0.4  %iota_compare_fusion = pred[128,128]{0,1:T(8,128)(4,1)S(3)} fusion(), kind=kLoop, calls=%fused_computation.147
+        47.9      0.1  %copy-done.10 = bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)} copy-done((bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)
+        48.0      0.0  %copy-done.11 = bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)} copy-done((bf16[1,1,64]{2,1,0:T(2,128)(2,1)S(3)}, bf16[1,1,64]{2,1,0:T(2,128)(2,1)}, u32[]{:S(2)
+        48.0      3.4  %fusion.135 = (bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)}, bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,4,32]{0,3,2,1:T(8,128)(2,1)S(3)
+        51.4      0.4  %convert.9 = f32[8,4,128]{2,1,0:T(4,128)S(3)} convert(bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)} %get-tuple-element.15)
+        51.9      1.9  %fusion.11 = f32[8,4,128]{2,1,0:T(4,128)S(3)} fusion(bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)} %get-tuple-element.16, f32[8,4,128]{2,1,0:T(4,128)S(
+        53.8      0.1  %copy-done.7 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+        53.9      0.0  %slice-start.1 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        53.9      5.1  %fusion.62 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)} %lp_3_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-done.
+        59.0      0.0  %copy-start.4 = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) copy-start(bf16[128,512]{1,0:T(8,128)(2,1)S(3)}
+        59.0      1.0  %copy.27 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.62)
+        60.0      2.0  %fusion.30 = bf16[8,64,4,128]{3,1,2,0:T(8,128)(2,1)S(3)} fusion(bf16[128,8,64,1]{0,2,3,1:T(8,128)(2,1)S(3)} %bitcast.119, bf16[8,4,128,128]{2,3,1,0:T(
+        62.0     16.3  %multiply_reduce_fusion.4 = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %copy-done.3,
+        78.3      0.1  %copy-done.4 = bf16[128,512]{1,0:T(8,128)(2,1)} copy-done((bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) %copy
+        78.4      0.4  %add_rsqrt_fusion.4 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.17), kind=kLoop, calls=%fused_computation.158
+        78.8      0.1  %copy-done = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)
+        78.8      0.0  %copy-done.12 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %co
+        78.8      0.1  %slice-start.2 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        78.9      0.0  %slice-start.3 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+        78.9      0.1  %slice-start.28 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        79.0      0.0  %slice-start.29 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        79.0      0.1  %slice-start.32 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        79.0      0.0  %slice-start.33 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+        79.1     18.3  %fusion.57 = bf16[128,8192]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} %copy-done, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %ge
+        97.4      0.0  %copy-done.2 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(
+        97.4      0.0  %slice-done = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+        97.5      0.0  %slice-done.1 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+        97.5      4.7  %slice-done.2 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       102.2      8.2  %slice-done.3 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       110.4      0.1  %custom-call = bf16[8192,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done, bf16[2048,2048]{1,0:T(8,128)(2,1
+       110.5      0.0  %slice-start.30 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       110.5      0.1  %slice-start.31 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       110.6      0.0  %copy-start.8 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_9_
+       110.6      0.0  %slice-start.34 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       110.6      0.1  %slice-start.35 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       110.6      0.0  %slice-start.12 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       110.7      0.1  %slice-start.13 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       110.7      0.0  %slice-start.14 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       110.7      0.1  %slice-start.8 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)(
+       110.8      0.0  %slice-start.9 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)(
+       110.8      0.2  %slice-start.10 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       111.0     40.9  %multiply_reduce_fusion.3 = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-el
+       151.9      0.4  %add_rsqrt_fusion.3 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.19), kind=kLoop, calls=%fused_computation.157
+       152.3      0.1  %slice-done.28 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       152.3      0.0  %slice-done.29 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       152.3      0.1  %slice-done.30 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       152.4      0.0  %slice-done.31 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       152.4      0.1  %copy-done.8 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+       152.5      0.0  %custom-call.7 = bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,512]{1,0:T(8,128)(2,1)S(3)} %slice-done.28, bf16[512,512]{1,0:T(8,128)(2,1
+       152.5      2.2  %fusion.64 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} %custom-call.7, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %
+       154.7      0.9  %copy.33 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.64)
+       155.6      0.5  %slice_negate_fusion.4 = (bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,64]{0,2,1:T(8,128)(2,1)S
+       156.1      0.0  %slice-start.15 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       156.1      0.1  %slice-start.4 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+       156.2     15.5  %fusion.63 = bf16[128,2048]{0,1:T(8,128)(2,1)S(3)} fusion(bf16[2048,2048]{1,0:T(8,128)(2,1)} %lp_10_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tup
+       171.6      0.8  %slice_negate_fusion.1 = (bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,32,64]{0,2,1:T(8,128)(2,
+       172.4      3.4  %fusion.136 = (bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)}, bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,4,32]{0,3,2,1:T(8,128)(2,1)S(3)
+       175.8      0.4  %convert.10 = f32[8,4,128]{2,1,0:T(4,128)S(3)} convert(bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)} %get-tuple-element.21)
+       176.3      1.9  %fusion.10 = f32[8,4,128]{2,1,0:T(4,128)S(3)} fusion(bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)} %get-tuple-element.22, f32[8,4,128]{2,1,0:T(4,128)S(
+       178.2      0.1  %slice-done.32 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       178.3      0.0  %slice-done.33 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       178.3      0.1  %slice-done.34 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       178.4      0.0  %slice-done.35 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       178.4      0.1  %custom-call.8 = bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,512]{1,0:T(8,128)(2,1)S(3)} %slice-done.32, bf16[512,512]{1,0:T(8,128)(2,1
+       178.4      0.0  %slice-start.5 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+       178.4      2.2  %fusion.65 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} %custom-call.8, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %
+       180.6      0.0  %copy-start.5 = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) copy-start(bf16[128,512]{1,0:T(8,128)(2,1)S(3)}
+       180.6      0.9  %copy.32 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.65)
+       181.6      2.0  %fusion.31 = bf16[8,64,4,128]{3,1,2,0:T(8,128)(2,1)S(3)} fusion(bf16[128,8,64,1]{0,2,3,1:T(8,128)(2,1)S(3)} %bitcast.120, bf16[8,4,128,128]{2,3,1,0:T(
+       183.6      0.0  %copy-start.13 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_1
+       183.6     16.1  %multiply_reduce_fusion.2 = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-el
+       199.7      0.1  %copy-done.5 = bf16[128,512]{1,0:T(8,128)(2,1)} copy-done((bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) %copy
+       199.8      0.4  %add_rsqrt_fusion.2 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.23), kind=kLoop, calls=%fused_computation.156
+       200.2      0.1  %slice-done.12 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       200.2      0.0  %slice-done.13 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       200.2      0.1  %slice-done.14 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       200.3      0.0  %slice-done.15 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       200.3      7.2  %copy-done.13 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %co
+       207.5      0.1  %custom-call.3 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} %slice-done.12, bf16[512,8192]{1,0:T(8,128)(
+       207.6      0.0  %slice-start.6 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+       207.6      0.1  %slice-start.7 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128)
+       207.7      0.0  %slice-start.11 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       207.7      0.1  %slice-start.36 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       207.7      0.0  %slice-start.37 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       207.7      0.1  %slice-start.40 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       207.8      0.3  %slice-start.41 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       208.1     18.3  %fusion.58 = bf16[128,8192]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} %custom-call.3, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}
+       226.4      0.1  %slice-done.8 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       226.5      0.0  %slice-done.9 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:
+       226.5      0.1  %slice-done.10 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       226.6      0.0  %slice-done.4 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       226.6      0.1  %slice-done.5 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       226.7      0.0  %slice-done.6 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       226.7      0.1  %slice-done.7 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]
+       226.7      8.0  %slice-done.11 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       234.7      0.1  %custom-call.1 = bf16[8192,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done.4, bf16[2048,2048]{1,0:T(8,128)
+       234.8      0.0  %custom-call.2 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} %slice-done.8, bf16[512,8192]{1,0:T(8,128)(2
+       234.8      0.1  %slice-start.38 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       234.9      0.0  %slice-start.39 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       234.9      0.0  %copy-start.9 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_18
+       234.9      0.1  %slice-start.42 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       234.9      0.0  %slice-start.43 = ((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,512]{1,0:T(8,128)(2,
+       234.9      0.1  %slice-start.24 = ((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,2048]{1,0:T(8,128)
+       235.0      0.0  %slice-start.25 = ((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,2048]{1,0:T(8,128)
+       235.0      0.1  %slice-start.26 = ((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,2048]{1,0:T(8,128)
+       235.1      0.0  %slice-start.16 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       235.1      0.1  %slice-start.17 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       235.1      0.0  %slice-start.18 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       235.2     40.3  %multiply_reduce_fusion.1 = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-el
+       275.4      0.4  %add_rsqrt_fusion.1 = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.25), kind=kLoop, calls=%fused_computation.155
+       275.8      0.1  %slice-done.36 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       275.9      0.0  %slice-done.37 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       275.9      0.1  %slice-done.38 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       275.9      0.0  %slice-done.39 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       275.9      0.1  %copy-done.9 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %cop
+       276.0      0.0  %custom-call.9 = bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,512]{1,0:T(8,128)(2,1)S(3)} %slice-done.36, bf16[512,512]{1,0:T(8,128)(2,1
+       276.0      0.1  %slice-start.27 = ((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,2048]{1,0:T(8,128)
+       276.1      0.0  %slice-start.20 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128
+       276.1      2.2  %fusion.67 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} %custom-call.9, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %
+       278.3      0.9  %copy.38 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.67)
+       279.2      0.5  %slice_negate_fusion.3 = (bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,64]{0,2,1:T(8,128)(2,1)S
+       279.7      0.5  %pad_maximum_fusion.2 = bf16[128,8,64]{0,2,1:T(8,128)(2,1)S(3)} fusion(bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)} %get-tuple-element.7, bf16[128,8,32]{0,
+       280.2      1.0  %copy.44 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} copy(bf16[128,512]{0,1:T(8,128)(2,1)S(3)} %bitcast.124)
+       281.2      0.5  %pad_maximum_fusion.1 = bf16[128,8,64]{0,2,1:T(8,128)(2,1)S(3)} fusion(bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)} %get-tuple-element.9, bf16[128,8,32]{0,
+       281.7      1.0  %copy.43 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} copy(bf16[128,512]{0,1:T(8,128)(2,1)S(3)} %bitcast.122)
+       282.6      0.5  %pad_maximum_fusion = bf16[128,8,64]{0,2,1:T(8,128)(2,1)S(3)} fusion(bf16[128,8,32]{0,2,1:T(8,128)(2,1)S(3)} %get-tuple-element.11, bf16[128,8,32]{0,2
+       283.1      1.0  %copy.42 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} copy(bf16[128,512]{0,1:T(8,128)(2,1)S(3)} %bitcast.123)
+       284.1      0.6  %broadcast.35 = bf16[8,64]{1,0:T(8,128)(2,1)S(3)} broadcast(bf16[64]{0:T(256)(128)(2,1)S(3)} %bitcast.131), dimensions={1}
+       284.7      0.7  %reshape.18 = bf16[512]{0:T(512)(128)(2,1)S(3)} reshape(bf16[8,64]{1,0:T(8,128)(2,1)S(3)} %broadcast.35)
+       285.4      0.6  %broadcast.37 = bf16[8,64]{1,0:T(8,128)(2,1)S(3)} broadcast(bf16[64]{0:T(256)(128)(2,1)S(3)} %bitcast.127), dimensions={1}
+       286.0      0.7  %reshape.20 = bf16[512]{0:T(512)(128)(2,1)S(3)} reshape(bf16[8,64]{1,0:T(8,128)(2,1)S(3)} %broadcast.37)
+       286.7      1.3  %multiply_add_fusion = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)}) fusion(bf16[128,512]{1,0
+       288.0      0.0  %slice-start.19 = ((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[2048,8192]{1,0:T(8,128)
+       288.0     15.4  %fusion.66 = bf16[128,2048]{0,1:T(8,128)(2,1)S(3)} fusion(bf16[2048,2048]{1,0:T(8,128)(2,1)} %lp_19_.1, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tup
+       303.4      0.7  %slice_negate_fusion = (bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}, bf16[128,32,32]{0,2,1:T(8,128)(2,1)S(3)}) fusion(bf16[128,32,64]{0,2,1:T(8,128)(2,1)
+       304.2      0.2  %slice-start.21 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128
+       304.4      3.4  %fusion.137 = (bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)}, bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,8,4,32]{0,3,2,1:T(8,128)(2,1)S(3)
+       307.8      0.4  %convert.11 = f32[8,4,128]{2,1,0:T(4,128)S(3)} convert(bf16[8,4,128]{2,1,0:T(4,128)(2,1)S(3)} %get-tuple-element.27)
+       308.3      1.9  %fusion.9 = f32[8,4,128]{2,1,0:T(4,128)S(3)} fusion(bf16[8,4,128,128]{2,3,1,0:T(8,128)(2,1)S(3)} %get-tuple-element.28, f32[8,4,128]{2,1,0:T(4,128)S(3
+       310.2      0.1  %slice-done.40 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       310.3      0.0  %slice-done.41 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       310.3      0.1  %slice-done.42 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       310.3      0.0  %slice-done.43 = bf16[512,512]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,512]{1,0:T(8,128)(2,1)}), bf16[512,512]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(
+       310.3      0.1  %custom-call.10 = bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,512]{1,0:T(8,128)(2,1)S(3)} %slice-done.40, bf16[512,512]{1,0:T(8,128)(2,
+       310.4      2.1  %fusion.68 = bf16[128,512]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,512]{1,0:T(8,128)(2,1)S(3)} %custom-call.10, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} 
+       312.5      0.0  %copy-start.6 = (bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) copy-start(bf16[128,512]{1,0:T(8,128)(2,1)S(3)}
+       312.5      1.0  %copy.37 = bf16[128,512]{0,1:T(8,128)(2,1)S(3)} copy(bf16[128,512]{1,0:T(8,128)(2,1)S(3)} %fusion.68)
+       313.5      2.0  %fusion.32 = bf16[8,64,4,128]{3,1,2,0:T(8,128)(2,1)S(3)} fusion(bf16[128,8,64,1]{0,2,3,1:T(8,128)(2,1)S(3)} %bitcast.121, bf16[8,4,128,128]{2,3,1,0:T(
+       315.5      0.1  %slice-done.24 = bf16[512,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       315.6      0.0  %slice-done.25 = bf16[512,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       315.6      0.1  %slice-done.26 = bf16[512,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       315.6      0.0  %slice-done.27 = bf16[512,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,2048]{1,0:T(8,128)(2,1)}), bf16[512,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       315.7      0.1  %custom-call.6 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done.24, bf16[512,2048]{1,0:T(8,128)(
+       315.7      0.0  %copy-start.14 = (bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048]{0:T(1024)(128)(2,1)} %lp_2
+       315.7      5.9  %multiply_reduce_fusion = (f32[128]{0:T(128)S(3)}, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}) fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-elem
+       321.7      0.1  %copy-done.6 = bf16[128,512]{1,0:T(8,128)(2,1)} copy-done((bf16[128,512]{1,0:T(8,128)(2,1)}, bf16[128,512]{1,0:T(8,128)(2,1)S(3)}, u32[]{:S(2)}) %copy
+       321.7      0.4  %add_rsqrt_fusion = bf16[128]{0:T(256)(128)(2,1)S(3)} fusion(f32[128]{0:T(128)S(3)} %get-tuple-element.29), kind=kLoop, calls=%fused_computation.154
+       322.1      0.1  %slice-done.16 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       322.2      0.0  %slice-done.17 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       322.2      0.1  %slice-done.18 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       322.2      0.0  %slice-done.19 = bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[2048,8192]{1,0:T(8,128)(2,1)}), bf16[512,8192]{1,0:T(8,128)(2,1)S(3)}, s32[]{
+       322.2      0.1  %copy-done.14 = bf16[2048]{0:T(1024)(128)(2,1)S(3)} copy-done((bf16[2048]{0:T(1024)(128)(2,1)S(3)}, bf16[2048]{0:T(1024)(128)(2,1)}, u32[]{:S(2)}) %co
+       322.3      0.0  %custom-call.4 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[512,8192]{1,0:T(8,128)(2,1)S(3)} %slice-done.16, bf16[512,8192]{1,0:T(8,128)(
+       322.3      0.1  %slice-start.22 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128
+       322.4      0.0  %slice-start.23 = ((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[]{:S(2)}) async-start(bf16[8192,2048]{1,0:T(8,128
+       322.4     18.3  %fusion.59 = bf16[128,8192]{1,0:T(8,128)(2,1)S(3)} fusion(bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} %custom-call.4, bf16[128,2048]{1,0:T(8,128)(2,1)S(3)}
+       340.7      0.0  %slice-done.20 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[
+       340.8      0.0  %slice-done.21 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[
+       340.8      0.0  %slice-done.22 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[
+       340.8      0.0  %slice-done.23 = bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} async-done(((bf16[8192,2048]{1,0:T(8,128)(2,1)}), bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)}, s32[
+       340.9      0.0  %custom-call.5 = bf16[8192,2048]{1,0:T(8,128)(2,1)S(3)} custom-call(bf16[2048,2048]{1,0:T(8,128)(2,1)S(3)} %slice-done.20, bf16[2048,2048]{1,0:T(8,128
+       340.9      0.0  %copy-start.1 = (bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(2)}) copy-start(bf16[2048,8192]{1,0:T(8,128)(2,1
+       340.9     59.5  %fusion.48 = bf16[128,2048]{1,0:T(8,128)(2,1)} fusion(bf16[128,2048]{1,0:T(8,128)(2,1)S(3)} %get-tuple-element.30, bf16[8192,2048]{1,0:T(8,128)(2,1)S(
+       400.4      7.8  %copy-done.1 = bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)} copy-done((bf16[2048,8192]{1,0:T(8,128)(2,1)S(3)}, bf16[2048,8192]{1,0:T(8,128)(2,1)}, u32[]{:S(
+  -- 같은 실행의 Async XLA Ops (start_us dur_us name | 그 동안 돈 XLA Ops)
+        18.9     59.9  %copy-start                              | %add_rsqrt_fusion.4 %add_rsqrt_fusion.5 %convert.9 %copy-done %copy-done.10 %copy-done.11 %copy-done.3 %copy-done.4 %copy-done.7 %copy-start %copy-start.10 %cop
+        19.0     11.9  %copy-start.3                            | %add_rsqrt_fusion.5 %copy-done.3 %copy-start.10 %copy-start.11 %copy-start.12 %copy-start.2 %copy-start.3 %copy-start.7 %copy.28 %fusion.61 %multiply_reduce_fus
+        19.0     29.0  %copy-start.10                           | %add_rsqrt_fusion.5 %copy-done.10 %copy-done.3 %copy-start.10 %copy-start.11 %copy-start.12 %copy-start.2 %copy-start.7 %copy.28 %fusion.60 %fusion.61 %iota_com
+        19.0     29.0  %copy-start.11                           | %add_rsqrt_fusion.5 %copy-done.10 %copy-done.11 %copy-done.3 %copy-start.11 %copy-start.12 %copy-start.2 %copy-start.7 %copy.28 %fusion.60 %fusion.61 %iota_comp
+        19.1     34.8  %copy-start.7                            | %add_rsqrt_fusion.5 %convert.9 %copy-done.10 %copy-done.11 %copy-done.3 %copy-done.7 %copy-start.12 %copy-start.2 %copy-start.7 %copy.28 %fusion.11 %fusion.135 
+        19.1     59.8  %copy-start.12                           | %add_rsqrt_fusion.4 %add_rsqrt_fusion.5 %convert.9 %copy-done %copy-done.10 %copy-done.11 %copy-done.12 %copy-done.3 %copy-done.4 %copy-done.7 %copy-start.12 %c
+        22.1     75.4  %copy-start.2                            | %add_rsqrt_fusion.4 %convert.9 %copy-done %copy-done.10 %copy-done.11 %copy-done.12 %copy-done.2 %copy-done.3 %copy-done.4 %copy-done.7 %copy-start.2 %copy-star
+        30.9     66.5  %slice-start                             | %add_rsqrt_fusion.4 %convert.9 %copy-done %copy-done.10 %copy-done.11 %copy-done.12 %copy-done.2 %copy-done.4 %copy-done.7 %copy-start.4 %copy.27 %fusion.11 %fu
+        53.9     43.6  %slice-start.1                           | %add_rsqrt_fusion.4 %copy-done %copy-done.12 %copy-done.2 %copy-done.4 %copy-start.4 %copy.27 %fusion.30 %fusion.57 %fusion.62 %multiply_reduce_fusion.4 %slice-
+        59.0     19.4  %copy-start.4                            | %copy-done.4 %copy-start.4 %copy.27 %fusion.30 %multiply_reduce_fusion.4
+        78.8     23.4  %slice-start.2                           | %copy-done.2 %fusion.57 %slice-done %slice-done.1 %slice-done.2 %slice-start.2 %slice-start.28 %slice-start.29 %slice-start.3 %slice-start.32 %slice-start.33
+        78.9     31.5  %slice-start.3                           | %copy-done.2 %fusion.57 %slice-done %slice-done.1 %slice-done.2 %slice-done.3 %slice-start.28 %slice-start.29 %slice-start.3 %slice-start.32 %slice-start.33
+        78.9     73.4  %slice-start.28                          | %add_rsqrt_fusion.3 %copy-done.2 %copy-start.8 %custom-call %fusion.57 %multiply_reduce_fusion.3 %slice-done %slice-done.1 %slice-done.2 %slice-done.28 %slice-d
+        79.0     73.4  %slice-start.29                          | %add_rsqrt_fusion.3 %copy-done.2 %copy-start.8 %custom-call %fusion.57 %multiply_reduce_fusion.3 %slice-done %slice-done.1 %slice-done.2 %slice-done.28 %slice-d
+        79.0     99.3  %slice-start.32                          | %add_rsqrt_fusion.3 %convert.10 %copy-done.2 %copy-done.8 %copy-start.8 %copy.33 %custom-call %custom-call.7 %fusion.10 %fusion.136 %fusion.57 %fusion.63 %fusio
+        79.0     99.3  %slice-start.33                          | %add_rsqrt_fusion.3 %convert.10 %copy-done.2 %copy-done.8 %copy-start.8 %copy.33 %custom-call %custom-call.7 %fusion.10 %fusion.136 %fusion.57 %fusion.63 %fusio
+       110.5     41.9  %slice-start.30                          | %add_rsqrt_fusion.3 %copy-start.8 %multiply_reduce_fusion.3 %slice-done.28 %slice-done.29 %slice-done.30 %slice-start.10 %slice-start.12 %slice-start.13 %slice-
+       110.5     41.9  %slice-start.31                          | %add_rsqrt_fusion.3 %copy-start.8 %multiply_reduce_fusion.3 %slice-done.28 %slice-done.29 %slice-done.30 %slice-done.31 %slice-start.10 %slice-start.12 %slice-s
+       110.6     41.9  %copy-start.8                            | %add_rsqrt_fusion.3 %copy-done.8 %copy-start.8 %multiply_reduce_fusion.3 %slice-done.28 %slice-done.29 %slice-done.30 %slice-done.31 %slice-start.10 %slice-star
+       110.6     67.8  %slice-start.34                          | %add_rsqrt_fusion.3 %convert.10 %copy-done.8 %copy.33 %custom-call.7 %fusion.10 %fusion.136 %fusion.63 %fusion.64 %multiply_reduce_fusion.3 %slice-done.28 %slic
+       110.6     67.8  %slice-start.35                          | %add_rsqrt_fusion.3 %convert.10 %copy-done.8 %copy.33 %custom-call.7 %fusion.10 %fusion.136 %fusion.63 %fusion.64 %multiply_reduce_fusion.3 %slice-done.28 %slic
+       110.6     89.6  %slice-start.12                          | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %convert.10 %copy-done.5 %copy-done.8 %copy-start.13 %copy-start.5 %copy.32 %copy.33 %custom-call.7 %custom-call.8 %fusi
+       110.7     89.6  %slice-start.13                          | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %convert.10 %copy-done.5 %copy-done.8 %copy-start.13 %copy-start.5 %copy.32 %copy.33 %custom-call.7 %custom-call.8 %fusi
+       110.7     89.6  %slice-start.14                          | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %convert.10 %copy-done.5 %copy-done.8 %copy-start.13 %copy-start.5 %copy.32 %copy.33 %custom-call.7 %custom-call.8 %fusi
+       110.7    115.8  %slice-start.8                           | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %convert.10 %copy-done.13 %copy-done.5 %copy-done.8 %copy-start.13 %copy-start.5 %copy.32 %copy.33 %custom-call.3 %custo
+       110.8    115.7  %slice-start.9                           | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %convert.10 %copy-done.13 %copy-done.5 %copy-done.8 %copy-start.13 %copy-start.5 %copy.32 %copy.33 %custom-call.3 %custo
+       110.8    115.8  %slice-start.10                          | %add_rsqrt_fusion.2 %add_rsqrt_fusion.3 %convert.10 %copy-done.13 %copy-done.5 %copy-done.8 %copy-start.13 %copy-start.5 %copy.32 %copy.33 %custom-call.3 %custo
+       156.1     44.2  %slice-start.15                          | %add_rsqrt_fusion.2 %convert.10 %copy-done.5 %copy-start.13 %copy-start.5 %copy.32 %custom-call.8 %fusion.10 %fusion.136 %fusion.31 %fusion.63 %fusion.65 %multi
+       156.1     70.5  %slice-start.4                           | %add_rsqrt_fusion.2 %convert.10 %copy-done.13 %copy-done.5 %copy-start.13 %copy-start.5 %copy.32 %custom-call.3 %custom-call.8 %fusion.10 %fusion.136 %fusion.31
+       178.4     48.2  %slice-start.5                           | %add_rsqrt_fusion.2 %copy-done.13 %copy-done.5 %copy-start.13 %copy-start.5 %copy.32 %custom-call.3 %fusion.31 %fusion.58 %fusion.65 %multiply_reduce_fusion.2 %
+       180.6     19.2  %copy-start.5                            | %copy-done.5 %copy-start.13 %copy-start.5 %copy.32 %fusion.31 %multiply_reduce_fusion.2
+       183.6     23.9  %copy-start.13                           | %add_rsqrt_fusion.2 %copy-done.13 %copy-done.5 %copy-start.13 %multiply_reduce_fusion.2 %slice-done.12 %slice-done.13 %slice-done.14 %slice-done.15
+       207.6     19.1  %slice-start.6                           | %fusion.58 %slice-done.10 %slice-done.4 %slice-done.5 %slice-done.6 %slice-done.8 %slice-done.9 %slice-start.11 %slice-start.36 %slice-start.37 %slice-start.40 
+       207.6     19.1  %slice-start.7                           | %fusion.58 %slice-done.10 %slice-done.4 %slice-done.5 %slice-done.6 %slice-done.7 %slice-done.8 %slice-done.9 %slice-start.11 %slice-start.36 %slice-start.37 %s
+       207.7     27.1  %slice-start.11                          | %fusion.58 %slice-done.10 %slice-done.11 %slice-done.4 %slice-done.5 %slice-done.6 %slice-done.7 %slice-done.8 %slice-done.9 %slice-start.11 %slice-start.36 %sl
+       207.7     68.2  %slice-start.36                          | %add_rsqrt_fusion.1 %copy-start.9 %custom-call.1 %custom-call.2 %fusion.58 %multiply_reduce_fusion.1 %slice-done.10 %slice-done.11 %slice-done.36 %slice-done.4 
+       207.7     68.1  %slice-start.37                          | %add_rsqrt_fusion.1 %copy-start.9 %custom-call.1 %custom-call.2 %fusion.58 %multiply_reduce_fusion.1 %slice-done.10 %slice-done.11 %slice-done.36 %slice-done.37
+       207.7    102.5  %slice-start.40                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy-start.9 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.1 %custom-call.2 %custom
+       207.8    102.5  %slice-start.41                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy-start.9 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.1 %custom-call.2 %custom
+       234.8     41.1  %slice-start.38                          | %add_rsqrt_fusion.1 %copy-start.9 %multiply_reduce_fusion.1 %slice-done.36 %slice-done.37 %slice-done.38 %slice-start.16 %slice-start.17 %slice-start.18 %slice-
+       234.9     41.1  %slice-start.39                          | %add_rsqrt_fusion.1 %copy-start.9 %multiply_reduce_fusion.1 %slice-done.36 %slice-done.37 %slice-done.38 %slice-done.39 %slice-start.16 %slice-start.17 %slice-s
+       234.9     41.1  %copy-start.9                            | %add_rsqrt_fusion.1 %copy-done.9 %copy-start.9 %multiply_reduce_fusion.1 %slice-done.36 %slice-done.37 %slice-done.38 %slice-done.39 %slice-start.16 %slice-star
+       234.9     75.5  %slice-start.42                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.9 %fusion.137 %fusion.66 %fusion.67 %f
+       234.9     75.4  %slice-start.43                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.9 %fusion.137 %fusion.66 %fusion.67 %f
+       234.9     80.6  %slice-start.24                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy-start.6 %copy.37 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.10 %custom-call
+       235.0     80.6  %slice-start.25                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy-start.6 %copy.37 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.10 %custom-call
+       235.0     80.6  %slice-start.26                          | %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.9 %copy-start.6 %copy.37 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.10 %custom-call
+       235.1     87.1  %slice-start.16                          | %add_rsqrt_fusion %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.6 %copy-done.9 %copy-start.14 %copy-start.6 %copy.37 %copy.38 %copy.42 
+       235.1     87.1  %slice-start.17                          | %add_rsqrt_fusion %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.6 %copy-done.9 %copy-start.14 %copy-start.6 %copy.37 %copy.38 %copy.42 
+       235.1     87.1  %slice-start.18                          | %add_rsqrt_fusion %add_rsqrt_fusion.1 %broadcast.35 %broadcast.37 %convert.11 %copy-done.6 %copy-done.9 %copy-start.14 %copy-start.6 %copy.37 %copy.38 %copy.42 
+       276.0     39.6  %slice-start.27                          | %broadcast.35 %broadcast.37 %convert.11 %copy-start.6 %copy.37 %copy.38 %copy.42 %copy.43 %copy.44 %custom-call.10 %fusion.137 %fusion.32 %fusion.66 %fusion.67 
+       276.1     64.7  %slice-start.20                          | %add_rsqrt_fusion %broadcast.35 %broadcast.37 %convert.11 %copy-done.14 %copy-done.6 %copy-start.14 %copy-start.6 %copy.37 %copy.38 %copy.42 %copy.43 %copy.44 %
+       288.0     34.2  %slice-start.19                          | %add_rsqrt_fusion %convert.11 %copy-done.6 %copy-start.14 %copy-start.6 %copy.37 %custom-call.10 %custom-call.6 %fusion.137 %fusion.32 %fusion.66 %fusion.68 %fu
+       304.2     36.6  %slice-start.21                          | %add_rsqrt_fusion %convert.11 %copy-done.14 %copy-done.6 %copy-start.14 %copy-start.6 %copy.37 %custom-call.10 %custom-call.4 %custom-call.6 %fusion.137 %fusion
+       312.5      9.2  %copy-start.6                            | %copy-done.6 %copy-start.14 %copy-start.6 %copy.37 %custom-call.6 %fusion.32 %multiply_reduce_fusion %slice-done.24 %slice-done.25 %slice-done.26 %slice-done.27
+       315.7      6.6  %copy-start.14                           | %add_rsqrt_fusion %copy-done.14 %copy-done.6 %copy-start.14 %multiply_reduce_fusion %slice-done.16 %slice-done.17 %slice-done.18 %slice-done.19
+       322.3     18.5  %slice-start.22                          | %fusion.59 %slice-done.20 %slice-done.21 %slice-done.22 %slice-start.22 %slice-start.23
+       322.4     18.5  %slice-start.23                          | %fusion.59 %slice-done.20 %slice-done.21 %slice-done.22 %slice-done.23 %slice-start.23
+       340.9     67.3  %copy-start.1                            | %copy-done.1 %copy-start.1 %fusion.48
+  (trace dir /tmp/mdtr__wji4zlj)
